@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.FluentValidation
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.Identity", "src\Extensions.Identity\Extensions.Identity.csproj", "{8426A54A-068D-49A4-99AF-9924DC15E110}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.Newtonsoft.Json", "src\Extensions.Newtonsoft.Json\Extensions.Newtonsoft.Json.csproj", "{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{8426A54A-068D-49A4-99AF-9924DC15E110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8426A54A-068D-49A4-99AF-9924DC15E110}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8426A54A-068D-49A4-99AF-9924DC15E110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
