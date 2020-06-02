@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.Identity", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.Newtonsoft.Json", "src\Extensions.Newtonsoft.Json\Extensions.Newtonsoft.Json.csproj", "{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.Polly", "src\Extensions.Polly\Extensions.Polly.csproj", "{74A99AC6-FE07-4CFE-BF06-87B73A834DCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A7B8219-AB02-4CF2-BECA-69DAEBA632AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74A99AC6-FE07-4CFE-BF06-87B73A834DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74A99AC6-FE07-4CFE-BF06-87B73A834DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74A99AC6-FE07-4CFE-BF06-87B73A834DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74A99AC6-FE07-4CFE-BF06-87B73A834DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
