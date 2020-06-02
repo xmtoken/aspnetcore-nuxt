@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "src\Extension
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.AspNetCore", "src\Extensions.AspNetCore\Extensions.AspNetCore.csproj", "{A8906367-B00E-461B-8567-A3CE7C3B2519}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.AutoMapper", "src\Extensions.AutoMapper\Extensions.AutoMapper.csproj", "{0E3CB071-3BE9-4EFE-B657-1B2EF8C559D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{A8906367-B00E-461B-8567-A3CE7C3B2519}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8906367-B00E-461B-8567-A3CE7C3B2519}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8906367-B00E-461B-8567-A3CE7C3B2519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E3CB071-3BE9-4EFE-B657-1B2EF8C559D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E3CB071-3BE9-4EFE-B657-1B2EF8C559D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E3CB071-3BE9-4EFE-B657-1B2EF8C559D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E3CB071-3BE9-4EFE-B657-1B2EF8C559D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
