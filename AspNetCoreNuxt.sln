@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains", "src\Domains\Doma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains.Data", "src\Domains.Data\Domains.Data.csproj", "{353BF97D-A409-4833-96CB-804DAD8AA396}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains.Data.Design", "src\Domains.Data.Design\Domains.Data.Design.csproj", "{6C85A6CB-93E6-45F3-8391-ABA346EC8D8B}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "src\Extensions\Extensions.csproj", "{67738581-283D-4166-BD59-00F5A1AC152D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.AspNetCore", "src\Extensions.AspNetCore\Extensions.AspNetCore.csproj", "{A8906367-B00E-461B-8567-A3CE7C3B2519}"
@@ -50,6 +52,10 @@ Global
 		{353BF97D-A409-4833-96CB-804DAD8AA396}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{353BF97D-A409-4833-96CB-804DAD8AA396}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{353BF97D-A409-4833-96CB-804DAD8AA396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C85A6CB-93E6-45F3-8391-ABA346EC8D8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C85A6CB-93E6-45F3-8391-ABA346EC8D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C85A6CB-93E6-45F3-8391-ABA346EC8D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C85A6CB-93E6-45F3-8391-ABA346EC8D8B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67738581-283D-4166-BD59-00F5A1AC152D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67738581-283D-4166-BD59-00F5A1AC152D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67738581-283D-4166-BD59-00F5A1AC152D}.Release|Any CPU.ActiveCfg = Release|Any CPU
