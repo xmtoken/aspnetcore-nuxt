@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.EntityFrameworkC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.EntityFrameworkCore.SqlServer", "src\Extensions.EntityFrameworkCore.SqlServer\Extensions.EntityFrameworkCore.SqlServer.csproj", "{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.FluentValidation", "src\Extensions.FluentValidation\Extensions.FluentValidation.csproj", "{66940BC3-2ED4-4EAC-AA18-35BEB3B9C589}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66940BC3-2ED4-4EAC-AA18-35BEB3B9C589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66940BC3-2ED4-4EAC-AA18-35BEB3B9C589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66940BC3-2ED4-4EAC-AA18-35BEB3B9C589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66940BC3-2ED4-4EAC-AA18-35BEB3B9C589}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
