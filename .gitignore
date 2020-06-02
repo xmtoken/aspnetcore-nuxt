@@ -1,0 +1,7 @@
+.nuxt/
+.vs/
+bin/
+dist/
+node_modules/
+obj/
+*.user

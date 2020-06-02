@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <Copyright>Copyright (c) 2020 xmtoken</Copyright>
+    <NeutralLanguage>ja-JP</NeutralLanguage>
+    <Product>AspNetCoreNuxt</Product>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\Directory.Analyzers.ruleset</CodeAnalysisRuleSet>
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>8.0</LangVersion>
+    <MapRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</MapRoot>
+    <PathMap>$(MapRoot)=.</PathMap>
+    <RootNamespace>AspNetCoreNuxt.$(MSBuildProjectName)</RootNamespace>
+  </PropertyGroup>
+</Project>

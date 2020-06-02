@@ -1,0 +1,18 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.renderWhitespace": "all",
+  "files.exclude": {
+    "**/.vs": true,
+    "**/bin": true,
+    "**/obj": true
+  },
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.enableRoslynAnalyzers": true,
+  "vetur.experimental.templateInterpolationService": true,
+  "vetur.format.enable": false,
+  "vetur.validation.template": false
+}

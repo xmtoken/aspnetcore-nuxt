@@ -1,0 +1,4 @@
+* -text
+*.cs diff=csharp
+*.ruleset eol=crlf
+*.sln eol=crlf

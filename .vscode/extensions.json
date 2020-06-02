@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "ms-dotnettools.csharp",
+    "octref.vetur",
+    "shd101wyy.markdown-preview-enhanced",
+    "stylelint.vscode-stylelint",
+    "yzhang.markdown-all-in-one"
+  ]
+}
