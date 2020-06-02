@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domains.Data\Domains.Data.csproj" />
+    <ProjectReference Include="..\Extensions.AspNetCore\Extensions.AspNetCore.csproj" />
+    <ProjectReference Include="..\Extensions.AutoMapper\Extensions.AutoMapper.csproj" />
+    <ProjectReference Include="..\Extensions.CsvHelper\Extensions.CsvHelper.csproj" />
+    <ProjectReference Include="..\Extensions.DependencyInjection\Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Extensions.EntityFrameworkCore\Extensions.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Extensions.EntityFrameworkCore.SqlServer\Extensions.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\Extensions.FluentValidation\Extensions.FluentValidation.csproj" />
+    <ProjectReference Include="..\Extensions.Newtonsoft.Json\Extensions.Newtonsoft.Json.csproj" />
+    <ProjectReference Include="..\Extensions.Polly\Extensions.Polly.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />
+    <PackageReference Include="NSwag.AspNetCore" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.Async" />
+  </ItemGroup>
+  <PropertyGroup>
+    <SpaRoot>ClientApp</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)/**;</DefaultItemExcludes>
+  </PropertyGroup>
+  <Target Name="PublishClientApp" AfterTargets="ComputeFilesToPublish">
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci --no-optional" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)/dist/**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+</Project>

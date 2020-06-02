@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\stylecop.json = src\stylecop.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Applications.WebHost", "src\Applications.WebHost\Applications.WebHost.csproj", "{D00EB821-5BC7-4E49-B3D6-50B0B2B99BEE}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains", "src\Domains\Domains.csproj", "{1C0E9A65-2672-412D-9691-275B3506207C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains.Data", "src\Domains.Data\Domains.Data.csproj", "{353BF97D-A409-4833-96CB-804DAD8AA396}"
@@ -44,6 +46,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D00EB821-5BC7-4E49-B3D6-50B0B2B99BEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D00EB821-5BC7-4E49-B3D6-50B0B2B99BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D00EB821-5BC7-4E49-B3D6-50B0B2B99BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D00EB821-5BC7-4E49-B3D6-50B0B2B99BEE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C0E9A65-2672-412D-9691-275B3506207C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C0E9A65-2672-412D-9691-275B3506207C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0E9A65-2672-412D-9691-275B3506207C}.Release|Any CPU.ActiveCfg = Release|Any CPU
