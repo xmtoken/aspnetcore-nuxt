@@ -39,6 +39,10 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/axios',
   ],
+  plugins: [
+    //
+    '~/plugins/vee-validate',
+  ],
   router: {
     middleware: ['auth'],
   },
