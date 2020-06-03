@@ -10,6 +10,7 @@ export default {
     //
     '@nuxtjs/vuetify',
   ],
+  css: ['@/assets/main.scss'],
   env: {},
   head: {
     titleTemplate(title) {

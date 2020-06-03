@@ -1,0 +1,31 @@
+@import 'variables.scss';
+
+#app.v-application {
+  background-color: $app-background-color;
+
+  .v-data-table {
+    border: $data-table-container-border;
+  }
+
+  .v-navigation-drawer {
+    background-color: $navigation-background-color;
+    border-color: $navigation-background-color;
+
+    .v-list-item--active {
+      color: $navigation-item-color;
+    }
+
+    a.v-list-item--active {
+      border-left: $navigation-active-item-border-size solid $navigation-active-item-border-color;
+
+      .v-list-item__icon,
+      .v-list-item__title {
+        margin-left: -$navigation-active-item-border-size;
+      }
+
+      .v-list-item__icon + .v-list-item__title {
+        margin-left: 0;
+      }
+    }
+  }
+}

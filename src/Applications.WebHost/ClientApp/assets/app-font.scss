@@ -1,0 +1,56 @@
+#app.v-application {
+  &.noto-sans-jp {
+    font-family: 'Noto Sans JP', sans-serif;
+
+    .body-1,
+    .body-2,
+    .caption,
+    .display-1,
+    .display-2,
+    .display-3,
+    .display-4,
+    .headline,
+    .overline,
+    .subtitle-1,
+    .subtitle-2,
+    .title {
+      font-family: inherit !important;
+    }
+
+    .v-input {
+      label.v-label {
+        height: 22px;
+        line-height: 22px;
+        top: -1px;
+      }
+
+      &.v-text-field {
+        input {
+          line-height: 22px;
+        }
+
+        label.v-label {
+          top: 4px;
+        }
+      }
+    }
+
+    .v-list-item {
+      .v-list-item__title,
+      .v-list-item__subtitle {
+        line-height: inherit;
+      }
+    }
+
+    .v-messages__message {
+      line-height: 14px;
+      margin-top: -2px;
+    }
+
+    .v-select__selection--comma {
+      line-height: 22px;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+  }
+}
