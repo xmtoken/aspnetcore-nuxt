@@ -46,6 +46,29 @@ export default {
   router: {
     middleware: ['auth'],
   },
+  auth: {
+    cookie: false,
+    redirect: {
+      callback: false,
+      home: '/',
+      login: '/sign-in',
+      logout: '/sign-in',
+    },
+    strategies: {
+      local: {
+        autoFetchUser: false,
+        tokenRequired: false,
+        endpoints: {
+          login: { url: '/account/sign-in', method: 'post' },
+          logout: { url: '/account/sign-out', method: 'post' },
+          user: { url: '/account', method: 'get', propertyName: false },
+        },
+      },
+    },
+  },
+  axios: {
+    baseURL: '/api',
+  },
   vuetify: {
     defaultAssets: {
       font: false,
