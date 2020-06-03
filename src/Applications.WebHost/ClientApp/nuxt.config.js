@@ -41,6 +41,7 @@ export default {
   ],
   plugins: [
     //
+    '~/plugins/axios',
     '~/plugins/vee-validate',
   ],
   router: {
