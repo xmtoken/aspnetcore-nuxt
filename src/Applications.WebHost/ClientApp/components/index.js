@@ -1,3 +1,4 @@
+export { default as AppAlertSnackbar } from './AppAlertSnackbar';
 export { default as AppBirthdayField } from './AppBirthdayField';
 export { default as AppCheckbox } from './AppCheckbox';
 export { default as AppCombobox } from './AppCombobox';
