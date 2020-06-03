@@ -27,6 +27,7 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -154,6 +155,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
         /// </summary>
         /// <param name="app"><see cref="IApplicationBuilder"/> オブジェクト。</param>
         /// <param name="env"><see cref="IWebHostEnvironment"/> オブジェクト。</param>
+        [SuppressMessage("Performance", "CA1822:メンバーを static に設定します")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHsts();
