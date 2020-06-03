@@ -22,7 +22,7 @@
     "numbro": "2.3.0",
     "nuxt": "2.12.2",
     "qs": "6.9.4",
-    "vee-validate": "3.3.1"
+    "vee-validate": "3.3.2"
   },
   "devDependencies": {
     "@mdi/js": "5.3.45",
