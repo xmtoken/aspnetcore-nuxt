@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.DependencyInject
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.EntityFrameworkCore", "src\Extensions.EntityFrameworkCore\Extensions.EntityFrameworkCore.csproj", "{3AC1E497-D82C-4A60-B5A7-C7E53C9FEBC2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.EntityFrameworkCore.Oracle", "src\Extensions.EntityFrameworkCore.Oracle\Extensions.EntityFrameworkCore.Oracle.csproj", "{2D891626-5503-41BA-AD92-DB05070CFEB3}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.EntityFrameworkCore.SqlServer", "src\Extensions.EntityFrameworkCore.SqlServer\Extensions.EntityFrameworkCore.SqlServer.csproj", "{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions.FluentValidation", "src\Extensions.FluentValidation\Extensions.FluentValidation.csproj", "{66940BC3-2ED4-4EAC-AA18-35BEB3B9C589}"
@@ -86,6 +88,10 @@ Global
 		{3AC1E497-D82C-4A60-B5A7-C7E53C9FEBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AC1E497-D82C-4A60-B5A7-C7E53C9FEBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AC1E497-D82C-4A60-B5A7-C7E53C9FEBC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D891626-5503-41BA-AD92-DB05070CFEB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D891626-5503-41BA-AD92-DB05070CFEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D891626-5503-41BA-AD92-DB05070CFEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D891626-5503-41BA-AD92-DB05070CFEB3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD694054-93F9-4FA2-B7CD-B5642FCB9C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
