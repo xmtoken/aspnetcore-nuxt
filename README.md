@@ -29,11 +29,11 @@ IDE は `Visual Studio Code 1.45.1+` を利用します。
    ```
    dotnet ef database update -p src/Domains.Data.Design
    ```
-6. Nuxt.js を http://localhost:3000 でホスティングします。
+6. Nuxt.js を <http://localhost:3000> でホスティングします。
    ```
    npm run dev --prefix src/Applications.WebHost/ClientApp
    ```
-7. ASP.NET Core を https://localhost:5001 でホスティングします。
+7. ASP.NET Core を <https://localhost:5001> でホスティングします。
    ```
    dotnet run -p src/Applications.WebHost
    ```
@@ -41,11 +41,13 @@ IDE は `Visual Studio Code 1.45.1+` を利用します。
 ## アプリケーションの修正
 
 ### VSCode
+
 VSCode でフォルダーを開くと開発に必要な拡張機能が reccomend されます。
 インテリセンスや Linter のサポートを受けるために、すべての拡張機能をインストールする必要があります。
 reccomend の一覧は `~/.vscode/extensions.json` で確認できます。
 
 ### Nuxt.js
+
 Nuxt.js はインテリセンスや Linter のサポートを受けるために VisualStudio ではなく VSCode で開発してください。
 また、VSCode で開くフォルダーはプロジェクト直下ではなく、`~/src/Applications.WebHost/ClientApp` フォルダーを開いてください。
 違う階層を基準に開いた場合は、vetur によるインテリセンスのサポートを受けれません。
