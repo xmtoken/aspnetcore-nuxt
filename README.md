@@ -51,3 +51,7 @@ reccomend の一覧は `~/.vscode/extensions.json` で確認できます。
 Nuxt.js はインテリセンスや Linter のサポートを受けるために VisualStudio ではなく VSCode で開発してください。
 また、VSCode で開くフォルダーはプロジェクト直下ではなく、`~/src/Applications.WebHost/ClientApp` フォルダーを開いてください。
 違う階層を基準に開いた場合は、vetur によるインテリセンスのサポートを受けれません。
+
+## その他
+
++ [OSS License](docs/OssLicense.md)
