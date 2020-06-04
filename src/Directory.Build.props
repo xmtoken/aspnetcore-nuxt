@@ -6,12 +6,16 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <PropertyGroup>
+    <MapRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</MapRoot>
+    <ProjectPrefixName>AspNetCoreNuxt</ProjectPrefixName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>$(ProjectPrefixName).$(MSBuildProjectName)</AssemblyName>
     <CodeAnalysisRuleSet>..\Directory.Analyzers.ruleset</CodeAnalysisRuleSet>
     <Deterministic>true</Deterministic>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>8.0</LangVersion>
-    <MapRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</MapRoot>
     <PathMap>$(MapRoot)=.</PathMap>
-    <RootNamespace>AspNetCoreNuxt.$(MSBuildProjectName)</RootNamespace>
+    <RootNamespace>$(ProjectPrefixName).$(MSBuildProjectName)</RootNamespace>
   </PropertyGroup>
 </Project>
