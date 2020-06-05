@@ -54,5 +54,6 @@ Nuxt.js はインテリセンスや Linter のサポートを受けるために 
 
 ## その他
 
++ [Coding Guideline](docs/CodingGuideline.md)
 + [OSS License](docs/OssLicense.md)
 + [Versioning](docs/Versioning.md)
