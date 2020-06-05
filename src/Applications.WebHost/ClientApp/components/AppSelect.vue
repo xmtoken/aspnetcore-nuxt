@@ -1,11 +1,16 @@
 <script>
 import AppValidationProviderProps from './AppValidationProviderProps';
+import { RequiredMarkable } from '~/mixins';
 import { ValidationProvider } from 'vee-validate';
 export default {
   components: {
     ValidationProvider,
   },
-  mixins: [AppValidationProviderProps],
+  mixins: [
+    //
+    AppValidationProviderProps,
+    RequiredMarkable,
+  ],
   inheritAttrs: false,
   props: {
     menuProps: {
@@ -22,7 +27,7 @@ export default {
 
 <template>
   <validation-provider v-slot="{ errors }" v-bind="veeValidationProps">
-    <v-select v-bind="$attrs" :error-messages="errors" :label="label" :menu-props="menuProps" v-on="$listeners">
+    <v-select v-bind="$attrs" :class="requiredClasses" :error-messages="errors" :label="label" :menu-props="menuProps" v-on="$listeners">
       <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
       <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
         <slot v-bind="scope" :name="slot" />

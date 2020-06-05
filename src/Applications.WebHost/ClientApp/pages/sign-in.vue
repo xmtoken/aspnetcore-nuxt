@@ -72,8 +72,8 @@ export default {
         <v-form autocomplete="off" @submit.prevent="signin">
           <v-card outlined width="360">
             <v-card-text>
-              <app-username-field v-model="credentials.userName" :disabled="loading.signin" label="ユーザー名" :prepend-inner-icon="icons.mdiAccount" vee-rules="required" vee-vid="UserName" />
-              <app-password-field v-model="credentials.password" :disabled="loading.signin" label="パスワード" :prepend-inner-icon="icons.mdiLock" vee-rules="required" vee-vid="Password" />
+              <app-username-field v-model="credentials.userName" :disabled="loading.signin" hide-required-marker label="ユーザー名" :prepend-inner-icon="icons.mdiAccount" vee-rules="required" vee-vid="UserName" />
+              <app-password-field v-model="credentials.password" :disabled="loading.signin" hide-required-marker label="パスワード" :prepend-inner-icon="icons.mdiLock" vee-rules="required" vee-vid="Password" />
             </v-card-text>
             <v-card-actions class="pb-4 pt-0 px-4">
               <v-btn block color="primary" depressed :disabled="loading.signin" :loading="loading.signin" type="submit">
