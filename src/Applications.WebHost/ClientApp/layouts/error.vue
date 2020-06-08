@@ -12,7 +12,7 @@ export default {
 <template>
   <v-content>
     <v-container fluid>
-      <v-row justify="center">
+      <v-row>
         <v-col class="text-center">
           <h1 class="display-4 font-weight-medium my-5 primary--text">
             {{ error.statusCode }}
