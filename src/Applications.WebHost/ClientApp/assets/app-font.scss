@@ -18,7 +18,8 @@
     }
 
     .v-input {
-      label.v-label {
+      label.v-label,
+      legend.v-label {
         height: 22px;
         line-height: 22px;
         top: -1px;
