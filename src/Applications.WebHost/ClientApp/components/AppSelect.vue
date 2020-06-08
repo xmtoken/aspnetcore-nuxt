@@ -26,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <validation-provider v-slot="{ errors }" v-bind="veeValidationProps">
+  <validation-provider ref="provider" v-slot="{ errors }" v-bind="veeValidationProps">
     <v-select v-bind="$attrs" :class="requiredClasses" :error-messages="errors" :label="label" :menu-props="menuProps" v-on="$listeners">
       <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
       <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
