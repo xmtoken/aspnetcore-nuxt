@@ -42,6 +42,9 @@ extend('email', email);
 import { password } from './validation-rules';
 extend('password', password);
 
+import { postal_code } from './validation-rules';
+extend('postal_code', postal_code);
+
 import { time } from './validation-rules';
 extend('time', time);
 
