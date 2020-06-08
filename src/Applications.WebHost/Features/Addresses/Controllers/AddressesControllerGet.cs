@@ -12,7 +12,8 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
         /// 指定された郵便番号に紐づく住所を非同期に取得します。
         /// </summary>
         /// <param name="code">郵便番号。</param>
-        /// <returns>郵便番号データ配信サービス zip-cloud は CORS が許可されていないため API アクセスをプロキシします。</returns>
+        /// <returns>郵便番号に紐づく住所。</returns>
+        /// <remarks>郵便番号データ配信サービス zip-cloud は CORS が許可されていないため API アクセスをプロキシします。</remarks>
         [HttpGet]
         public async Task<JsonResult> Get([FromQuery] string code)
         {
@@ -23,20 +24,20 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
             // http://zipcloud.ibsnet.co.jp/doc/api
             var anonymouseType = new
             {
-                Status = 0,
-                Message = string.Empty,
+                Status = default(int),
+                Message = default(string),
                 Results = new[]
                 {
                     new
                     {
-                        Zipcode = string.Empty,
-                        PrefCode = string.Empty,
-                        Address1 = string.Empty,
-                        Address2 = string.Empty,
-                        Address3 = string.Empty,
-                        Kana1 = string.Empty,
-                        Kana2 = string.Empty,
-                        Kana3 = string.Empty,
+                        Zipcode = default(string),
+                        PrefCode = default(string),
+                        Address1 = default(string),
+                        Address2 = default(string),
+                        Address3 = default(string),
+                        Kana1 = default(string),
+                        Kana2 = default(string),
+                        Kana3 = default(string),
                     },
                 },
             };
