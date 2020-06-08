@@ -9,11 +9,11 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    fileldClass: {
+    contentClass: {
       default: undefined,
       type: String,
     },
-    fileldStyle: {
+    contentStyle: {
       default: undefined,
       type: String,
     },
@@ -94,7 +94,7 @@ export default {
 <template>
   <v-menu v-model="menu" :close-on-content-click="false" :content-class="classes" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :class="fileldClass" :style="fileldStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-bind="$attrs" :class="contentClass" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @keydown.enter="onComplete">
         <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
         <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
