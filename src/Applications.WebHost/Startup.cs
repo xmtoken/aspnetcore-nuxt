@@ -63,6 +63,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     .AddCsvHelper<Startup>()
                     .AddEntityMetadataProvider<AppDbContext>()
                     .AddEnumLabelProviders<Startup>()
+                    .AddHttpClient()
                     .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
                     .AddSingleton<ILookupNormalizer, UpperInvariantLookupNormalizer>()
                     .AddSingleton<IStringHasher, StringHasher>()

@@ -8,6 +8,7 @@ export { default as AppDatePicker } from './AppDatePicker';
 export { default as AppFileInput } from './AppFileInput';
 export { default as AppNumeralField } from './AppNumeralField';
 export { default as AppPasswordField } from './AppPasswordField';
+export { default as AppPostalCodeField } from './AppPostalCodeField';
 export { default as AppRadioGroup } from './AppRadioGroup';
 export { default as AppSelect } from './AppSelect';
 export { default as AppSwitch } from './AppSwitch';

@@ -66,4 +66,5 @@
 | stylelint-order                   | MIT License          |
 | stylelint-prettier                | MIT License          |
 | stylelint-scss                    | MIT License          |
+| v-mask                            | MIT License          |
 | vee-validate                      | MIT License          |

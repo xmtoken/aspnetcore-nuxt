@@ -22,6 +22,7 @@
     "numbro": "2.3.0",
     "nuxt": "2.12.2",
     "qs": "6.9.4",
+    "v-mask": "2.2.1",
     "vee-validate": "3.3.2"
   },
   "devDependencies": {
