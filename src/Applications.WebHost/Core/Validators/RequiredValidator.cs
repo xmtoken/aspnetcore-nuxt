@@ -4,7 +4,7 @@ using System.Collections;
 namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
 {
     /// <summary>
-    /// 生年月日の妥当性検証ロジックを提供します。
+    /// コレクションの必須検証ロジックを提供します。
     /// </summary>
     public class RequiredValidator : PropertyValidator
     {
