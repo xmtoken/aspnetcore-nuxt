@@ -1,6 +1,7 @@
 <script>
 import {
   //
+  mdiAccountCircleOutline,
   mdiHomeCircleOutline,
   mdiMicrosoftVisualStudio,
 } from '@mdi/js';
@@ -15,6 +16,11 @@ export default {
           text: 'Home',
           icon: mdiHomeCircleOutline,
           path: '/',
+        },
+        {
+          text: 'User',
+          icon: mdiAccountCircleOutline,
+          path: '/users',
         },
       ],
     };
