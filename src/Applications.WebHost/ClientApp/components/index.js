@@ -5,6 +5,7 @@ export { default as AppCombobox } from './AppCombobox';
 export { default as AppDataTable } from './AppDataTable';
 export { default as AppDateField } from './AppDateField';
 export { default as AppDatePicker } from './AppDatePicker';
+export { default as AppDialog } from './AppDialog';
 export { default as AppFileInput } from './AppFileInput';
 export { default as AppMenu } from './AppMenu';
 export { default as AppNumeralField } from './AppNumeralField';
