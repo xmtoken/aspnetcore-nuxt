@@ -41,16 +41,16 @@ export default {
         ...newOptions,
       };
     },
-    options: {
-      deep: true,
-      handler(val) {
-        this.internalOptions = val;
-      },
-    },
     internalOptions: {
       deep: true,
       handler(val) {
         this.$emit('update:options', val);
+      },
+    },
+    options: {
+      deep: true,
+      handler(val) {
+        this.internalOptions = val;
       },
     },
   },

@@ -10,27 +10,22 @@ export default {
 </script>
 
 <template>
-  <v-content>
-    <v-container fluid>
-      <v-row>
-        <v-col class="text-center">
-          <h1 class="display-4 font-weight-medium my-5 primary--text">
-            {{ error.statusCode }}
-          </h1>
-          <h4 class="title">
-            {{ error.message }}
-          </h4>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-content>
+  <div>
+    <h1 class="display-4 font-weight-medium my-5 primary--text">
+      {{ error.statusCode }}
+    </h1>
+    <h5 class="title">
+      {{ error.message }}
+    </h5>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.v-content ::v-deep {
+div ::v-deep {
   height: 100%;
   left: 0;
   position: absolute;
+  text-align: center;
   top: 0;
   width: 100%;
 }

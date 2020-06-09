@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     async search() {
-      if (this.model) {
+      if (!this.model) {
         return;
       }
       try {

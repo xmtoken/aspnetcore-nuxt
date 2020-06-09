@@ -13,6 +13,7 @@ export default {
     };
   },
   computed: {
+    /** @returns {Object} */
     requiredClasses() {
       return {
         required: this.isRequired && !this.hideRequiredMarker,

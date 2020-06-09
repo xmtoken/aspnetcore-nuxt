@@ -21,7 +21,7 @@ export default {
   },
   watch: {
     messages(val) {
-      this.snackbar = val && val.length > 0;
+      this.snackbar = !!val && val.length > 0;
     },
   },
   methods: {
@@ -59,8 +59,7 @@ export default {
   <v-slide-y-transition>
     <v-snackbar v-model="snackbar" v-bind="$attrs" class="pa-0" color="white" :timeout="timeout">
       <v-alert class="mx-n4 my-n2" :color="type" dismissible :icon="icon" outlined text @input="close">
-        <!-- eslint-disable-next-line vue/require-v-for-key -->
-        <div v-for="message in messages">
+        <div v-for="(message, i) in messages" :key="i">
           {{ message }}
         </div>
       </v-alert>
