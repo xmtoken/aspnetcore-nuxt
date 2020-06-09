@@ -43,6 +43,7 @@ export default {
   plugins: [
     //
     '~/plugins/axios',
+    '~/plugins/injection',
     '~/plugins/vee-validate',
   ],
   router: {
