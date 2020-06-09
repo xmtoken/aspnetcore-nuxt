@@ -44,6 +44,7 @@ export default {
     //
     '~/plugins/axios',
     '~/plugins/injection',
+    '~/plugins/prototype',
     '~/plugins/vee-validate',
   ],
   router: {
