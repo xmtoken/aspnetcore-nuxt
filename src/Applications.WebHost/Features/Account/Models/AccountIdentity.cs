@@ -1,5 +1,6 @@
 using AspNetCoreNuxt.Domains;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AspNetCoreNuxt.Applications.WebHost.Features.Account.Models
 {
@@ -9,24 +10,14 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Account.Models
     public class AccountIdentity
     {
         /// <summary>
-        /// ユーザー名を取得します。
+        /// ユーザー名を取得または設定します。
         /// </summary>
-        public string UserName { get; }
+        public string UserName { get; set; }
 
         /// <summary>
-        /// 権限を表す <see cref="Permission"/> 値をキーとしたコレクションを取得します。
+        /// 権限を表す <see cref="Permission"/> 値をキーとしたコレクションを取得または設定します。
         /// </summary>
-        public IDictionary<string, bool> Permissions { get; }
-
-        /// <summary>
-        /// <see cref="Credentials"/> クラスの新しいインスタンスを作成します。
-        /// </summary>
-        /// <param name="userName">ユーザー名。</param>
-        /// <param name="permissions">権限を表す <see cref="Permission"/> 値をキーとしたコレクション。</param>
-        public AccountIdentity(string userName, IDictionary<string, bool> permissions)
-        {
-            UserName = userName;
-            Permissions = permissions;
-        }
+        [SuppressMessage("Usage", "CA2227:コレクション プロパティは読み取り専用でなければなりません")]
+        public IDictionary<string, bool> Permissions { get; set; }
     }
 }
