@@ -33,4 +33,15 @@
       }
     }
   }
+
+  .v-input {
+    &.v-input--is-focused {
+      .v-input__append-inner,
+      .v-input__prepend-inner {
+        .v-btn--icon {
+          color: inherit;
+        }
+      }
+    }
+  }
 }
