@@ -7,9 +7,11 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Models
     /// <inheritdoc cref="IPaging"/>
     public class Paging : IPaging
     {
-        /// <inheritdoc cref="IPaging.PageIndex"/>
+        /// <summary>
+        /// 1 から始まるページインデックスを取得または設定します。
+        /// </summary>
         [FromQuery(Name = "index")]
-        public virtual string PageIndex { get; }
+        public virtual string PageIndex { get; set; }
 
         /// <inheritdoc cref="IPaging.PageSize"/>
         [FromQuery(Name = "size")]
@@ -18,14 +20,5 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Models
         /// <inheritdoc/>
         int IPaging.PageIndex
             => QueryStringConverter.ConvertToInt32(PageIndex) ?? default;
-
-        /// <summary>
-        /// <see cref="Paging"/> クラスの新しいインスタンスを作成します。
-        /// </summary>
-        /// <param name="pageIndex">1 から始まるページインデックス。</param>
-        public Paging(string pageIndex)
-        {
-            PageIndex = pageIndex;
-        }
     }
 }
