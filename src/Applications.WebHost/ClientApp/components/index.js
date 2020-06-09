@@ -6,6 +6,7 @@ export { default as AppDataTable } from './AppDataTable';
 export { default as AppDateField } from './AppDateField';
 export { default as AppDatePicker } from './AppDatePicker';
 export { default as AppFileInput } from './AppFileInput';
+export { default as AppMenu } from './AppMenu';
 export { default as AppNumeralField } from './AppNumeralField';
 export { default as AppPasswordField } from './AppPasswordField';
 export { default as AppPostalCodeField } from './AppPostalCodeField';
