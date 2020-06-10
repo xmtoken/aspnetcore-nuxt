@@ -19,13 +19,13 @@ export default {
   data() {
     return {
       focused: false,
-      model: this.applyFormat(this.value),
+      model: this.toFormatted(this.value),
     };
   },
   computed: {
     /** @returns {String} */
     formattedText() {
-      return this.applyFormat(this.model);
+      return this.toFormatted(this.model);
     },
     /** @returns {Object} */
     listeners() {
@@ -36,17 +36,14 @@ export default {
   },
   watch: {
     value(val) {
-      const formattedValue = this.applyFormat(val);
-      if (this.focused && this.formattedText === formattedValue) {
+      const formatted = this.toFormatted(val);
+      if (this.focused && this.formattedText === formatted) {
         return;
       }
-      this.model = formattedValue;
+      this.model = formatted;
     },
   },
   methods: {
-    applyFormat(val) {
-      return Numbro.validate(val, {}) ? Numbro(val).format(this.format) : val;
-    },
     onBlue() {
       this.focused = false;
       this.model = this.formattedText;
@@ -55,7 +52,10 @@ export default {
       this.focused = true;
     },
     onInput() {
-      this.$emit('input', Numbro.validate(this.formattedText, {}) ? Numbro(this.formattedText).value() : this.formattedText);
+      this.$emit('input', Numbro.validate(this.formattedText, {}) ? Numbro(this.formattedText).value() : this.model);
+    },
+    toFormatted(val) {
+      return Numbro.validate(val, {}) ? Numbro(val).format(this.format) : val;
     },
   },
 };

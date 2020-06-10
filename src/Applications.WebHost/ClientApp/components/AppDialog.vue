@@ -32,7 +32,7 @@ export default {
       return '';
     },
     /** @returns {String} */
-    transition() {
+    transitions() {
       if (this.left) {
         return 'scroll-x-transition';
       }
@@ -44,7 +44,7 @@ export default {
   },
   watch: {
     model(val) {
-      this.$emit('change', val);
+      this.$emit('input', val);
     },
     value(val) {
       this.model = val;
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <template>
-  <v-dialog v-model="model" v-bind="$attrs" :content-class="classes" :transition="transition" v-on="$listeners">
+  <v-dialog v-model="model" v-bind="$attrs" :content-class="classes" :transition="transitions" v-on="$listeners">
     <template v-slot:activator="scope">
       <slot v-bind="scope" name="activator" />
     </template>

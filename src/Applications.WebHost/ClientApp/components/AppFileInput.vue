@@ -13,8 +13,8 @@ export default {
   ],
   inheritAttrs: false,
   model: {
-    prop: 'value',
     event: 'change',
+    prop: 'value',
   },
 };
 </script>

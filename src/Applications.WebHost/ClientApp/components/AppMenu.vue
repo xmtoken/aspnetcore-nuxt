@@ -18,7 +18,7 @@ export default {
   },
   watch: {
     model(val) {
-      this.$emit('change', val);
+      this.$emit('input', val);
     },
     value(val) {
       this.model = val;
