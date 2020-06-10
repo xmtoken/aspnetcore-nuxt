@@ -1,6 +1,7 @@
 <script>
 import AppDatePicker from './AppDatePicker';
 import AppTextField from './AppTextField';
+import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
 export default {
   components: {
@@ -9,6 +10,18 @@ export default {
   },
   inheritAttrs: false,
   props: {
+    appendIcon: {
+      default: mdiCalendar,
+      type: String,
+    },
+    appendIconTabindex: {
+      default: -1,
+      type: Number,
+    },
+    closeOnContentClick: {
+      default: false,
+      type: Boolean,
+    },
     contentClass: {
       default: undefined,
       type: String,
@@ -22,6 +35,10 @@ export default {
       type: Boolean,
     },
     menuOffsetY: {
+      default: false,
+      type: Boolean,
+    },
+    openOnClick: {
       default: false,
       type: Boolean,
     },
@@ -40,27 +57,22 @@ export default {
   data() {
     return {
       menu: false,
-      date: this.applyFormat(this.value),
+      model: this.value,
     };
   },
   computed: {
-    model: {
+    date: {
       /** @returns {Array|String} */
       get() {
-        return this.value;
+        if (this.model && dayjs(this.model).isValid()) {
+          return dayjs(this.model).format(this.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM');
+        }
+        return null;
       },
       /** @param {Array|String} val */
       set(val) {
-        this.$emit('input', val);
+        this.model = val;
       },
-    },
-    /** @returns {String} */
-    classes() {
-      return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
-    },
-    /** @returns {Number} */
-    menuNudgeLeft() {
-      return this.menuOffsetLeft ? 290 /*menu width*/ + 5 /*space*/ : 0;
     },
     /** @returns {Object} */
     listeners() {
@@ -68,40 +80,44 @@ export default {
       delete listeners.input;
       return listeners;
     },
+    /** @returns {String} */
+    menuClass() {
+      return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
+    },
+    /** @returns {Number} */
+    menuNudgeLeft() {
+      return this.menuOffsetLeft ? 290 /*menu width*/ + 5 /*space*/ : 0;
+    },
   },
   watch: {
     model(val) {
-      this.date = this.applyFormat(val);
+      this.$emit('input', val);
+    },
+    value(val) {
+      this.model = val;
     },
   },
   methods: {
-    applyFormat(val) {
-      return !!val && dayjs(val).isValid() ? dayjs(val).format(this.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM') : null;
-    },
     onComplete() {
       if (this.date) {
         this.model = this.date;
       }
-    },
-    onPickerChange(val) {
-      this.menu = false;
-      this.model = val;
     },
   },
 };
 </script>
 
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false" :content-class="classes" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY">
+  <v-menu v-model="menu" :close-on-content-click="closeOnContentClick" :content-class="menuClass" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :class="contentClass" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
         <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
         <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
         </template>
       </app-text-field>
     </template>
-    <app-date-picker v-model="date" :type="type" @change="onPickerChange" />
+    <app-date-picker v-model="date" :type="type" @change="menu = false" />
   </v-menu>
 </template>
 

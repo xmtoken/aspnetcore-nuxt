@@ -1,5 +1,6 @@
 <script>
 import AppTextField from './AppTextField';
+import { mdiClockOutline } from '@mdi/js';
 import dayjs from 'dayjs';
 export default {
   components: {
@@ -7,6 +8,18 @@ export default {
   },
   inheritAttrs: false,
   props: {
+    appendIcon: {
+      default: mdiClockOutline,
+      type: String,
+    },
+    appendIconTabindex: {
+      default: -1,
+      type: Number,
+    },
+    closeOnContentClick: {
+      default: false,
+      type: Boolean,
+    },
     contentClass: {
       default: undefined,
       type: String,
@@ -30,6 +43,10 @@ export default {
       default: false,
       type: Boolean,
     },
+    openOnClick: {
+      default: false,
+      type: Boolean,
+    },
     useSeconds: {
       default: false,
       type: Boolean,
@@ -42,69 +59,68 @@ export default {
   data() {
     return {
       menu: false,
-      time: this.applyFormat(this.value),
+      model: this.value,
     };
   },
   computed: {
-    model: {
-      /** @returns {Any} */
-      get() {
-        return this.value;
-      },
-      /** @param {Any} val */
-      set(val) {
-        this.$emit('input', val);
-      },
-    },
-    /** @returns {String} */
-    classes() {
-      return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
-    },
-    /** @returns {Number} */
-    menuNudgeLeft() {
-      return this.menuOffsetLeft ? 290 /*menu width*/ + 5 /*space*/ : 0;
-    },
     /** @returns {Object} */
     listeners() {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
     },
+    /** @returns {String} */
+    menuClass() {
+      return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
+    },
+    /** @returns {Number} */
+    menuNudgeLeft() {
+      return this.menuOffsetLeft ? 290 /*menu width*/ + 5 /*space*/ : 0;
+    },
+    time: {
+      /** @returns {Any} */
+      get() {
+        const datetime = `0001/01/01 ${this.model}`;
+        if (this.model && dayjs(datetime).isValid()) {
+          return dayjs(datetime).format(this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
+        }
+        return null;
+      },
+      /** @param {Any} val */
+      set(val) {
+        this.model = val;
+      },
+    },
   },
   watch: {
     model(val) {
-      this.time = this.applyFormat(val);
+      this.$emit('input', val);
+    },
+    value(val) {
+      this.model = val;
     },
   },
   methods: {
-    applyFormat(val) {
-      const datetime = `0001/01/01 ${val}`;
-      return !!val && dayjs(datetime).isValid() ? dayjs(datetime).format(this.useSeconds ? 'HH:mm:ss' : 'HH:mm') : null;
-    },
     onComplete() {
       if (this.time) {
         this.model = this.time;
       }
-    },
-    onPickerChange(val) {
-      this.menu = false;
-      this.model = val;
     },
   },
 };
 </script>
 
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false" :content-class="classes" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY">
+  <v-menu v-model="menu" :close-on-content-click="closeOnContentClick" :content-class="menuClass" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :class="contentClass" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
         <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
         <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
         </template>
       </app-text-field>
     </template>
-    <v-time-picker v-if="menu" v-model="time" :format="format" :use-seconds="useSeconds" @change="onPickerChange" />
+    <v-time-picker v-if="menu" v-model="time" :format="format" :use-seconds="useSeconds" @change="menu = false" />
   </v-menu>
 </template>
 
