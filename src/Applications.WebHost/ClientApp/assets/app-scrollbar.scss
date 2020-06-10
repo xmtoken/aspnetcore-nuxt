@@ -11,11 +11,14 @@ html {
   *::-webkit-scrollbar-thumb {
     background-color: $scrollbar-thumb-color;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
   }
 
   *::-webkit-scrollbar-track {
     background-color: $scrollbar-track-color;
-    border-radius: 5px;
+  }
+
+  .v-data-table__wrapper::-webkit-scrollbar-track:vertical {
+    border-top: 1px inset rgba(0, 0, 0, 0.06);
   }
 }
