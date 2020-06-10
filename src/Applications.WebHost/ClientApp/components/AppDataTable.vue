@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      internalOptions: {},
+      internalOptions: this.options,
     };
   },
   watch: {
@@ -55,7 +55,10 @@ export default {
     },
   },
   created() {
-    this.internalOptions = this.getOptionsFromQuery(this.$route.query);
+    this.internalOptions = {
+      ...this.internalOptions,
+      ...this.getOptionsFromQuery(this.$route.query),
+    };
   },
   methods: {
     getOptionsFromQuery(query) {

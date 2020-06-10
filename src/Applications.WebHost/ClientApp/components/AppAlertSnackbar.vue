@@ -4,9 +4,9 @@ export default {
   inheritAttrs: false,
   data() {
     return {
-      type: '',
       messages: [],
       snackbar: false,
+      type: null,
     };
   },
   computed: {
@@ -21,14 +21,12 @@ export default {
   },
   watch: {
     messages(val) {
-      this.snackbar = !!val && val.length > 0;
+      this.snackbar = val && val.length > 0;
     },
   },
   methods: {
     close() {
       this.snackbar = false;
-    },
-    reset() {
       this.messages = [];
     },
     setMessages(type, messages) {
