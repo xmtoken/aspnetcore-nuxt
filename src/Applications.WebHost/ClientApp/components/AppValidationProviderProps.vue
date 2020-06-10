@@ -21,10 +21,6 @@ export default {
       default: undefined,
       type: [Object, String],
     },
-    veeSlim: {
-      default: true,
-      type: Boolean,
-    },
     veeVid: {
       default: undefined,
       type: String,
@@ -36,9 +32,9 @@ export default {
       return {
         customMessages: this.veeCustomMessages,
         disabled: this.veeDisabled,
-        name: this.veeName === undefined ? this.label : this.veeName,
+        name: this.veeName ? this.veeName : this.label,
         rules: this.veeRules,
-        slim: this.veeSlim,
+        slim: true,
         vid: this.veeVid,
       };
     },
