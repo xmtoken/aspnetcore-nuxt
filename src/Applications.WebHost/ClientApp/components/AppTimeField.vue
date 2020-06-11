@@ -70,7 +70,7 @@ export default {
       return listeners;
     },
     /** @returns {String} */
-    menuClass() {
+    menuClasses() {
       return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
     },
     /** @returns {Number} */
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <template>
-  <v-menu v-model="menu" :close-on-content-click="closeOnContentClick" :content-class="menuClass" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY" :open-on-click="openOnClick">
+  <v-menu v-model="menu" :close-on-content-click="closeOnContentClick" :content-class="menuClasses" min-width="inherit" :nudge-left="menuNudgeLeft" :offset-y="menuOffsetY" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
       <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
         <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
