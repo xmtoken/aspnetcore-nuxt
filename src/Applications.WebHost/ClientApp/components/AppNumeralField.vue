@@ -1,6 +1,6 @@
 <script>
 import AppTextField from './AppTextField';
-import Numbro from 'numbro';
+import numbro from 'numbro';
 export default {
   components: {
     AppTextField,
@@ -52,10 +52,10 @@ export default {
       this.focused = true;
     },
     onInput() {
-      this.$emit('input', Numbro.validate(this.formattedText, {}) ? Numbro(this.formattedText).value() : this.model);
+      this.$emit('input', numbro.validate(this.formattedText, {}) ? numbro(this.formattedText).value() : this.model);
     },
     toFormatted(val) {
-      return Numbro.validate(val, {}) ? Numbro(val).format(this.format) : val;
+      return numbro.validate(val, {}) ? numbro(val).format(this.format) : val;
     },
   },
 };
