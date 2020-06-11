@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     /** @returns {String} */
-    menuClass() {
+    menuClasses() {
       return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
     },
   },
@@ -106,7 +106,7 @@ export default {
         <slot v-bind="scope" :name="slot" />
       </template>
     </app-text-field>
-    <v-menu v-model="menu" :activator="$refs.field" :content-class="menuClass" :offset-y="menuOffsetY" :open-on-click="false">
+    <v-menu v-model="menu" :activator="$refs.field" :content-class="menuClasses" :offset-y="menuOffsetY" :open-on-click="false">
       <v-list dense>
         <v-list-item-group v-model="selected">
           <v-list-item v-for="(item, i) in items" :key="i">
