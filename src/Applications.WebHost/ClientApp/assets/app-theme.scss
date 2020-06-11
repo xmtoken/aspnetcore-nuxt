@@ -3,10 +3,6 @@
 #app.v-application {
   background-color: $app-background-color;
 
-  .v-data-table {
-    border: $data-table-container-border;
-  }
-
   .v-navigation-drawer {
     background-color: $navigation-background-color;
     border-color: $navigation-background-color;

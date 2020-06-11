@@ -23,11 +23,22 @@ export default {
       },
       type: Object,
     },
+    outlined: {
+      default: false,
+      type: Boolean,
+    },
   },
   data() {
     return {
       internalOptions: this.options,
     };
+  },
+  computed: {
+    classes() {
+      return {
+        'v-data-table--outlined': this.outlined,
+      };
+    },
   },
   watch: {
     '$route.query'(newQuery, oldQuery) {
@@ -109,7 +120,7 @@ export default {
 </script>
 
 <template>
-  <v-data-table v-bind="$attrs" :footer-props="footerProps" :options.sync="internalOptions" v-on="$listeners" @update:options="onUpdateOptions">
+  <v-data-table v-bind="$attrs" :class="classes" :footer-props="footerProps" :options.sync="internalOptions" v-on="$listeners" @update:options="onUpdateOptions">
     <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
     <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
       <slot v-bind="scope" :name="slot" />

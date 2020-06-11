@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 #app.v-application {
   .v-btn,
   .v-tab {
@@ -5,6 +7,10 @@
   }
 
   .v-data-table {
+    &.v-data-table--outlined {
+      border: $data-table-container-border;
+    }
+
     .v-data-table__wrapper {
       border-radius: inherit;
 
