@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
 
 namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
@@ -16,12 +17,19 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
         private readonly IHttpClientFactory HttpClientFactory;
 
         /// <summary>
+        /// <see cref="IMemoryCache"/> オブジェクトを表します。
+        /// </summary>
+        private readonly IMemoryCache MemoryCache;
+
+        /// <summary>
         /// <see cref="AddressesController"/> クラスの新しいインスタンスを作成します。
         /// </summary>
         /// <param name="httpClientFactory"><see cref="IHttpClientFactory"/> オブジェクト。</param>
-        public AddressesController(IHttpClientFactory httpClientFactory)
+        /// <param name="memoryCache"><see cref="IMemoryCache"/> オブジェクト。</param>
+        public AddressesController(IHttpClientFactory httpClientFactory, IMemoryCache memoryCache)
         {
             HttpClientFactory = httpClientFactory;
+            MemoryCache = memoryCache;
         }
     }
 }

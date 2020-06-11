@@ -64,6 +64,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     .AddEntityMetadataProvider<AppDbContext>()
                     .AddEnumLabelProviders<Startup>()
                     .AddHttpClient()
+                    .AddMemoryCache()
                     .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
                     .AddSingleton<ILookupNormalizer, UpperInvariantLookupNormalizer>()
                     .AddSingleton<IStringHasher, StringHasher>()
