@@ -19,3 +19,4 @@ export { default as AppTextField } from './AppTextField';
 export { default as AppTimeField } from './AppTimeField';
 export { default as AppUsernameField } from './AppUsernameField';
 export { default as AppValidationProviderProps } from './AppValidationProviderProps';
+export { default as AppVersioning } from './AppVersioning';

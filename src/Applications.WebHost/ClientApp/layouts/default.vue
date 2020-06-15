@@ -1,4 +1,5 @@
 <script>
+import { AppVersioning } from '~/components';
 import {
   //
   mdiAccountCircleOutline,
@@ -6,6 +7,9 @@ import {
   mdiMicrosoftVisualStudio,
 } from '@mdi/js';
 export default {
+  components: {
+    AppVersioning,
+  },
   data() {
     return {
       icons: {
@@ -146,5 +150,6 @@ export default {
         <nuxt v-resize="onResize" />
       </v-container>
     </v-content>
+    <app-versioning />
   </v-app>
 </template>

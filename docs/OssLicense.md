@@ -14,6 +14,7 @@
 | FluentValidation                                      | Apache License 2.0                |
 | FluentValidation.AspNetCore                           | Apache License 2.0                |
 | Microsoft.AspNetCore.Mvc.NewtonsoftJson               | Apache License 2.0                |
+| Microsoft.AspNetCore.Mvc.Versioning                   | MIT License                       |
 | Microsoft.AspNetCore.SpaServices.Extensions           | Apache License 2.0                |
 | Microsoft.CodeAnalysis.FxCopAnalyzers                 | Apache License 2.0                |
 | Microsoft.EntityFrameworkCore                         | Apache License 2.0                |

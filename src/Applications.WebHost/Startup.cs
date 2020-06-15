@@ -1,4 +1,6 @@
+using AspNetCoreNuxt.Applications.WebHost.Core.Mvc;
 using AspNetCoreNuxt.Domains.Data;
+using AspNetCoreNuxt.Extensions.AspNetCore.Mvc.Versioning.Conventions;
 using AspNetCoreNuxt.Extensions.AspNetCore.Routing;
 using AspNetCoreNuxt.Extensions.CsvHelper.DependencyInjection;
 using AspNetCoreNuxt.Extensions.DependencyInjection;
@@ -15,7 +17,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -24,11 +28,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NSwag;
 using Serilog;
 using Serilog.Events;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AspNetCoreNuxt.Applications.WebHost
@@ -90,6 +97,19 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     {
                         settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
                         settings.Title = typeof(Startup).Namespace;
+                        settings.AddOperationFilter(context =>
+                        {
+                            if (context.MethodInfo.GetCustomAttribute<ApiVersionNeutralAttribute>() == null)
+                            {
+                                context.OperationDescription.Operation.Parameters.Add(new OpenApiParameter()
+                                {
+                                    Kind = OpenApiParameterKind.Header,
+                                    Name = "x-api-version",
+                                    Default = AppApiVersion.Latest.ToVersion(),
+                                });
+                            }
+                            return true;
+                        });
                     });
 
             services.AddRouting(options =>
@@ -117,6 +137,14 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     });
 
             services.AddAuthorization();
+
+            services.AddApiVersioning(options =>
+                    {
+                        options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+                        options.Conventions.Add(new InterleavingControllerConvention(ApiVersion.Default, typeof(Startup).Assembly));
+                        options.DefaultApiVersion = ApiVersion.Default;
+                        options.ReportApiVersions = true;
+                    });
 
             services.AddControllers(options =>
                     {
@@ -183,12 +211,17 @@ namespace AspNetCoreNuxt.Applications.WebHost
 
             app.Use(async (context, next) =>
             {
-                await next();
                 var scheme = context.Request.Scheme.ToUpperInvariant();
                 var address = context.Connection.RemoteIpAddress;
                 var username = context.User.Identity.Name;
                 var useragent = context.Request.Headers["User-Agent"].ToString();
                 Log.Logger.Information($"Connected {scheme} from {address} by {username} via {useragent}");
+
+                var headers = context.Request.Headers.Where(x => x.Key != "Cookie" && x.Key != "User-Agent" && x.Key != ":method" && x.Key != ":path");
+                var values = string.Join(',', headers.Select(x => $"{x.Key}:{x.Value}"));
+                Log.Logger.Information($"Requested {values}");
+
+                await next();
             });
 
             app.UseSerilogRequestLogging(options =>

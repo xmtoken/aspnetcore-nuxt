@@ -1,3 +1,4 @@
+using AspNetCoreNuxt.Applications.WebHost.Core.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +24,9 @@ namespace AspNetCoreNuxt.Applications.WebHost
 
             try
             {
+                Log.Information($"Application assembly version: {typeof(Program).Assembly.GetName().Version.ToString(3)}");
+                Log.Information($"Application api version: {AppApiVersion.Latest.ToVersion()}");
+                Log.Information($"Application spa version: {AppSpaVersion.Latest.ToVersion()}");
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)

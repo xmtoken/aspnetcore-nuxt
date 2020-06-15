@@ -48,7 +48,11 @@ export default {
     '~/plugins/vee-validate',
   ],
   router: {
-    middleware: ['auth'],
+    middleware: [
+      //
+      'versioning',
+      'auth',
+    ],
   },
   auth: {
     cookie: false,

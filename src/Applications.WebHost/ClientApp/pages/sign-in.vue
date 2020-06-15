@@ -33,23 +33,25 @@ export default {
       try {
         this.loading.signin = true;
 
-        this.$refs.snackbar.reset();
+        this.$refs.snackbar.close();
         if (!(await this.$refs.observer.validate())) {
           return;
         }
 
         const response = await this.$auth.loginWith('local', { data: this.credentials });
-        if (response.status === HttpStatus.BAD_REQUEST) {
-          this.$refs.observer.setErrors(response.data.errors);
-          this.$refs.snackbar.setValidationErrors(response.data.errors);
-          return;
+        switch (response.status) {
+          case HttpStatus.OK:
+            if (window.PasswordCredential) {
+              const credentials = new window.PasswordCredential({ id: this.credentials.userName, password: this.credentials.password });
+              await navigator.credentials.store(credentials);
+            }
+            await this.$auth.fetchUser();
+            break;
+          case HttpStatus.BAD_REQUEST:
+            this.$refs.observer.setErrors(response.data.errors ?? []);
+            this.$refs.snackbar.setValidationErrors(response.data.errors ?? []);
+            break;
         }
-
-        if (window.PasswordCredential) {
-          const credentials = new window.PasswordCredential({ id: this.credentials.userName, password: this.credentials.password });
-          await navigator.credentials.store(credentials);
-        }
-        await this.$auth.fetchUser();
       } finally {
         this.loading.signin = false;
       }
