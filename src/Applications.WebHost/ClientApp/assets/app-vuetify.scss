@@ -24,16 +24,6 @@
     }
 
     &.v-data-table--fixed-header {
-      .v-data-table__wrapper {
-        &::-webkit-scrollbar-track {
-          margin-top: 47px;
-        }
-
-        .v-data-table__progress th {
-          top: 48px;
-        }
-      }
-
       .v-data-footer {
         margin-right: 0;
       }

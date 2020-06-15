@@ -17,8 +17,4 @@ html {
   *::-webkit-scrollbar-track {
     background-color: $scrollbar-track-color;
   }
-
-  .v-data-table__wrapper::-webkit-scrollbar-track:vertical {
-    border-top: 1px inset rgba(0, 0, 0, 0.06);
-  }
 }
