@@ -12,6 +12,9 @@ export default {
   computed: {
     /** @returns {String} */
     icon() {
+      if (this.$device.isMobile) {
+        return null;
+      }
       return this.type === 'success' ? mdiCheckCircle : mdiAlert;
     },
     /** @returns {Number} */
