@@ -3,16 +3,12 @@ export default {
   data() {
     return {
       loading: false,
-      value: false,
     };
-  },
-  mounted() {
-    this.value = true;
   },
   methods: {
     reload() {
       this.loading = true;
-      this.$router.push({ path: this.$route.path, query: this.$route.query });
+      location.reload(true);
     },
   },
 };
