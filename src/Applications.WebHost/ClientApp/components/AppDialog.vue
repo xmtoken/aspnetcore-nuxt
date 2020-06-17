@@ -29,7 +29,13 @@ export default {
       if (this.right) {
         return 'v-dialog--position v-dialog--position-right';
       }
-      return '';
+      return undefined;
+    },
+    /** @returns {Object} */
+    listeners() {
+      const listeners = { ...this.$listeners };
+      delete listeners.input;
+      return listeners;
     },
     /** @returns {String} */
     transitions() {
@@ -39,7 +45,7 @@ export default {
       if (this.right) {
         return 'scroll-x-reverse-transition';
       }
-      return '';
+      return 'dialog-transition';
     },
   },
   watch: {
@@ -54,14 +60,17 @@ export default {
     close() {
       this.model = false;
     },
+    open() {
+      this.model = true;
+    },
   },
 };
 </script>
 
 <template>
-  <v-dialog v-model="model" v-bind="$attrs" :content-class="classes" :transition="transitions" v-on="$listeners">
+  <v-dialog v-model="model" v-bind="$attrs" :content-class="classes" :transition="transitions" v-on="listeners">
     <template v-slot:activator="scope">
-      <slot v-bind="scope" name="activator" />
+      <slot v-bind="{ ...scope, open }" name="activator" />
     </template>
     <template v-slot>
       <slot v-bind="{ close }" />

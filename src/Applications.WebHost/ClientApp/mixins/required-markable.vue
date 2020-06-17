@@ -24,7 +24,9 @@ export default {
     this.isRequired = this.$refs.provider.isRequired;
     this.$watch(
       () => this.$refs.provider.isRequired,
-      val => (this.isRequired = val)
+      val => {
+        this.isRequired = val;
+      }
     );
   },
 };

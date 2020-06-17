@@ -16,6 +16,7 @@ export default {
 </script>
 
 <template>
+  <!-- provider refs for RequiredMarkable -->
   <validation-provider ref="provider" v-slot="{ errors }" v-bind="veeValidationProps">
     <v-textarea v-bind="$attrs" :class="requiredClasses" :error-messages="errors" :label="label" v-on="$listeners">
       <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />

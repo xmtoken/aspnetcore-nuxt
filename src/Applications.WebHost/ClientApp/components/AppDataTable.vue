@@ -5,7 +5,7 @@ const QUERY_KEY_SORT_DIRECTION = 'sort-direction';
 const QUERY_VAL_SORT_ASCENDING = 'ascending';
 const QUERY_VAL_SORT_DESCENDING = 'descending';
 const QUERY_VAL_SEPARATOR = ',';
-import DeepEqual from 'deep-equal';
+import deepEqual from 'deep-equal';
 export default {
   inheritAttrs: false,
   props: {
@@ -44,7 +44,7 @@ export default {
     '$route.query'(newQuery, oldQuery) {
       const newOptions = this.getOptionsFromQuery(newQuery);
       const oldOptions = this.getOptionsFromQuery(oldQuery);
-      if (DeepEqual(newOptions, oldOptions)) {
+      if (deepEqual(newOptions, oldOptions)) {
         return;
       }
       this.internalOptions = {
@@ -102,7 +102,7 @@ export default {
         sortBy: options.sortBy,
         sortDesc: options.sortDesc,
       };
-      if (DeepEqual(newOptions, oldOptions)) {
+      if (deepEqual(newOptions, oldOptions)) {
         return;
       }
       const directions = options.sortDesc.map(x => (x ? QUERY_VAL_SORT_DESCENDING : QUERY_VAL_SORT_ASCENDING));

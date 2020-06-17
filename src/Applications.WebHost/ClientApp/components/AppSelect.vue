@@ -26,6 +26,7 @@ export default {
 </script>
 
 <template>
+  <!-- provider refs for RequiredMarkable -->
   <validation-provider ref="provider" v-slot="{ errors }" v-bind="veeValidationProps">
     <v-select v-bind="$attrs" :class="requiredClasses" :error-messages="errors" :label="label" :menu-props="menuProps" v-on="$listeners">
       <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />

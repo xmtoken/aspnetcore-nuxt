@@ -16,6 +16,14 @@ export default {
       model: this.value,
     };
   },
+  computed: {
+    /** @returns {Object} */
+    listeners() {
+      const listeners = { ...this.$listeners };
+      delete listeners.input;
+      return listeners;
+    },
+  },
   watch: {
     model(val) {
       this.$emit('input', val);
@@ -28,14 +36,17 @@ export default {
     close() {
       this.model = false;
     },
+    open() {
+      this.model = true;
+    },
   },
 };
 </script>
 
 <template>
-  <v-menu v-model="model" v-bind="$attrs" :close-on-content-click="closeOnContentClick" v-on="$listeners">
+  <v-menu v-model="model" v-bind="$attrs" :close-on-content-click="closeOnContentClick" v-on="listeners">
     <template v-slot:activator="scope">
-      <slot v-bind="scope" name="activator" />
+      <slot v-bind="{ ...scope, open }" name="activator" />
     </template>
     <template v-slot>
       <slot v-bind="{ close }" />

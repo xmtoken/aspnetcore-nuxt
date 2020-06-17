@@ -13,7 +13,7 @@ export default {
     /** @returns {String} */
     icon() {
       if (this.$device.isMobile) {
-        return null;
+        return undefined;
       }
       return this.type === 'success' ? mdiCheckCircle : mdiAlert;
     },
@@ -38,6 +38,9 @@ export default {
     },
     setSuccesses(messages) {
       this.setMessages('success', messages);
+    },
+    setInformations(messages) {
+      this.setMessages('info', messages);
     },
     setWarnings(messages) {
       this.setMessages('warning', messages);

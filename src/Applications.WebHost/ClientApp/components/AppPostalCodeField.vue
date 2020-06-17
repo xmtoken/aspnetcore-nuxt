@@ -8,7 +8,6 @@ export default {
     AppTextField,
   },
   directives: {
-    //
     mask: VueMaskDirective,
   },
   inheritAttrs: false,
@@ -27,11 +26,15 @@ export default {
     },
     contentClass: {
       default: undefined,
-      type: String,
+      type: [Object, String],
     },
     contentStyle: {
       default: undefined,
-      type: String,
+      type: [Object, String],
+    },
+    dense: {
+      default: false,
+      type: Boolean,
     },
     mask: {
       default: '###-####',
@@ -56,9 +59,18 @@ export default {
     };
   },
   computed: {
+    /** @returns {Object} */
+    listeners() {
+      const listeners = { ...this.$listeners };
+      delete listeners.input;
+      return listeners;
+    },
     /** @returns {String} */
     menuClasses() {
-      return this.menuOffsetY ? 'v-menu__content--offset-y' : undefined;
+      if (this.menuOffsetY) {
+        return this.dense ? 'v-menu__content--offset-y-dense' : 'v-menu__content--offset-y';
+      }
+      return undefined;
     },
   },
   watch: {
@@ -77,12 +89,12 @@ export default {
       try {
         this.loading = true;
         if (this.model) {
-          const data = await this.$axios.$get('/addresses', { params: { code: this.model } });
-          if (data.status === HttpStatus.OK) {
-            if (data.results.length === 1) {
-              this.emit(data.results[0]);
+          const response = await this.$axios.get('/addresses', { params: { code: this.model } });
+          if (response.status === HttpStatus.OK && response.data.status === HttpStatus.OK) {
+            if (response.data.results.length === 1) {
+              this.emit(response.data.results[0]);
             } else {
-              this.items.splice(0, this.items.length, ...data.results);
+              this.items.splice(0, this.items.length, ...response.data.results);
               this.selected = [];
               this.menu = true;
             }
@@ -99,29 +111,33 @@ export default {
 </script>
 
 <template>
-  <div>
-    <app-text-field ref="field" v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :autocomplete="autocomplete" :class="contentClass" :loading="loading" :style="contentStyle" v-on="$listeners" @click:append="search">
-      <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
-      <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
-        <slot v-bind="scope" :name="slot" />
-      </template>
-    </app-text-field>
-    <v-menu v-model="menu" :activator="$refs.field" :content-class="menuClasses" :offset-y="menuOffsetY" :open-on-click="false">
-      <v-list dense>
-        <v-list-item-group v-model="selected">
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <v-list-item-content @click="emit(item)">
-              {{ item.address1 + item.address2 + item.address3 }}
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-menu>
-  </div>
+  <v-menu v-model="menu" :content-class="menuClasses" :open-on-click="false">
+    <template v-slot:activator="{}">
+      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :autocomplete="autocomplete" :class="contentClass" :dense="dense" :loading="loading" :style="contentStyle" v-on="listeners" @click:append="search">
+        <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
+        <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+          <slot v-bind="scope" :name="slot" />
+        </template>
+      </app-text-field>
+    </template>
+    <v-list dense>
+      <v-list-item-group v-model="selected">
+        <v-list-item v-for="(item, i) in items" :key="i">
+          <v-list-item-content @click="emit(item)">
+            {{ item.address1 + item.address2 + item.address3 }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+  </v-menu>
 </template>
 
 <style lang="scss" scoped>
 .v-menu__content--offset-y ::v-deep {
-  margin-top: -21px;
+  margin-top: 45px;
+}
+
+.v-menu__content--offset-y-dense ::v-deep {
+  margin-top: 29px;
 }
 </style>
