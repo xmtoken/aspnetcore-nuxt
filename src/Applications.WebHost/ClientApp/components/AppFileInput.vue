@@ -1,6 +1,5 @@
 <script>
-import AppValidationProviderProps from './AppValidationProviderProps';
-import { RequiredMarkable, Slotable } from '~/mixins';
+import { RequiredMarkable, Slotable, ValidationProviderProps } from '~/mixins';
 import { ValidationProvider } from 'vee-validate';
 export default {
   components: {
@@ -8,9 +7,9 @@ export default {
   },
   mixins: [
     //
-    AppValidationProviderProps,
     RequiredMarkable,
     Slotable,
+    ValidationProviderProps,
   ],
   inheritAttrs: false,
   model: {
