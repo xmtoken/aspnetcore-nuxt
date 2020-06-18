@@ -1,6 +1,7 @@
 <script>
 import AppDatePicker from './AppDatePicker';
 import AppTextField from './AppTextField';
+import { Slotable } from '~/mixins';
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
 export default {
@@ -8,6 +9,10 @@ export default {
     AppDatePicker,
     AppTextField,
   },
+  mixins: [
+    //
+    Slotable,
+  ],
   inheritAttrs: false,
   props: {
     appendIcon: {
@@ -114,8 +119,8 @@ export default {
   <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
       <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
-        <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
-        <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+        <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
+        <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
         </template>
       </app-text-field>

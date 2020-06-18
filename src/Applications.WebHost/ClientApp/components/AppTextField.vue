@@ -1,6 +1,6 @@
 <script>
 import AppValidationProviderProps from './AppValidationProviderProps';
-import { RequiredMarkable } from '~/mixins';
+import { RequiredMarkable, Slotable } from '~/mixins';
 import { ValidationProvider } from 'vee-validate';
 export default {
   components: {
@@ -10,6 +10,7 @@ export default {
     //
     AppValidationProviderProps,
     RequiredMarkable,
+    Slotable,
   ],
   inheritAttrs: false,
   props: {
@@ -43,8 +44,8 @@ export default {
   <!-- provider refs for RequiredMarkable -->
   <validation-provider ref="provider" v-slot="{ errors }" v-bind="veeValidationProps">
     <v-text-field v-bind="$attrs" :class="requiredClasses" :error-messages="errors" :label="label" v-on="$listeners">
-      <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
-      <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+      <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
+      <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
         <slot v-bind="scope" :name="slot" />
       </template>
     </v-text-field>

@@ -1,10 +1,15 @@
 <script>
 import AppTextField from './AppTextField';
+import { Slotable } from '~/mixins';
 import numbro from 'numbro';
 export default {
   components: {
     AppTextField,
   },
+  mixins: [
+    //
+    Slotable,
+  ],
   inheritAttrs: false,
   props: {
     format: {
@@ -52,10 +57,14 @@ export default {
       this.focused = true;
     },
     onInput() {
-      this.$emit('input', numbro.validate(this.formattedText, {}) ? numbro(this.formattedText).value() : this.model);
+      this.$emit('input', this.isValid(this.model) ? numbro(this.model).value() : this.model);
     },
     toFormatted(val) {
-      return numbro.validate(val, {}) ? numbro(val).format(this.format) : val;
+      return this.isValid(val) ? numbro(val).format(this.format) : val;
+    },
+    isValid(val) {
+      const value = numbro(val).value();
+      return value !== undefined && value !== null && !Number.isNaN(value);
     },
   },
 };
@@ -63,8 +72,8 @@ export default {
 
 <template>
   <app-text-field v-model="model" v-bind="$attrs" v-on="listeners" @blur="onBlue" @focus="onFocus" @input="onInput">
-    <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
-    <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+    <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
+    <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
       <slot v-bind="scope" :name="slot" />
     </template>
   </app-text-field>

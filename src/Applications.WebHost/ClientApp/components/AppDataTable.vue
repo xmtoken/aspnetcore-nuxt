@@ -5,8 +5,13 @@ const QUERY_KEY_SORT_DIRECTION = 'sort-direction';
 const QUERY_VAL_SORT_ASCENDING = 'ascending';
 const QUERY_VAL_SORT_DESCENDING = 'descending';
 const QUERY_VAL_SEPARATOR = ',';
+import { Slotable } from '~/mixins';
 import deepEqual from 'deep-equal';
 export default {
+  mixins: [
+    //
+    Slotable,
+  ],
   inheritAttrs: false,
   props: {
     footerProps: {
@@ -121,8 +126,8 @@ export default {
 
 <template>
   <v-data-table v-bind="$attrs" :class="classes" :footer-props="footerProps" :options.sync="internalOptions" v-on="$listeners" @update:options="onUpdateOptions">
-    <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
-    <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+    <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
+    <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
       <slot v-bind="scope" :name="slot" />
     </template>
   </v-data-table>

@@ -1,5 +1,6 @@
 <script>
 import AppTextField from './AppTextField';
+import { Slotable } from '~/mixins';
 import { mdiMagnify } from '@mdi/js';
 import HttpStatus from 'http-status-codes';
 import { VueMaskDirective } from 'v-mask';
@@ -10,6 +11,10 @@ export default {
   directives: {
     mask: VueMaskDirective,
   },
+  mixins: [
+    //
+    Slotable,
+  ],
   inheritAttrs: false,
   props: {
     appendIcon: {
@@ -114,8 +119,8 @@ export default {
   <v-menu v-model="menu" :content-class="menuClasses" :open-on-click="false">
     <template v-slot:activator="{}">
       <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :autocomplete="autocomplete" :class="contentClass" :dense="dense" :loading="loading" :style="contentStyle" v-on="listeners" @click:append="search">
-        <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
-        <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+        <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
+        <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
         </template>
       </app-text-field>
