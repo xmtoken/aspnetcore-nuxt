@@ -13,6 +13,10 @@ export default {
       default: false,
       type: Boolean,
     },
+    veeDisabledRules: {
+      default: false,
+      type: Boolean,
+    },
     veeName: {
       default: undefined,
       type: String,
@@ -33,7 +37,7 @@ export default {
         customMessages: this.veeCustomMessages,
         disabled: this.veeDisabled,
         name: this.veeName ? this.veeName : this.label,
-        rules: this.veeRules,
+        rules: this.veeDisabledRules ? undefined : this.veeRules,
         slim: true,
         vid: this.veeVid,
       };
