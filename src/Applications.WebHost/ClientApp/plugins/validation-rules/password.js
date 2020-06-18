@@ -18,7 +18,7 @@ export default {
     return `${message}${REQUIRED_LENGTH}文字以上で入力してください。`;
   },
   validate(val) {
-    const value = val || '';
+    const value = val?.toString() || '';
     if (REQUIRED_LENGTH > value.length) {
       return false;
     }
