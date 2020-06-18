@@ -70,7 +70,7 @@ export default {
 <template>
   <v-dialog v-model="model" v-bind="$attrs" :content-class="classes" :transition="transitions" v-on="listeners">
     <template v-slot:activator="scope">
-      <slot v-bind="{ ...scope, open }" name="activator" />
+      <slot v-bind="{ ...scope, open, opend: model }" name="activator" />
     </template>
     <template v-slot>
       <slot v-bind="{ close }" />
