@@ -65,6 +65,9 @@ module.exports = {
           'computed',
           'watch',
           'watchQuery', // for nuxt
+          'beforeRouteEnter', // for vue-router
+          'beforeRouteUpdate', // for vue-router
+          'beforeRouteLeave', // for vue-router
           'beforeCreate',
           'created',
           'beforeMount',
