@@ -29,7 +29,7 @@ export default {
   methods: {
     setAppendIconTabindex() {
       const elements = this.$el.querySelectorAll('.v-input__icon--append button.v-icon');
-      if (this.appendIconTabindex) {
+      if (this.appendIconTabindex || this.appendIconTabindex === 0) {
         elements.forEach(x => x.setAttribute('tabindex', this.appendIconTabindex));
       } else {
         elements.forEach(x => x.removeAttribute('tabindex'));

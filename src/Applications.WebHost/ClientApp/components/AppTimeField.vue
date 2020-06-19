@@ -48,6 +48,10 @@ export default {
       default: false,
       type: Boolean,
     },
+    readonly: {
+      default: false,
+      type: Boolean,
+    },
     useSeconds: {
       default: false,
       type: Boolean,
@@ -84,8 +88,9 @@ export default {
     time: {
       /** @returns {Any} */
       get() {
-        const datetime = `0001/01/01 ${this.model}`;
-        if (this.model && dayjs(datetime).isValid()) {
+        const value = this.model?.toString() || '';
+        const datetime = `0001/01/01 ${value}`;
+        if (value && dayjs(datetime).isValid()) {
           return dayjs(datetime).format(this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
         }
         return null;
@@ -115,9 +120,9 @@ export default {
 </script>
 
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
+  <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" :disabled="readonly" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
         <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
         <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />

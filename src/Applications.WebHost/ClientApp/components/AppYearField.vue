@@ -1,6 +1,5 @@
 <script>
 import { Slotable } from '~/mixins';
-import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
 export default {
   mixins: [
@@ -9,14 +8,6 @@ export default {
   ],
   inheritAttrs: false,
   props: {
-    appendIcon: {
-      default: mdiCalendar,
-      type: String,
-    },
-    appendIconTabindex: {
-      default: -1,
-      type: Number,
-    },
     contentClass: {
       default: undefined,
       type: [Object, String],
@@ -28,6 +19,10 @@ export default {
     dense: {
       default: false,
       type: Boolean,
+    },
+    max: {
+      default: undefined,
+      type: String,
     },
     menuOffsetLeft: {
       default: false,
@@ -41,16 +36,13 @@ export default {
       default: false,
       type: Boolean,
     },
+    pickerWidth: {
+      default: 150,
+      type: [Number, String],
+    },
     readonly: {
       default: false,
       type: Boolean,
-    },
-    type: {
-      default: 'date',
-      type: String,
-      validator(val) {
-        return ['date', 'month'].includes(val);
-      },
     },
     value: {
       default: undefined,
@@ -69,13 +61,13 @@ export default {
       get() {
         const value = this.model?.toString().trim() || '';
         if (value && dayjs(value).isValid()) {
-          return dayjs(value).format(this.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM');
+          return dayjs(value).format('YYYY-01-01');
         }
         return null;
       },
       /** @param {Array|String} val */
       set(val) {
-        this.model = val;
+        this.model = dayjs(val).format('YYYY');
       },
     },
     /** @returns {Object} */
@@ -97,6 +89,13 @@ export default {
     },
   },
   watch: {
+    menu(val) {
+      if (val) {
+        this.$nextTick(() => {
+          this.$refs.picker.activePicker = 'YEAR';
+        });
+      }
+    },
     model(val) {
       this.$emit('input', val);
     },
@@ -107,7 +106,7 @@ export default {
   methods: {
     onComplete() {
       if (this.date) {
-        this.model = this.date;
+        this.model = dayjs(this.date).format('YYYY');
       }
     },
   },
@@ -117,14 +116,14 @@ export default {
 <template>
   <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" :disabled="readonly" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-bind="$attrs" :class="contentClass" :dense="dense" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
         <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
         <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
         </template>
       </app-text-field>
     </template>
-    <app-date-picker v-model="date" :type="type" @change="menu = false" />
+    <app-date-picker ref="picker" v-model="date" :max="`${max}-12-31`" no-title reactive :width="pickerWidth" @input="menu = false" />
   </v-menu>
 </template>
 

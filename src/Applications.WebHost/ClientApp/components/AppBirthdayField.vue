@@ -51,12 +51,9 @@ export default {
       default: false,
       type: Boolean,
     },
-    type: {
-      default: 'date',
-      type: String,
-      validator(val) {
-        return ['date', 'month'].includes(val);
-      },
+    readonly: {
+      default: false,
+      type: Boolean,
     },
     value: {
       default: undefined,
@@ -73,8 +70,9 @@ export default {
     date: {
       /** @returns {Array|String} */
       get() {
-        if (this.model && dayjs(this.model).isValid()) {
-          return dayjs(this.model).format(this.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM');
+        const value = this.model?.toString().trim() || '';
+        if (value && dayjs(value).isValid()) {
+          return dayjs(value).format('YYYY-MM-DD');
         }
         return null;
       },
@@ -127,16 +125,16 @@ export default {
 </script>
 
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
+  <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" :disabled="readonly" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
         <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
         <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
           <slot v-bind="scope" :name="slot" />
         </template>
       </app-text-field>
     </template>
-    <app-date-picker ref="picker" v-model="date" :max="max" :type="type" @change="menu = false" />
+    <app-date-picker ref="picker" v-model="date" :max="max" @change="menu = false" />
   </v-menu>
 </template>
 
