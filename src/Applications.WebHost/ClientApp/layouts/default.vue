@@ -1,15 +1,6 @@
 <script>
-import { AppVersioning } from '~/components';
-import {
-  //
-  mdiAccountCircleOutline,
-  mdiHomeCircleOutline,
-  mdiMicrosoftVisualStudio,
-} from '@mdi/js';
+import { mdiAccountCircleOutline, mdiHomeCircleOutline, mdiMicrosoftVisualStudio } from '@mdi/js';
 export default {
-  components: {
-    AppVersioning,
-  },
   data() {
     return {
       icons: {

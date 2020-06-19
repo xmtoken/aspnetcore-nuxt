@@ -1,14 +1,8 @@
 <script>
-import AppDatePicker from './AppDatePicker';
-import AppTextField from './AppTextField';
 import { Slotable } from '~/mixins';
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
 export default {
-  components: {
-    AppDatePicker,
-    AppTextField,
-  },
   mixins: [
     //
     Slotable,

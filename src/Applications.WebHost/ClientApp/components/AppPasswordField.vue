@@ -1,11 +1,7 @@
 <script>
-import AppTextField from './AppTextField';
 import { Slotable } from '~/mixins';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 export default {
-  components: {
-    AppTextField,
-  },
   mixins: [
     //
     Slotable,

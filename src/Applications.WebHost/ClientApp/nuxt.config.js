@@ -10,6 +10,7 @@ export default {
     //
     '@nuxtjs/vuetify',
   ],
+  components: true,
   css: ['@/assets/main.scss'],
   env: {},
   head: {
@@ -55,6 +56,7 @@ export default {
       'auth',
     ],
   },
+  telemetry: false,
   auth: {
     cookie: false,
     redirect: {

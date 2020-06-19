@@ -1,12 +1,8 @@
 <script>
-import AppTextField from './AppTextField';
 import { Slotable } from '~/mixins';
 import { mdiClockOutline } from '@mdi/js';
 import dayjs from 'dayjs';
 export default {
-  components: {
-    AppTextField,
-  },
   mixins: [
     //
     Slotable,

@@ -1,13 +1,9 @@
 <script>
-import AppTextField from './AppTextField';
 import { Slotable } from '~/mixins';
 import { mdiMagnify } from '@mdi/js';
 import HttpStatus from 'http-status-codes';
 import { VueMaskDirective } from 'v-mask';
 export default {
-  components: {
-    AppTextField,
-  },
   directives: {
     mask: VueMaskDirective,
   },

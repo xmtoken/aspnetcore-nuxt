@@ -1,10 +1,6 @@
 <script>
-import AppTextField from './AppTextField';
 import { Slotable } from '~/mixins';
 export default {
-  components: {
-    AppTextField,
-  },
   mixins: [
     //
     Slotable,

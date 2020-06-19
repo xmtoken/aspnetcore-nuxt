@@ -1,5 +1,4 @@
 <script>
-import { AppAlertSnackbar, AppPasswordField, AppUsernameField } from '~/components';
 import { mdiAccount, mdiLock, mdiMicrosoftVisualStudio } from '@mdi/js';
 import HttpStatus from 'http-status-codes';
 import { ValidationObserver } from 'vee-validate';
@@ -7,9 +6,6 @@ export default {
   layout: 'none',
   auth: 'guest',
   components: {
-    AppAlertSnackbar,
-    AppPasswordField,
-    AppUsernameField,
     ValidationObserver,
   },
   data() {
