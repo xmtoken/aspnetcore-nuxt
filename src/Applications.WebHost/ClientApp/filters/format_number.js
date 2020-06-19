@@ -1,9 +1,10 @@
 import numbro from 'numbro';
 export default function (val, format) {
-  const value = numbro(val).value();
-  if (value === undefined || value === null || Number.isNaN(value)) {
+  const value = val?.toString().trim() || '';
+  const number = numbro(value).value();
+  if (number === undefined || number === null || number === Infinity || Number.isNaN(number)) {
     return val;
   } else {
-    return numbro(val).format(format);
+    return numbro(value).format(format);
   }
 }
