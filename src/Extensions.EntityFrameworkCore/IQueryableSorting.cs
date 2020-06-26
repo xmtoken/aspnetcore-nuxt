@@ -13,6 +13,6 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         /// <summary>
         /// 並び替えのキーとなるプロパティを示す式ツリーを取得します。
         /// </summary>
-        Expression<Func<T, object>> SortExpression { get; }
+        Expression<Func<T, object>> SortPropertyExpression { get; }
     }
 }

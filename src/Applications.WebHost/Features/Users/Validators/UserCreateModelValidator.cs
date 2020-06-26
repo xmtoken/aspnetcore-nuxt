@@ -28,7 +28,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Validators
             RuleFor(x => x.UserName)
                 .Configure(x => x.DisplayName = new StaticStringSource("ユーザー名"))
                 .NotNull()
-                .MaximumLength(metadata.Entity<UserEntity>().Property(x => x.Name).GetMaxLength().Value)
+                .MaximumLength(metadata.Entity<UserEntity>().FindProperty(x => x.Name).GetMaxLength().Value)
                 .UserName()
                 .CustomAsync(async (userName, validationContext, cancellationToken) =>
                 {
@@ -47,7 +47,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Validators
             RuleFor(x => x.EmailAddress)
                 .Configure(x => x.DisplayName = new StaticStringSource("メールアドレス"))
                 .NotNull()
-                .MaximumLength(metadata.Entity<UserProfileEntity>().Property(x => x.EmailAddress).GetMaxLength().Value)
+                .MaximumLength(metadata.Entity<UserProfileEntity>().FindProperty(x => x.EmailAddress).GetMaxLength().Value)
                 .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
 
             RuleFor(x => x.Birthday)

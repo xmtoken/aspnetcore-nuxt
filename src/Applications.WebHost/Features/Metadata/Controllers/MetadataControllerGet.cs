@@ -30,7 +30,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Metadata.Controllers
                 var entityProperties = new Dictionary<string, object>();
                 foreach (var memberMap in map.MemberMaps.Where(x => x.SourceMember != null))
                 {
-                    var propertyMetadata = entityMetadata.Property(memberMap.SourceMember.Name);
+                    var propertyMetadata = entityMetadata.FindProperty(memberMap.SourceMember.Name);
                     if (propertyMetadata == null)
                     {
                         continue;

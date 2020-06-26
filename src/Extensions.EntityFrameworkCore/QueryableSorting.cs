@@ -15,7 +15,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         public SortDirection SortDirection { get; }
 
         /// <inheritdoc/>
-        public Expression<Func<T, object>> SortExpression { get; }
+        public Expression<Func<T, object>> SortPropertyExpression { get; }
 
         /// <inheritdoc/>
         public string SortPropertyName { get; }
@@ -29,7 +29,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         {
             SortPropertyName = propertyName;
             SortDirection = direction;
-            SortExpression = ConvertToExpression(propertyName);
+            SortPropertyExpression = ConvertToExpression(propertyName);
 
             static Expression<Func<T, object>> ConvertToExpression(string propertyName)
             {
@@ -66,7 +66,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         /// <param name="direction">並び替え方向。</param>
         public QueryableSorting(Expression<Func<T, object>> expression, SortDirection direction)
         {
-            SortExpression = expression;
+            SortPropertyExpression = expression;
             SortDirection = direction;
 
             var node

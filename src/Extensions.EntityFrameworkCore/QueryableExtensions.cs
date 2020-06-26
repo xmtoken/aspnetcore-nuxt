@@ -20,7 +20,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         /// <param name="sorting">ソート条件を表す <see cref="IQueryableSorting{T}"/> オブジェクト。</param>
         /// <returns><see cref="IQueryable{T}"/> オブジェクト。</returns>
         public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, IQueryableSorting<T> sorting)
-            => sorting.SortDirection == SortDirection.Ascending ? source.OrderBy(sorting.SortExpression) : source.OrderByDescending(sorting.SortExpression);
+            => sorting.SortDirection == SortDirection.Ascending ? source.OrderBy(sorting.SortPropertyExpression) : source.OrderByDescending(sorting.SortPropertyExpression);
 
         /// <summary>
         /// 指定されたページング条件をもとにシーケンスを非同期でページングします。

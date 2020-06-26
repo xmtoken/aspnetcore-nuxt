@@ -5,9 +5,8 @@ using System.Linq.Expressions;
 
 namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
 {
-    /// <inheritdoc/>
-    /// <typeparam name="T">エンティティの型。</typeparam>
-    public class EntityMetadata<T> : EntityMetadata
+    /// <inheritdoc cref="IEntityMetadata{T}"/>
+    public class EntityMetadata<T> : EntityMetadata, IEntityMetadata<T>
     {
         /// <summary>
         /// <see cref="EntityMetadata{T}"/> クラスの新しいインスタンスを作成します。
@@ -18,15 +17,11 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         {
         }
 
-        /// <summary>
-        /// 指定されたプロパティのメタデータを取得します。
-        /// </summary>
-        /// <param name="expression">プロパティを示す式ツリー。</param>
-        /// <returns><see cref="IProperty"/> オブジェクト。</returns>
-        public IProperty Property(Expression<Func<T, object>> expression)
+        /// <inheritdoc/>
+        public IProperty FindProperty(Expression<Func<T, object>> expression)
         {
             var name = expression.Body<MemberExpression>().Member.Name;
-            return Property(name);
+            return FindProperty(name);
         }
     }
 }

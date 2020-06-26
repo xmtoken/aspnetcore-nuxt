@@ -2,10 +2,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
 {
-    /// <summary>
-    /// エンティティのメタデータを表します。
-    /// </summary>
-    public class EntityMetadata
+    /// <inheritdoc cref="IEntityMetadata"/>
+    public class EntityMetadata : IEntityMetadata
     {
         /// <summary>
         /// <see cref="IEntityType"/> オブジェクトを表します。
@@ -21,12 +19,8 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
             EntityType = entityType;
         }
 
-        /// <summary>
-        /// 指定されたプロパティのメタデータを取得します。
-        /// </summary>
-        /// <param name="propertyName">プロパティ名。</param>
-        /// <returns><see cref="IProperty"/> オブジェクト。</returns>
-        public IProperty Property(string propertyName)
+        /// <inheritdoc/>
+        public IProperty FindProperty(string propertyName)
             => EntityType.FindProperty(propertyName);
     }
 }

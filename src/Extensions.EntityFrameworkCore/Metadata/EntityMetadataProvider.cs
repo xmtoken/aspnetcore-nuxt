@@ -25,7 +25,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         }
 
         /// <inheritdoc/>
-        public IEnumerable<EntityMetadata> Entities()
+        public IEnumerable<IEntityMetadata> Entities()
         {
             foreach (var entityType in Model.GetEntityTypes())
             {
@@ -34,14 +34,14 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         }
 
         /// <inheritdoc/>
-        public EntityMetadata Entity(Type type)
+        public IEntityMetadata Entity(Type type)
         {
             var entityType = Model.FindEntityType(type);
             return new EntityMetadata(entityType);
         }
 
         /// <inheritdoc/>
-        public EntityMetadata<T> Entity<T>()
+        public IEntityMetadata<T> Entity<T>()
         {
             var entityType = Model.FindEntityType(typeof(T));
             return new EntityMetadata<T>(entityType);

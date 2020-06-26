@@ -4,7 +4,7 @@ using FluentValidation.Resources;
 namespace AspNetCoreNuxt.Extensions.FluentValidation.Resources
 {
     /// <summary>
-    /// <see cref="ILanguageManager"/> インターフェイスの拡張機能を提供します。
+    /// <see cref="LanguageManager"/> クラスの拡張機能を提供します。
     /// </summary>
     public static class LanguageManagerExtensions
     {
