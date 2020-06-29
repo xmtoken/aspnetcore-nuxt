@@ -21,14 +21,14 @@
     "file-saver": "2.0.2",
     "http-status-codes": "1.4.0",
     "numbro": "2.3.1",
-    "nuxt": "2.13.1",
+    "nuxt": "2.13.2",
     "qs": "6.9.4",
     "v-mask": "2.2.1",
     "vee-validate": "3.3.5"
   },
   "devDependencies": {
     "@mdi/js": "5.3.45",
-    "@nuxt/types": "2.13.1",
+    "@nuxt/types": "2.13.2",
     "@nuxtjs/vuetify": "1.11.2",
     "@types/file-saver": "2.0.1",
     "@types/nuxtjs__auth": "4.8.4",
