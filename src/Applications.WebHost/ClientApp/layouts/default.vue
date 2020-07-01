@@ -129,6 +129,7 @@ export default {
         <nuxt v-resize="onResize" />
       </v-container>
     </v-content>
+    <app-notifications :notifications="$store.state.notifications.queue" />
     <app-versioning />
   </v-app>
 </template>
