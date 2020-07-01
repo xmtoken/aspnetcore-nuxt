@@ -59,6 +59,7 @@ export default {
   telemetry: false,
   auth: {
     cookie: false,
+    localStorage: false,
     redirect: {
       callback: false,
       home: '/',

@@ -35,7 +35,8 @@ export default function ({ $axios, app, store }) {
 
   $axios.onResponse(async response => {
     if (response.status === HttpStatus.UNAUTHORIZED || response.status === HttpStatus.FORBIDDEN) {
-      await app.$auth.reset();
+      await app.$auth.setUser(false);
+      await app.$auth.redirect('login');
     }
     return Promise.resolve(response);
   });
