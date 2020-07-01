@@ -19,7 +19,7 @@ export default {
     },
     /** @returns {Number} */
     timeout() {
-      return this.type === 'success' ? 5000 : 0;
+      return this.type === 'success' ? 5000 : -1;
     },
   },
   watch: {

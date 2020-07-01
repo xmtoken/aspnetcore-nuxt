@@ -57,7 +57,7 @@ export default {
 
 <template>
   <v-app v-resize="onResize" class="noto-sans-jp">
-    <v-navigation-drawer app dark fixed :mobile-break-point="0">
+    <v-navigation-drawer app dark fixed :mobile-breakpoint="0">
       <v-list-item>
         <v-list-item-avatar>
           <v-icon>
@@ -124,11 +124,11 @@ export default {
         </template>
       </v-list>
     </v-navigation-drawer>
-    <v-content>
+    <v-main>
       <v-container id="container" fluid>
         <nuxt v-resize="onResize" />
       </v-container>
-    </v-content>
+    </v-main>
     <app-notifications :notifications="$store.state.notifications.queue" />
     <app-versioning />
   </v-app>

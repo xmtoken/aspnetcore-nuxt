@@ -58,7 +58,7 @@ export default {
 </script>
 
 <template>
-  <v-content>
+  <v-main>
     <v-container class="my-5 py-5">
       <app-alert-snackbar ref="snackbar" top />
       <v-row dense justify="center">
@@ -95,5 +95,5 @@ export default {
         </v-col>
       </v-row>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
