@@ -40,7 +40,6 @@ export default {
     //
     '@nuxtjs/auth',
     '@nuxtjs/axios',
-    '@nuxtjs/device',
   ],
   plugins: [
     //
