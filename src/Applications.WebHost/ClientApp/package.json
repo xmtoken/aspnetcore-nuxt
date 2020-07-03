@@ -16,7 +16,7 @@
     "@nuxtjs/axios": "5.11.0",
     "@nuxtjs/device": "1.2.7",
     "content-disposition": "0.5.3",
-    "dayjs": "1.8.28",
+    "dayjs": "1.8.29",
     "deep-equal": "2.0.3",
     "file-saver": "2.0.2",
     "http-status-codes": "1.4.0",
