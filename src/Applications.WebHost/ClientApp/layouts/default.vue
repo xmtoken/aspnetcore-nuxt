@@ -1,6 +1,6 @@
 <script>
 import { Resizer } from '~/extensions';
-import { mdiAccountCircleOutline, mdiHomeCircleOutline, mdiMicrosoftVisualStudio } from '@mdi/js';
+import { mdiAccountCircleOutline, mdiHomeCircleOutline, mdiMicrosoftVisualStudio, mdiLayersOutline } from '@mdi/js';
 export default {
   data() {
     return {
@@ -22,27 +22,15 @@ export default {
     };
   },
   created() {
-    for (const lv1route of this.routes) {
-      if (this.$route.path.startsWith(lv1route.path)) {
-        return;
+    const isRouteExpand = path => path.replace(/\/$/, '') === this.$route.path.replace(/\/$/, '');
+    for (const lv1route of this.routes.filter(x => x.routes)) {
+      for (const lv2route of lv1route.routes.filter(x => x.path)) {
+        lv1route.expands = isRouteExpand(lv2route.path);
       }
-      if (!lv1route.routes) {
-        continue;
-      }
-      for (const lv2route of lv1route.routes) {
-        if (this.$route.path.startsWith(lv2route.path)) {
-          lv1route.expands = true;
-          return;
-        }
-        if (!lv2route.routes) {
-          continue;
-        }
-        for (const lv3route of lv2route.routes) {
-          if (this.$route.path.startsWith(lv3route.path)) {
-            lv1route.expands = true;
-            lv2route.expands = true;
-            return;
-          }
+      for (const lv2route of lv1route.routes.filter(x => x.routes)) {
+        for (const lv3route of lv2route.routes.filter(x => x.path)) {
+          lv1route.expands = isRouteExpand(lv3route.path);
+          lv2route.expands = isRouteExpand(lv3route.path);
         }
       }
     }
@@ -75,23 +63,20 @@ export default {
       </v-list-item>
       <v-divider />
       <v-list>
-        <template v-for="lv1route in routes">
+        <template v-for="(lv1route, lv1key) in routes">
           <template v-if="lv1route.routes">
-            <!-- eslint-disable-next-line vue/valid-v-for -->
-            <v-list-group no-action :prepend-icon="lv1route.icon" :value="lv1route.expands">
+            <v-list-group :key="lv1key" no-action :prepend-icon="lv1route.icon" :value="lv1route.expands">
               <template v-slot:activator>
                 <v-list-item-title>{{ lv1route.text }}</v-list-item-title>
               </template>
-              <template v-for="lv2route in lv1route.routes">
+              <template v-for="(lv2route, lv2key) in lv1route.routes">
                 <template v-if="lv2route.routes">
-                  <!-- eslint-disable-next-line vue/valid-v-for -->
-                  <v-list-group no-action sub-group :value="lv2route.expands">
+                  <v-list-group :key="lv2key" no-action sub-group :value="lv2route.expands">
                     <template v-slot:activator>
                       <v-list-item-title>{{ lv2route.text }}</v-list-item-title>
                     </template>
-                    <template v-for="lv3route in lv2route.routes">
-                      <!-- eslint-disable-next-line vue/valid-v-for -->
-                      <v-list-item nuxt :to="lv3route.path">
+                    <template v-for="(lv3route, lv3key) in lv2route.routes">
+                      <v-list-item :key="lv3key" nuxt :to="lv3route.path">
                         <v-list-item-title>{{ lv3route.text }}</v-list-item-title>
                         <v-list-item-icon v-if="lv3route.icon">
                           <v-icon>{{ lv3route.icon }}</v-icon>
@@ -101,8 +86,7 @@ export default {
                   </v-list-group>
                 </template>
                 <template v-else>
-                  <!-- eslint-disable-next-line vue/valid-v-for -->
-                  <v-list-item nuxt :to="lv2route.path">
+                  <v-list-item :key="lv2key" nuxt :to="lv2route.path">
                     <v-list-item-title>{{ lv2route.text }}</v-list-item-title>
                     <v-list-item-icon v-if="lv2route.icon">
                       <v-icon>{{ lv2route.icon }}</v-icon>
@@ -113,8 +97,7 @@ export default {
             </v-list-group>
           </template>
           <template v-else>
-            <!-- eslint-disable-next-line vue/valid-v-for -->
-            <v-list-item nuxt :to="lv1route.path">
+            <v-list-item :key="lv1key" nuxt :to="lv1route.path">
               <v-list-item-icon v-if="lv1route.icon">
                 <v-icon>{{ lv1route.icon }}</v-icon>
               </v-list-item-icon>
@@ -126,7 +109,7 @@ export default {
     </v-navigation-drawer>
     <v-main>
       <v-container id="container" fluid>
-        <nuxt v-resize="onResize" />
+        <nuxt />
       </v-container>
     </v-main>
     <app-notifications :notifications="$store.state.notifications.queue" />
