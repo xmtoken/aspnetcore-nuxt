@@ -48,7 +48,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Validators
                 .Configure(x => x.DisplayName = new StaticStringSource("メールアドレス"))
                 .NotNull()
                 .MaximumLength(metadata.Entity<UserProfileEntity>().FindProperty(x => x.EmailAddress).GetMaxLength().Value)
-                .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
+                .EmailAddress();
 
             RuleFor(x => x.Birthday)
                 .Configure(x => x.DisplayName = new StaticStringSource("生年月日"))

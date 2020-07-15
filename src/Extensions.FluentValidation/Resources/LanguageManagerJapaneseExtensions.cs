@@ -21,7 +21,7 @@ namespace AspNetCoreNuxt.Extensions.FluentValidation.Resources
         {
             var languageManager = (LanguageManager)source;
             languageManager
-                .AddTranslation<EmailValidator>(Culture, "{PropertyName}は有効なメールアドレスではありません。")
+                .AddTranslation<AspNetCoreCompatibleEmailValidator>(Culture, "{PropertyName}は有効なメールアドレスではありません。")
                 .AddTranslation<EnumValidator>(Culture, "{PropertyName}は有効な値ではありません。")
                 .AddTranslation<GreaterThanOrEqualValidator>(Culture, "{PropertyName}は{ComparisonValue}以上の値を入力してください。")
                 .AddTranslation<InclusiveBetweenValidator>(Culture, "{PropertyName}は{From}から{To}までの値を入力してください。")

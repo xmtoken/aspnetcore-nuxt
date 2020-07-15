@@ -154,8 +154,8 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     {
                         config.RegisterValidatorsFromAssemblyContaining<Startup>();
                         config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                        ValidatorOptions.CascadeMode = CascadeMode.StopOnFirstFailure;
-                        ValidatorOptions.LanguageManager.AddJapaneseTranslations();
+                        ValidatorOptions.Global.CascadeMode = CascadeMode.StopOnFirstFailure;
+                        ValidatorOptions.Global.LanguageManager.AddJapaneseTranslations();
                     })
                     .AddNewtonsoftJson(options =>
                     {
