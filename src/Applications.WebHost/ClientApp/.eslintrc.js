@@ -13,11 +13,35 @@ module.exports = {
   extends: [
     //
     'eslint:recommended',
+    'plugin:import/warnings',
+    'plugin:import/errors',
+    'plugin:import/typescript',
     'plugin:vue/recommended',
     'plugin:prettier/recommended',
   ],
   plugins: ['vue'],
   rules: {
+    'import/newline-after-import': ['error', { count: 1 }],
+
+    'import/no-unresolved': 'off',
+
+    'import/order': [
+      'error',
+      {
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'never',
+        pathGroups: [
+          {
+            pattern: '~/**',
+            group: 'internal',
+          },
+        ],
+      },
+    ],
+
     'no-var': ['error'],
 
     'vue/attributes-order': ['error', { alphabetical: true }],

@@ -41,7 +41,6 @@
 | @nuxt/types                       | MIT License          |
 | @nuxtjs/auth                      | MIT License          |
 | @nuxtjs/axios                     | MIT License          |
-| @nuxtjs/device                    | MIT License          |
 | @nuxtjs/vuetify                   | MIT License          |
 | @types/file-saver                 | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
@@ -52,6 +51,7 @@
 | eslint                            | MIT License          |
 | eslint-config-prettier            | MIT License          |
 | eslint-loader                     | MIT License          |
+| eslint-plugin-import              | MIT License          |
 | eslint-plugin-prettier            | MIT License          |
 | eslint-plugin-vue                 | MIT License          |
 | file-saver                        | MIT License          |
