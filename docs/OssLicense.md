@@ -42,7 +42,9 @@
 | @nuxtjs/auth                      | MIT License          |
 | @nuxtjs/axios                     | MIT License          |
 | @nuxtjs/vuetify                   | MIT License          |
+| @types/deep-equal                 | MIT License          |
 | @types/file-saver                 | MIT License          |
+| @types/lodash                     | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
 | babel-eslint                      | MIT License          |
 | content-disposition               | MIT License          |
