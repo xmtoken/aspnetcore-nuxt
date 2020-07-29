@@ -6,7 +6,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="AutoMapper" Version="10.0.0" />
-    <PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Update="CsvHelper" Version="15.0.5" />
     <PackageReference Update="FluentValidation" Version="9.0.1" />
     <PackageReference Update="FluentValidation.AspNetCore" Version="9.0.1" />
