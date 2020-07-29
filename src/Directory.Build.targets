@@ -24,7 +24,7 @@
     <PackageReference Update="NSwag.AspNetCore" Version="13.6.2" />
     <PackageReference Update="Oracle.EntityFrameworkCore" Version="3.19.0-beta1" />
     <PackageReference Update="Polly" Version="7.2.1" />
-    <PackageReference Update="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Update="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Update="Serilog.Sinks.Async" Version="1.4.0" />
     <PackageReference Update="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
