@@ -1,5 +1,7 @@
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
   inheritAttrs: false,
   props: {
     closeOnContentClick: {
@@ -8,7 +10,7 @@ export default {
     },
     value: {
       default: undefined,
-      type: undefined,
+      type: Boolean,
     },
   },
   data() {
@@ -17,39 +19,38 @@ export default {
     };
   },
   computed: {
-    /** @returns {Object} */
-    listeners() {
+    listeners(): Record<string, Function | Function[]> {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
     },
   },
   watch: {
-    model(val) {
+    model(val: boolean): void {
       this.$emit('input', val);
     },
-    value(val) {
+    value(val: boolean): void {
       this.model = val;
     },
   },
   methods: {
-    close() {
+    close(): void {
       this.model = false;
     },
-    open() {
+    open(): void {
       this.model = true;
     },
   },
-};
+});
 </script>
 
 <template>
   <v-menu v-model="model" v-bind="$attrs" :close-on-content-click="closeOnContentClick" v-on="listeners">
-    <template v-slot:activator="scope">
-      <slot v-bind="{ ...scope, open, opend: model }" name="activator" />
-    </template>
     <template v-slot>
       <slot v-bind="{ close }" />
+    </template>
+    <template v-slot:activator="scope">
+      <slot v-bind="{ ...scope, open, opend: model }" name="activator" />
     </template>
   </v-menu>
 </template>

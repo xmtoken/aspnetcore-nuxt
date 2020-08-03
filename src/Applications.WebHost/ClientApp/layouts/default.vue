@@ -1,67 +1,136 @@
-<script>
-import { Resizer } from '~/extensions';
-import { mdiAccountCircleOutline, mdiHomeCircleOutline, mdiMicrosoftVisualStudio, mdiLayersOutline } from '@mdi/js';
-export default {
+<script lang="ts">
+import { mdiAccountCircleOutline, mdiBattlenet, mdiCheckCircleOutline, mdiHomeCircleOutline, mdiMenu, mdiMenuOpen } from '@mdi/js';
+import Vue from 'vue';
+import responsive from '~/extensions/responsive';
+
+type NavigationRoute = {
+  icon: string | null;
+  text: string | null;
+  path: string | null;
+  expands: boolean | null;
+  routes: NavigationRoute[] | null;
+};
+
+export default Vue.extend({
   data() {
     return {
       icons: {
-        mdiMicrosoftVisualStudio,
+        avatar: mdiBattlenet,
+        menuOnOpen: mdiMenuOpen,
+        menuOnClose: mdiMenu,
       },
+      isNavigationDrawerMiniVariant: (localStorage.getItem('isNavigationDrawerMiniVariant') ?? false) === 'true',
       routes: [
         {
           text: 'Home',
           icon: mdiHomeCircleOutline,
           path: '/',
+          routes: null,
+        },
+        {
+          text: 'Task',
+          icon: mdiCheckCircleOutline,
+          path: '/tasks',
+          routes: null,
         },
         {
           text: 'User',
           icon: mdiAccountCircleOutline,
           path: '/users',
+          routes: null,
         },
-      ],
+        {
+          text: 'Level2',
+          icon: mdiAccountCircleOutline,
+          routes: [
+            {
+              text: 'Level2',
+              icon: mdiAccountCircleOutline,
+              path: '/level2',
+            },
+          ],
+        },
+        {
+          text: 'Level3',
+          icon: mdiAccountCircleOutline,
+          routes: [
+            {
+              text: 'Level3',
+              icon: mdiAccountCircleOutline,
+              routes: [
+                {
+                  text: 'Level3',
+                  icon: mdiAccountCircleOutline,
+                  path: '/level3',
+                },
+              ],
+            },
+          ],
+        },
+      ] as NavigationRoute[],
     };
   },
-  created() {
-    const isRouteExpand = path => path.replace(/\/$/, '') === this.$route.path.replace(/\/$/, '');
-    for (const lv1route of this.routes.filter(x => x.routes)) {
-      for (const lv2route of lv1route.routes.filter(x => x.path)) {
-        lv1route.expands = isRouteExpand(lv2route.path);
-      }
-      for (const lv2route of lv1route.routes.filter(x => x.routes)) {
-        for (const lv3route of lv2route.routes.filter(x => x.path)) {
-          lv1route.expands = isRouteExpand(lv3route.path);
-          lv2route.expands = isRouteExpand(lv3route.path);
+  watch: {
+    isNavigationDrawerMiniVariant(val: any /* typed as boolean, $route becomes any type by vetur or typescript bug. */): void {
+      localStorage.setItem('isNavigationDrawerMiniVariant', String(val));
+    },
+  },
+  created(): void {
+    const removeTrailingSlash = (path: string) => path.replace(/\/$/, '');
+    const isRouteExpands = (path: string) => removeTrailingSlash(path) === removeTrailingSlash(this.$route.path);
+    for (const lv1route of this.routes) {
+      if (lv1route.routes) {
+        for (const lv2route of lv1route.routes) {
+          if (lv2route.path) {
+            lv1route.expands = isRouteExpands(lv2route.path);
+          }
+          if (lv2route.routes) {
+            for (const lv3route of lv2route.routes) {
+              if (lv3route.path) {
+                lv1route.expands = isRouteExpands(lv3route.path);
+                lv2route.expands = isRouteExpands(lv3route.path);
+              }
+            }
+          }
         }
       }
     }
   },
   methods: {
-    onResize() {
-      Resizer.resize();
+    onResize(): void {
+      responsive();
     },
   },
-};
+});
 </script>
 
 <template>
   <v-app v-resize="onResize" class="noto-sans-jp">
-    <v-navigation-drawer app dark fixed :mobile-breakpoint="0">
-      <v-list-item>
-        <v-list-item-avatar>
+    <v-app-bar id="app-bar" app :elevation="0" height="64">
+      <v-toolbar-title>
+        Nuxt.js
+      </v-toolbar-title>
+    </v-app-bar>
+    <v-navigation-drawer app dark fixed :mini-variant="isNavigationDrawerMiniVariant" :mobile-breakpoint="0">
+      <v-list-item :class="{ 'px-0': isNavigationDrawerMiniVariant }">
+        <v-list-item-avatar v-if="!isNavigationDrawerMiniVariant">
           <v-icon>
-            {{ icons.mdiMicrosoftVisualStudio }}
+            {{ icons.avatar }}
           </v-icon>
         </v-list-item-avatar>
-        <v-list-item-content>
+        <v-list-item-content v-if="!isNavigationDrawerMiniVariant">
           <v-list-item-title class="title">
-            Nuxt.js
+            <span>Nuxt.js</span>
           </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ $auth.user.userName }}
-          </v-list-item-subtitle>
         </v-list-item-content>
+        <v-list-item-icon class="mx-auto">
+          <v-btn icon @click="isNavigationDrawerMiniVariant = !isNavigationDrawerMiniVariant">
+            <v-icon>
+              {{ isNavigationDrawerMiniVariant ? icons.menuOnClose : icons.menuOnOpen }}
+            </v-icon>
+          </v-btn>
+        </v-list-item-icon>
       </v-list-item>
-      <v-divider />
       <v-list>
         <template v-for="(lv1route, lv1key) in routes">
           <template v-if="lv1route.routes">
@@ -112,7 +181,7 @@ export default {
         <nuxt />
       </v-container>
     </v-main>
-    <app-notifications :notifications="$store.state.notifications.queue" />
+    <app-notifications :notifications="$store.state.notification.values" />
     <app-versioning />
   </v-app>
 </template>

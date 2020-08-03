@@ -7,6 +7,19 @@
     cursor: pointer;
   }
 
+  .required-marker {
+    .v-label::after {
+      color: #f00;
+      content: '*';
+    }
+
+    .v-radio {
+      .v-label::after {
+        content: '';
+      }
+    }
+  }
+
   .visibility-hidden {
     visibility: hidden;
   }

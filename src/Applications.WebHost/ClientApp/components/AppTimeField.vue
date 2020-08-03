@@ -1,12 +1,10 @@
-<script>
-import { Slotable } from '~/mixins';
+<script lang="ts">
 import { mdiClockOutline } from '@mdi/js';
-import dayjs from 'dayjs';
-export default {
-  mixins: [
-    //
-    Slotable,
-  ],
+import mixins from '~/extensions/mixins';
+import * as TimeHelper from '~/extensions/time';
+import slotable from '~/mixins/slotable';
+
+export default mixins(slotable).extend({
   inheritAttrs: false,
   props: {
     appendIcon: {
@@ -29,116 +27,104 @@ export default {
       default: false,
       type: Boolean,
     },
-    format: {
-      default: '24hr',
-      type: String,
-      validator(val) {
-        return ['24hr', 'ampm'].includes(val);
+    menuProps: {
+      default(): object {
+        return {};
       },
+      type: Object,
     },
-    menuOffsetLeft: {
+    pickerOffsetLeft: {
       default: false,
       type: Boolean,
     },
-    menuOffsetY: {
+    pickerOffsetY: {
       default: false,
       type: Boolean,
     },
-    openOnClick: {
-      default: false,
-      type: Boolean,
+    pickerProps: {
+      default(): object {
+        return {};
+      },
+      type: Object,
     },
     readonly: {
       default: false,
       type: Boolean,
     },
-    useSeconds: {
-      default: false,
-      type: Boolean,
-    },
     value: {
       default: undefined,
-      type: undefined,
+      type: String,
     },
   },
   data() {
     return {
       menu: false,
-      model: this.value,
+      model: this.value as string | null,
     };
   },
   computed: {
-    /** @returns {Object} */
-    listeners() {
+    listeners(): Record<string, Function | Function[]> {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
     },
-    /** @returns {String} */
-    menuClasses() {
-      if (this.menuOffsetY) {
-        return this.dense ? 'v-menu__content--offset-y-dense' : 'v-menu__content--offset-y';
-      }
-      return undefined;
+    menuNudgeBottom(): number {
+      return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
     },
-    /** @returns {Number} */
-    menuNudgeLeft() {
-      return this.menuOffsetLeft ? 290 /*menu width*/ + 5 /*space*/ : 0;
+    menuNudgeLeft(): number {
+      return this.pickerOffsetLeft ? 290 /* menu width */ + 5 /* space */ : 0;
     },
-    time: {
-      /** @returns {Any} */
-      get() {
-        const value = this.model?.toString() || '';
-        const datetime = `0001/01/01 ${value}`;
-        if (value && dayjs(datetime).isValid()) {
-          return dayjs(datetime).format(this.useSeconds ? 'HH:mm:ss' : 'HH:mm');
-        }
-        return null;
+    menuPropsInternal(): object {
+      return {
+        openOnClick: false,
+        ...this.menuProps,
+      };
+    },
+    pickerPropsInternal(): { useSeconds: boolean } {
+      return {
+        format: '24hr',
+        useSeconds: false,
+        ...this.pickerProps,
+      };
+    },
+    pickerValue: {
+      get(): string | null {
+        const format = this.pickerPropsInternal.useSeconds ? 'HH:mm:ss' : 'HH:mm';
+        return TimeHelper.isValid(this.model) ? TimeHelper.format(this.model, format) : null;
       },
-      /** @param {Any} val */
-      set(val) {
+      set(val: string | null): void {
         this.model = val;
       },
     },
   },
   watch: {
-    model(val) {
+    model(val: string | null): void {
       this.$emit('input', val);
     },
-    value(val) {
+    value(val: string | null): void {
       this.model = val;
     },
   },
   methods: {
-    onComplete() {
-      if (this.time) {
-        this.model = this.time;
+    onComplete(): void {
+      if (this.pickerValue) {
+        this.model = this.pickerValue;
       }
     },
   },
-};
+});
 </script>
 
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false" :content-class="menuClasses" :disabled="readonly" min-width="inherit" :nudge-left="menuNudgeLeft" :open-on-click="openOnClick">
+  <v-menu v-model="menu" v-bind="menuPropsInternal" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
     <template v-slot:activator="{ on }">
       <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIcon" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
-        <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
-        <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
-          <slot v-bind="scope" :name="slot" />
+        <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+        <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+          <slot v-bind="scope" :name="scopedSlotKey" />
         </template>
       </app-text-field>
     </template>
-    <v-time-picker v-if="menu" v-model="time" :format="format" :use-seconds="useSeconds" @change="menu = false" />
+    <v-time-picker v-if="menu" v-model="pickerValue" v-bind="pickerPropsInternal" @change="menu = false" />
   </v-menu>
 </template>
-
-<style lang="scss" scoped>
-.v-menu__content--offset-y ::v-deep {
-  margin-top: 45px;
-}
-
-.v-menu__content--offset-y-dense ::v-deep {
-  margin-top: 29px;
-}
-</style>

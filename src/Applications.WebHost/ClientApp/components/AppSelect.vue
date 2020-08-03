@@ -1,20 +1,19 @@
-<script>
-import { RequiredMarkable, Slotable, ValidationProviderProps } from '~/mixins';
+<script lang="ts">
 import { ValidationProvider } from 'vee-validate';
-export default {
+import mixins from '~/extensions/mixins';
+import iconTabIndexable from '~/mixins/icon-tab-indexable';
+import requiredMarkable from '~/mixins/required-markable';
+import slotable from '~/mixins/slotable';
+import validationProviderProps from '~/mixins/validation-provider-props';
+
+export default mixins(iconTabIndexable, requiredMarkable, slotable, validationProviderProps).extend({
   components: {
     ValidationProvider,
   },
-  mixins: [
-    //
-    RequiredMarkable,
-    Slotable,
-    ValidationProviderProps,
-  ],
   inheritAttrs: false,
   props: {
     menuProps: {
-      default() {
+      default(): object {
         return {
           offsetY: true,
         };
@@ -22,16 +21,15 @@ export default {
       type: [Array, Object, String],
     },
   },
-};
+});
 </script>
 
 <template>
-  <!-- provider refs for RequiredMarkable -->
-  <validation-provider ref="provider" v-slot="{ errors }" v-bind="veeValidationProps">
-    <v-select v-bind="$attrs" :class="requiredClasses" :error-messages="errors" :label="label" :menu-props="menuProps" v-on="$listeners">
-      <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
-      <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
-        <slot v-bind="scope" :name="slot" />
+  <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
+    <v-select v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :error-messages="errors" :label="label" :menu-props="menuProps" v-on="$listeners">
+      <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+      <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+        <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
     </v-select>
   </validation-provider>

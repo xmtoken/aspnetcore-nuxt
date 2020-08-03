@@ -1,0 +1,100 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    //
+    "/**/node_modules/**",
+    ".eslintrc.*",
+    ".prettierrc.*",
+    ".stylelintrc.*"
+  ],
+  "parserOptions": {
+    // "parser": "babel-eslint",
+  },
+  "extends": [
+    //
+    "@nuxtjs/eslint-config-typescript",
+    "eslint:recommended",
+    "plugin:import/warnings",
+    "plugin:import/errors",
+    "plugin:import/typescript",
+    "plugin:vue/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["vue"],
+  "rules": {
+    // "@typescript-eslint/explicit-function-return-type": ["error"],
+    "import/newline-after-import": ["error", { "count": 1 }],
+    "import/no-unresolved": "off",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "never",
+        "pathGroups": [
+          {
+            "pattern": "~/**",
+            "group": "internal"
+          }
+        ]
+      }
+    ],
+    "no-var": ["error"],
+    "vue/attributes-order": ["error", { "alphabetical": true }],
+    "vue/component-tags-order": ["error"],
+    "vue/html-self-closing": ["error", { "html": { "void": "always" } }],
+    "vue/max-attributes-per-line": ["off"], // for prettier : https://github.com/prettier/prettier/pull/6644
+    "vue/order-in-components": [
+      "error",
+      {
+        "order": [
+          //
+          "head", // for nuxt
+          "auth", // for nuxt-auth
+          "layout", // for nuxt
+          "el",
+          "name",
+          "parent",
+          "functional",
+          "delimiters",
+          "comments",
+          "components",
+          "directives",
+          "filters",
+          "extends",
+          "mixins",
+          "inheritAttrs",
+          "model",
+          "props",
+          "propsData",
+          "validate", // for nuxt
+          "fetch", // for nuxt
+          "asyncData", // for nuxt
+          "data",
+          "computed",
+          "watch",
+          "watchQuery", // for nuxt
+          "beforeRouteEnter", // for vue-router
+          "beforeRouteUpdate", // for vue-router
+          "beforeRouteLeave", // for vue-router
+          "beforeCreate",
+          "created",
+          "beforeMount",
+          "mounted",
+          "beforeUpdate",
+          "updated",
+          "activated",
+          "deactivated",
+          "beforeDestroy",
+          "destroyed",
+          "methods",
+          "template",
+          "render",
+          "renderError"
+        ]
+      }
+    ]
+  }
+}

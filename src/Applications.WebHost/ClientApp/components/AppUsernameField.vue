@@ -1,29 +1,23 @@
-<script>
-import { Slotable } from '~/mixins';
-export default {
-  mixins: [
-    //
-    Slotable,
-  ],
+<script lang="ts">
+import mixins from '~/extensions/mixins';
+import slotable from '~/mixins/slotable';
+
+export default mixins(slotable).extend({
   inheritAttrs: false,
   props: {
-    autocomplete: {
-      default: 'username',
-      type: String,
-    },
     type: {
       default: 'email',
       type: String,
     },
   },
-};
+});
 </script>
 
 <template>
-  <app-text-field v-bind="$attrs" :autocomplete="autocomplete" :type="type" v-on="$listeners">
-    <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
-    <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
-      <slot v-bind="scope" :name="slot" />
+  <app-text-field v-bind="$attrs" :type="type" v-on="$listeners">
+    <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+    <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+      <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
   </app-text-field>
 </template>

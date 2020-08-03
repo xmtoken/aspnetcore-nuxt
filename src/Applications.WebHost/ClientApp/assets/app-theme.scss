@@ -3,9 +3,18 @@
 #app.v-application {
   background-color: $app-background-color;
 
+  .v-app-bar {
+    background-color: $appbar-background-color;
+    border-bottom: 1px solid $appbar-border-color;
+
+    &.v-app-bar--is-scrolled {
+      border-bottom: none;
+    }
+  }
+
   .v-navigation-drawer {
     background-color: $navigation-background-color;
-    border-color: $navigation-background-color;
+    border-color: $navigation-border-color;
 
     .v-list-item--active {
       color: $navigation-item-color;

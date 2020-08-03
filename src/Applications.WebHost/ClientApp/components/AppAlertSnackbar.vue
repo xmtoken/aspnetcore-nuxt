@@ -1,82 +1,67 @@
-<script>
-import { mdiAlert, mdiCheckCircle } from '@mdi/js';
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
   inheritAttrs: false,
+  props: {
+    color: {
+      default: undefined,
+      type: String,
+    },
+    icon: {
+      default: undefined,
+      type: [Boolean, String],
+    },
+    type: {
+      default: undefined,
+      type: String,
+    },
+  },
   data() {
     return {
-      messages: [],
+      message: null as string | null,
       snackbar: false,
-      type: null,
     };
   },
-  computed: {
-    /** @returns {String} */
-    icon() {
-      return this.type === 'success' ? mdiCheckCircle : mdiAlert;
-    },
-    /** @returns {Number} */
-    timeout() {
-      return this.type === 'success' ? 5000 : -1;
-    },
-  },
-  watch: {
-    messages(val) {
-      this.snackbar = val && val.length > 0;
-    },
-  },
   methods: {
-    close() {
+    close(): void {
       this.snackbar = false;
-      this.messages = [];
     },
-    setMessages(type, messages) {
-      this.type = type;
-      this.messages = messages ? (Array.isArray(messages) ? messages : [messages]) : [];
+    setErrors(errors: Record<string, string[]>, messageIfErrorsEmpty: string = '入力内容のエラーを確認してください。'): void {
+      const message = errors ? errors['']?.join() ?? messageIfErrorsEmpty : null;
+      this.setMessage(message);
     },
-    setSuccesses(messages) {
-      this.setMessages('success', messages);
-    },
-    setInformations(messages) {
-      this.setMessages('info', messages);
-    },
-    setWarnings(messages) {
-      this.setMessages('warning', messages);
-    },
-    setErrors(messages) {
-      this.setMessages('error', messages);
-    },
-    setValidationErrors(errors) {
-      const messages = errors ? errors['']?.flatMap(message => message) : [];
-      this.setErrors(messages);
-    },
-    setHasInputErrorsMessage() {
-      this.setErrors('入力内容に誤りがあります。');
+    setMessage(message: string | null): void {
+      this.message = message;
+      this.snackbar = !!this.message;
     },
   },
-};
+});
 </script>
 
 <template>
-  <v-slide-y-transition>
-    <v-snackbar v-model="snackbar" v-bind="$attrs" class="pa-0" color="white" :timeout="timeout">
-      <v-alert class="mx-n4 my-n2" :color="type" dismissible :icon="icon" outlined text @input="close">
-        <div v-for="(message, i) in messages" :key="i">
-          {{ message }}
-        </div>
-      </v-alert>
-    </v-snackbar>
-  </v-slide-y-transition>
+  <v-snackbar v-model="snackbar" v-bind="$attrs" color="white" v-on="$listeners">
+    <v-alert v-model="snackbar" :color="color" dismissible :icon="icon" outlined text :type="type">
+      {{ message }}
+    </v-alert>
+  </v-snackbar>
 </template>
 
 <style lang="scss" scoped>
 .v-snack ::v-deep {
-  .v-alert {
-    box-sizing: content-box;
-    width: inherit;
+  .v-snack__wrapper {
+    min-width: auto;
 
-    .v-alert__dismissible {
-      margin-left: 16px;
-      padding: 2px;
+    .v-snack__content {
+      padding: 0;
+
+      .v-alert {
+        margin: 0;
+      }
+    }
+
+    .v-snack__action {
+      display: none;
     }
   }
 }

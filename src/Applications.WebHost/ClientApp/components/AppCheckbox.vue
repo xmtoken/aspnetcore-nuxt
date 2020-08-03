@@ -1,29 +1,28 @@
-<script>
-import { Slotable, ValidationProviderProps } from '~/mixins';
+<script lang="ts">
 import { ValidationProvider } from 'vee-validate';
-export default {
+import validationProviderProps from '../mixins/validation-provider-props';
+import mixins from '~/extensions/mixins';
+import requiredMarkable from '~/mixins/required-markable';
+import slotable from '~/mixins/slotable';
+
+export default mixins(requiredMarkable, slotable, validationProviderProps).extend({
   components: {
     ValidationProvider,
   },
-  mixins: [
-    //
-    Slotable,
-    ValidationProviderProps,
-  ],
   inheritAttrs: false,
   model: {
     event: 'change',
     prop: 'inputValue',
   },
-};
+});
 </script>
 
 <template>
-  <validation-provider v-slot="{ errors }" v-bind="veeValidationProps">
-    <v-checkbox v-bind="$attrs" :error-messages="errors" :label="label" v-on="$listeners">
-      <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
-      <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
-        <slot v-bind="scope" :name="slot" />
+  <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
+    <v-checkbox v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :error-messages="errors" :label="label" v-on="$listeners">
+      <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+      <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+        <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
     </v-checkbox>
   </validation-provider>

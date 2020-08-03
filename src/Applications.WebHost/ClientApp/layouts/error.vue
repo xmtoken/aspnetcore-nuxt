@@ -1,12 +1,14 @@
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropType } from 'vue';
+
+export default Vue.extend({
   props: {
     error: {
-      default: null,
-      type: Object,
+      default: undefined,
+      type: Object as PropType<{ statusCode: number; message: string }>,
     },
   },
-};
+});
 </script>
 
 <template>

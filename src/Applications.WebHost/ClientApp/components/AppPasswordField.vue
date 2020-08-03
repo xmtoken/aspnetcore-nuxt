@@ -1,20 +1,14 @@
-<script>
-import { Slotable } from '~/mixins';
+<script lang="ts">
 import { mdiEye, mdiEyeOff } from '@mdi/js';
-export default {
-  mixins: [
-    //
-    Slotable,
-  ],
+import mixins from '~/extensions/mixins';
+import slotable from '~/mixins/slotable';
+
+export default mixins(slotable).extend({
   inheritAttrs: false,
   props: {
     appendIconTabindex: {
       default: -1,
       type: Number,
-    },
-    autocomplete: {
-      default: 'current-password',
-      type: String,
     },
   },
   data() {
@@ -23,23 +17,21 @@ export default {
     };
   },
   computed: {
-    /** @returns {String} */
-    icon() {
+    icon(): string {
       return this.visible ? mdiEye : mdiEyeOff;
     },
-    /** @returns {String} */
-    type() {
+    type(): string {
       return this.visible ? 'text' : 'password';
     },
   },
-};
+});
 </script>
 
 <template>
-  <app-text-field v-bind="$attrs" :append-icon="icon" :append-icon-tabindex="appendIconTabindex" :autocomplete="autocomplete" :type="type" v-on="$listeners" @click:append="visible = !visible">
-    <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
-    <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
-      <slot v-bind="scope" :name="slot" />
+  <app-text-field v-bind="$attrs" :append-icon="icon" :append-icon-tabindex="appendIconTabindex" :type="type" v-on="$listeners" @click:append="visible = !visible">
+    <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+    <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+      <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
   </app-text-field>
 </template>

@@ -1,16 +1,24 @@
-<script>
-import { Slotable } from '~/mixins';
+<script lang="ts">
 import dayjs from 'dayjs';
-export default {
-  mixins: [
-    //
-    Slotable,
-  ],
+import Vue, { VueConstructor } from 'vue';
+import { VDatePicker } from 'vuetify/src/components';
+import mixins from '~/extensions/mixins';
+import slotable from '~/mixins/slotable';
+
+const $refs = Vue as VueConstructor<
+  Vue & {
+    $refs: {
+      picker: InstanceType<typeof VDatePicker>;
+    };
+  }
+>;
+
+export default mixins($refs, slotable).extend({
   inheritAttrs: false,
   props: {
     dayFormat: {
-      default(val) {
-        return dayjs(val).date();
+      default(val: string): string {
+        return dayjs(val).date().toString();
       },
       type: Function,
     },
@@ -21,24 +29,22 @@ export default {
   },
   computed: {
     activePicker: {
-      /** @returns {String} */
-      get() {
+      get(): string {
         return this.$refs.picker.activePicker;
       },
-      /** @param {String} val */
-      set(val) {
+      set(val: string): void {
         this.$refs.picker.activePicker = val;
       },
     },
   },
-};
+});
 </script>
 
 <template>
   <v-date-picker ref="picker" v-bind="$attrs" :day-format="dayFormat" :locale="locale" v-on="$listeners">
-    <slot v-for="slot in slotKeys" :slot="slot" :name="slot" />
-    <template v-for="slot in scopedSlotKeys" :slot="slot" slot-scope="scope">
-      <slot v-bind="scope" :name="slot" />
+    <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+    <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+      <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
   </v-date-picker>
 </template>

@@ -11,5 +11,5 @@ trim_trailing_whitespace = true
 [*.{ruleset,sln}]
 end_of_line = crlf
 
-[*.{config,csproj,js,json,props,scss,targets,vue}]
+[*.{config,csproj,js,json,props,scss,targets,ts,vue}]
 indent_size = 2

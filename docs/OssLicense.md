@@ -25,6 +25,8 @@
 | Microsoft.Extensions.Identity.Core                    | Apache License 2.0                |
 | Newtonsoft.Json                                       | MIT License                       |
 | NSwag.AspNetCore                                      | MIT License                       |
+| NSwag.CodeGeneration.TypeScript                       | MIT License                       |
+| NSwag.MSBuild                                         | MIT License                       |
 | Oracle.EntityFrameworkCore                            | Oracle Technology Network License |
 | Polly                                                 | BSD 3-Clause License              |
 | Serilog.AspNetCore                                    | Apache License 2.0                |
@@ -39,8 +41,11 @@
 | --------------------------------- | -------------------- |
 | @mdi/js                           | MIT License          |
 | @nuxt/types                       | MIT License          |
+| @nuxt/typescript-build            | MIT License          |
+| @nuxt/typescript-runtime          | MIT License          |
 | @nuxtjs/auth                      | MIT License          |
 | @nuxtjs/axios                     | MIT License          |
+| @nuxtjs/eslint-config-typescript  | MIT License          |
 | @nuxtjs/vuetify                   | MIT License          |
 | @types/deep-equal                 | MIT License          |
 | @types/file-saver                 | MIT License          |

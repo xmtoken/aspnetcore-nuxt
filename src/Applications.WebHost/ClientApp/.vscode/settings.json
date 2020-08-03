@@ -1,4 +1,7 @@
 {
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
     "source.fixAll.stylelint": true
@@ -6,5 +9,6 @@
   "editor.formatOnSave": true,
   "vetur.experimental.templateInterpolationService": true,
   "vetur.format.enable": false,
+  // "vetur.validation.script": false,
   "vetur.validation.template": false
 }
