@@ -12,14 +12,14 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
         /// <summary>
         /// 指定された郵便番号に紐づく住所を非同期に取得します。
         /// </summary>
-        /// <param name="code">郵便番号。</param>
+        /// <param name="code">7 桁の郵便番号、もしくはハイフンを含む 8 桁の郵便番号。</param>
         /// <returns>郵便番号に紐づく住所。</returns>
         /// <remarks>郵便番号データ配信サービス zip-cloud は CORS が許可されていないため API アクセスをプロキシします。</remarks>
         [HttpGet]
-        public async Task<JsonResult> Get([FromQuery] string code)
+        public Task<JsonResult> Get([FromQuery] string code)
         {
             var uri = $"https://zipcloud.ibsnet.co.jp/api/search?zipcode={code}";
-            return await MemoryCache.GetOrCreateAsync(uri, async entry =>
+            return MemoryCache.GetOrCreateAsync(uri, async entry =>
             {
                 using var client = HttpClientFactory.CreateClient();
                 using var response = await client.GetAsync(new Uri(uri));
