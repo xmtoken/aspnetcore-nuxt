@@ -23,7 +23,7 @@
     "nuxt": "2.14.0",
     "qs": "6.9.4",
     "v-mask": "2.2.3",
-    "vee-validate": "3.3.7"
+    "vee-validate": "3.3.8"
   },
   "devDependencies": {
     "@mdi/js": "5.4.55",
