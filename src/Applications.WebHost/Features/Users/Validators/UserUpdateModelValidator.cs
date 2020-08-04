@@ -7,7 +7,6 @@ using AspNetCoreNuxt.Extensions.AspNetCore.Routing;
 using AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata;
 using FluentValidation;
 using FluentValidation.Resources;
-using FluentValidation.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;

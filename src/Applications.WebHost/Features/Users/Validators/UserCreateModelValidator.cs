@@ -6,7 +6,6 @@ using AspNetCoreNuxt.Domains.Entities;
 using AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata;
 using FluentValidation;
 using FluentValidation.Resources;
-using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq;
