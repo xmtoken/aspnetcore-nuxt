@@ -25,14 +25,14 @@
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.Async" />
   </ItemGroup>
-  <Target Name="NSwag" AfterTargets="Build">
-    <Exec Command="$(NSwagExe_Core31) aspnetcore2openapi /assembly:$(TargetPath) /documentName:$(Version) /output:swagger.json" />
-    <Exec Command="$(NSwagExe_Core31) openapi2tsclient /GenerateClientClasses:false /MarkOptionalProperties:false /NullValue:Null /TypeStyle:Interface /input:swagger.json /output:ClientApp/types/api.d.ts" />
-  </Target>
   <PropertyGroup>
     <SpaRoot>ClientApp</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)/**;</DefaultItemExcludes>
   </PropertyGroup>
+  <Target Name="GenerateClientInterfaces" AfterTargets="Build">
+    <Exec Command="$(NSwagExe_Core31) aspnetcore2openapi /assembly:$(TargetPath) /documentName:$(Version) /output:swagger.json" />
+    <Exec Command="$(NSwagExe_Core31) openapi2tsclient /GenerateClientClasses:false /MarkOptionalProperties:false /NullValue:Null /TypeStyle:Interface /input:swagger.json /output:$(SpaRoot)/types/api.d.ts" />
+  </Target>
   <Target Name="PublishClientApp" AfterTargets="ComputeFilesToPublish">
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci --no-optional" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
