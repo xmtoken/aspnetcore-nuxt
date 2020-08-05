@@ -6,8 +6,6 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <PropertyGroup>
-    <!-- if comment out, could not found source, on vscode debug -->
-    <!-- <MapRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</MapRoot> -->
     <ProjectPrefixName>AspNetCoreNuxt</ProjectPrefixName>
   </PropertyGroup>
   <PropertyGroup>
@@ -16,8 +14,6 @@
     <Deterministic>true</Deterministic>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>8.0</LangVersion>
-    <!-- if comment out, could not found source, on vscode debug -->
-    <!-- <PathMap>$(MapRoot)=.</PathMap> -->
     <RootNamespace>$(ProjectPrefixName).$(MSBuildProjectName)</RootNamespace>
   </PropertyGroup>
 </Project>
