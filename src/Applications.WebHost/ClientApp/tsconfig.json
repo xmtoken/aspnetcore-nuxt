@@ -14,7 +14,16 @@
       "~/*": ["./*"]
       // "@/*": ["./*"]
     },
-    "types": ["@nuxt/types", "@nuxtjs/axios", "@types/deep-equal", "@types/lodash", "@types/node", "@types/nuxtjs__auth"]
+    "types": [
+      //
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "@types/deep-equal",
+      "@types/fontfaceobserver",
+      "@types/lodash",
+      "@types/node",
+      "@types/nuxtjs__auth"
+    ]
   },
   "exclude": ["node_modules"]
 }

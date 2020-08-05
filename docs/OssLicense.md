@@ -49,6 +49,7 @@
 | @nuxtjs/vuetify                   | MIT License          |
 | @types/deep-equal                 | MIT License          |
 | @types/file-saver                 | MIT License          |
+| @types/fontfaceobserver           | MIT License          |
 | @types/lodash                     | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
 | babel-eslint                      | MIT License          |
@@ -62,6 +63,7 @@
 | eslint-plugin-prettier            | MIT License          |
 | eslint-plugin-vue                 | MIT License          |
 | file-saver                        | MIT License          |
+| fontfaceobserver                  | BSD 2-Clause License |
 | http-status-codes                 | MIT License          |
 | npm-run-all                       | MIT License          |
 | numbro                            | MIT License          |
