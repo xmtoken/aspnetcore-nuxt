@@ -1,10 +1,14 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
+import { VueMaskDirective } from 'v-mask';
 import * as DateHelper from '~/extensions/date';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
 
 export default mixins(slotable).extend({
+  directives: {
+    mask: VueMaskDirective,
+  },
   inheritAttrs: false,
   props: {
     appendIcon: {
@@ -75,6 +79,9 @@ export default mixins(slotable).extend({
       delete listeners.input;
       return listeners;
     },
+    mask(): string {
+      return this.pickerPropsInternal.type === 'date' ? '####-#?#-#?#' : '####-#?#';
+    },
     menuNudgeBottom(): number {
       return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
     },
@@ -112,9 +119,19 @@ export default mixins(slotable).extend({
     },
   },
   methods: {
-    onComplete(): void {
+    onBlur(): void {
       if (this.pickerValue) {
         this.model = this.pickerValue;
+      }
+    },
+    onInput(val: string | null): void {
+      if (val) {
+        if (this.pickerPropsInternal.type === 'date') {
+          if (/^[0-9]{4}-[0-9]--$/.test(val)) {
+            // formatted `0000-0-` to `0000-0--` by v-mask, re-format `0000-0--` to `0000-00-`. `0` is mean `[0-9]`.
+            this.model = val.substr(0, 5) + '0' + val.substr(5, 2);
+          }
+        }
       }
     },
   },
@@ -124,7 +141,7 @@ export default mixins(slotable).extend({
 <template>
   <v-menu v-model="menu" v-bind="menuPropsInternal" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onComplete" @click:append="menu = true" @keydown.enter="onComplete">
+      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onBlur" @click:append="menu = true" @input="onInput">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
         <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
           <slot v-bind="scope" :name="scopedSlotKey" />
