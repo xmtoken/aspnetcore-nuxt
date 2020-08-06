@@ -1,7 +1,7 @@
 <script lang="ts">
 import { mdiAccountCircleOutline, mdiBattlenet, mdiCheckCircleOutline, mdiHomeCircleOutline, mdiMenu, mdiMenuOpen } from '@mdi/js';
 import Vue from 'vue';
-import responsive from '~/extensions/responsive';
+import * as Responsive from '~/extensions/responsive';
 
 type NavigationRoute = {
   icon: string | null;
@@ -40,30 +40,13 @@ export default Vue.extend({
           routes: null,
         },
         {
-          text: 'Level2',
+          text: 'Samples',
           icon: mdiAccountCircleOutline,
           routes: [
             {
-              text: 'Level2',
+              text: 'Components',
               icon: mdiAccountCircleOutline,
-              path: '/level2',
-            },
-          ],
-        },
-        {
-          text: 'Level3',
-          icon: mdiAccountCircleOutline,
-          routes: [
-            {
-              text: 'Level3',
-              icon: mdiAccountCircleOutline,
-              routes: [
-                {
-                  text: 'Level3',
-                  icon: mdiAccountCircleOutline,
-                  path: '/level3',
-                },
-              ],
+              path: '/samples/components',
             },
           ],
         },
@@ -98,7 +81,8 @@ export default Vue.extend({
   },
   methods: {
     onResize(): void {
-      responsive();
+      const elements = Responsive.getResponsiveElements();
+      Responsive.setResponsiveMaxHeight(elements);
     },
   },
 });
