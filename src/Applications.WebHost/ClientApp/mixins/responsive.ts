@@ -5,6 +5,9 @@ import * as Responsive from '~/extensions/responsive';
 export default Vue.extend({
   async mounted(): Promise<void> {
     const elements = Responsive.getResponsiveElements();
+    if (elements.length === 0) {
+      return;
+    }
     try {
       // 高さを自動調整するエレメント以外で使用されている高さを計算するために mounted 時には一時的に非表示とします。
       for (const element of elements) {

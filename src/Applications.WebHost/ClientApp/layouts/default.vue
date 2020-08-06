@@ -82,7 +82,9 @@ export default Vue.extend({
   methods: {
     onResize(): void {
       const elements = Responsive.getResponsiveElements();
-      Responsive.setResponsiveMaxHeight(elements);
+      if (elements.length) {
+        Responsive.setResponsiveMaxHeight(elements);
+      }
     },
   },
 });
