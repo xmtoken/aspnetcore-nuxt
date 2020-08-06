@@ -30,7 +30,8 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Profiles
                         // ネストされたオブジェクトのプロパティをキーとしてクエリのソートを行う場合に、
                         // 生成される式ツリーへ null チェック処理が挟まることによるクエリ変換の失敗を防ぎます。
                         // https://stackoverflow.com/questions/39950128/automapper-projection-with-linq-orderby-child-property-error/39965284
-                        x.AllowNull();
+                        // AutoMapper 9.0 までは AllowNull()、10.0 以降は DoNotAllowNull() を設定します。
+                        x.DoNotAllowNull();
 
                         // API の要求元から取得項目を指定できるように項目の展開を明示的にします。
                         x.ExplicitExpansion();
