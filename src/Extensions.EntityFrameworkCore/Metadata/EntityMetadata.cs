@@ -1,4 +1,6 @@
+using AspNetCoreNuxt.Extensions.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq.Expressions;
 
 namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
 {
@@ -17,6 +19,13 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         public EntityMetadata(IEntityType entityType)
         {
             EntityType = entityType;
+        }
+
+        /// <inheritdoc/>
+        public IProperty FindProperty(LambdaExpression expression)
+        {
+            var name = expression.Body<MemberExpression>().Member.Name;
+            return FindProperty(name);
         }
 
         /// <inheritdoc/>

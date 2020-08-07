@@ -1,4 +1,3 @@
-using AspNetCoreNuxt.Extensions.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Linq.Expressions;
@@ -19,9 +18,6 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
 
         /// <inheritdoc/>
         public IProperty FindProperty<TProperty>(Expression<Func<T, TProperty>> expression)
-        {
-            var name = expression.Body<MemberExpression>().Member.Name;
-            return FindProperty(name);
-        }
+            => FindProperty((LambdaExpression)expression);
     }
 }
