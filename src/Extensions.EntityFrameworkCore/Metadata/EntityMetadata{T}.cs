@@ -18,7 +18,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         }
 
         /// <inheritdoc/>
-        public IProperty FindProperty(Expression<Func<T, object>> expression)
+        public IProperty FindProperty<TProperty>(Expression<Func<T, TProperty>> expression)
         {
             var name = expression.Body<MemberExpression>().Member.Name;
             return FindProperty(name);

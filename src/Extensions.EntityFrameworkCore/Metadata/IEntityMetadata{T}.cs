@@ -11,8 +11,9 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         /// <summary>
         /// 指定されたプロパティのメタデータを取得します。
         /// </summary>
+        /// <typeparam name="TProperty">プロパティの型。</typeparam>
         /// <param name="expression">プロパティを示す式ツリー。</param>
         /// <returns><see cref="IProperty"/> オブジェクト。</returns>
-        IProperty FindProperty(Expression<Func<T, object>> expression);
+        IProperty FindProperty<TProperty>(Expression<Func<T, TProperty>> expression);
     }
 }
