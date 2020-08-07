@@ -17,8 +17,8 @@
 | Microsoft.AspNetCore.Mvc.Versioning                   | MIT License                       |
 | Microsoft.AspNetCore.SpaServices.Extensions           | Apache License 2.0                |
 | Microsoft.CodeAnalysis.FxCopAnalyzers                 | Apache License 2.0                |
-| Microsoft.EntityFrameworkCore                         | Apache License 2.0                |
 | Microsoft.EntityFrameworkCore.Design                  | Apache License 2.0                |
+| Microsoft.EntityFrameworkCore.Relational              | Apache License 2.0                |
 | Microsoft.EntityFrameworkCore.SqlServer               | Apache License 2.0                |
 | Microsoft.Extensions.DependencyInjection.Abstractions | Apache License 2.0                |
 | Microsoft.Extensions.Hosting                          | Apache License 2.0                |
