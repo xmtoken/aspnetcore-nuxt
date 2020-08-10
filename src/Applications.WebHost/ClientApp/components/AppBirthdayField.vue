@@ -2,11 +2,12 @@
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
 import { VueMaskDirective } from 'v-mask';
-import Vue, { VueConstructor } from 'vue';
+import Vue, { VueConstructor, PropType } from 'vue';
 import AppDatePicker from '~/components/AppDatePicker.vue';
 import * as DateHelper from '~/extensions/date';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
+import { Listeners } from '~/types/vue';
 
 const $refs = Vue as VueConstructor<
   Vue & {
@@ -50,7 +51,7 @@ export default mixins($refs, slotable).extend({
       default(): object {
         return {};
       },
-      type: Object,
+      type: Object as PropType<object>,
     },
     pickerOffsetLeft: {
       default: false,
@@ -64,7 +65,7 @@ export default mixins($refs, slotable).extend({
       default(): object {
         return {};
       },
-      type: Object,
+      type: Object as PropType<object>,
     },
     readonly: {
       default: false,
@@ -85,7 +86,7 @@ export default mixins($refs, slotable).extend({
     appendIconInternal(): string | null {
       return this.disabled || this.readonly ? null : this.appendIcon;
     },
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;

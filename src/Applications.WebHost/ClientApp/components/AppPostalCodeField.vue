@@ -5,6 +5,7 @@ import { VueMaskDirective } from 'v-mask';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
 import { AddressModel } from '~/types/api';
+import { Listeners } from '~/types/vue';
 
 export default mixins(slotable).extend({
   directives: {
@@ -66,7 +67,7 @@ export default mixins(slotable).extend({
     appendIconInternal(): string | null {
       return this.disabled || this.readonly ? null : this.appendIcon;
     },
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;

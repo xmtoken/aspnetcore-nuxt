@@ -1,9 +1,11 @@
 <script lang="ts">
 import { mdiClockOutline } from '@mdi/js';
 import { VueMaskDirective } from 'v-mask';
+import { PropType } from 'vue';
 import mixins from '~/extensions/mixins';
 import * as TimeHelper from '~/extensions/time';
 import slotable from '~/mixins/slotable';
+import { Listeners } from '~/types/vue';
 
 export default mixins(slotable).extend({
   directives: {
@@ -39,7 +41,7 @@ export default mixins(slotable).extend({
       default(): object {
         return {};
       },
-      type: Object,
+      type: Object as PropType<object>,
     },
     pickerOffsetLeft: {
       default: false,
@@ -53,7 +55,7 @@ export default mixins(slotable).extend({
       default(): object {
         return {};
       },
-      type: Object,
+      type: Object as PropType<object>,
     },
     readonly: {
       default: false,
@@ -74,7 +76,7 @@ export default mixins(slotable).extend({
     appendIconInternal(): string | null {
       return this.disabled || this.readonly ? null : this.appendIcon;
     },
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
@@ -94,7 +96,7 @@ export default mixins(slotable).extend({
         ...this.menuProps,
       };
     },
-    pickerPropsInternal(): { useSeconds: boolean } {
+    pickerPropsInternal(): { format: string; useSeconds: boolean } {
       return {
         format: '24hr',
         useSeconds: false,

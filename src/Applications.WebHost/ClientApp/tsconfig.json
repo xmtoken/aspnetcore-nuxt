@@ -9,10 +9,12 @@
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"]
-      // "@/*": ["./*"]
     },
     "types": [
       //

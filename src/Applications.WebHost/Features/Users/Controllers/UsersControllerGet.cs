@@ -17,17 +17,17 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Controllers
         /// 指定された情報をもとにページングされたユーザー情報のコレクションを非同期に取得します。
         /// </summary>
         /// <param name="conditions">検索条件を表す <see cref="UserSearchConditions"/> オブジェクト。</param>
-        /// <param name="sorting">ソート条件を表す <see cref="Sorting"/> オブジェクト。</param>
+        /// <param name="sort">ソート条件を表す <see cref="Sorting"/> オブジェクトのコレクション。</param>
         /// <param name="paging">ページング条件を表す <see cref="Paging"/> オブジェクト。</param>
         /// <param name="fields">取得する項目のプロパティを示す文字列のコレクション。</param>
         /// <returns><see cref="IPagination{T}"/> オブジェクト。</returns>
         [Authorize]
         [HttpGet]
-        public Task<IPagination<User>> Get([FromQuery] UserSearchConditions conditions, [FromQuery] Sorting sorting, [FromQuery] Paging paging, [FromQuery] IEnumerable<string> fields)
+        public Task<IPagination<User>> Get([FromQuery] UserSearchConditions conditions, [FromQuery] IEnumerable<Sorting> sort, [FromQuery] Paging paging, [FromQuery] IEnumerable<string> fields)
         {
             var specification = SearchSpecificationFactory.Create(conditions);
-            var sort = sorting.ToQueryableOrDefault<User>(x => x.Id, SortDirection.Descending);
-            return UseCase.GetPaginatedUsersAsync(specification, sort, paging, fields);
+            var sortings = sort.ToQueryableOrDefault<User>((x => x.Id, SortDirection.Descending));
+            return UseCase.GetPaginatedUsersAsync(specification, sortings, paging, fields);
         }
     }
 }
