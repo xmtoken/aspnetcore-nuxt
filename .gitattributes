@@ -1,4 +1,7 @@
-* -text
-*.cs diff=csharp
+* text=auto
+*.gif binary
+*.ico binary
+*.jpg binary
+*.png binary
 *.ruleset eol=crlf
 *.sln eol=crlf
