@@ -5,3 +5,5 @@ dist/
 node_modules/
 obj/
 *.user
+api.ts
+swagger.json
