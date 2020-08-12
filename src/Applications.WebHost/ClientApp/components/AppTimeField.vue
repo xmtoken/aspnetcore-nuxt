@@ -1,9 +1,16 @@
 <script lang="ts">
 import { mdiClockOutline } from '@mdi/js';
 import { VueMaskDirective } from 'v-mask';
+import { PropType } from 'vue';
 import mixins from '~/extensions/mixins';
 import * as TimeHelper from '~/extensions/time';
 import slotable from '~/mixins/slotable';
+import { Listeners } from '~/types/vue';
+
+type PickerProps = {
+  format: string;
+  useSeconds: boolean;
+};
 
 export default mixins(slotable).extend({
   directives: {
@@ -21,11 +28,11 @@ export default mixins(slotable).extend({
     },
     contentClass: {
       default: undefined,
-      type: [Object, String],
+      type: [Object, String] as PropType<string | object>,
     },
     contentStyle: {
       default: undefined,
-      type: [Object, String],
+      type: [Object, String] as PropType<string | object>,
     },
     dense: {
       default: false,
@@ -37,9 +44,11 @@ export default mixins(slotable).extend({
     },
     menuProps: {
       default(): object {
-        return {};
+        return {
+          openOnClick: false,
+        };
       },
-      type: Object,
+      type: Object as PropType<object>,
     },
     pickerOffsetLeft: {
       default: false,
@@ -50,10 +59,13 @@ export default mixins(slotable).extend({
       type: Boolean,
     },
     pickerProps: {
-      default(): object {
-        return {};
+      default(): PickerProps {
+        return {
+          format: '24hr',
+          useSeconds: false,
+        };
       },
-      type: Object,
+      type: Object as PropType<PickerProps>,
     },
     readonly: {
       default: false,
@@ -74,36 +86,23 @@ export default mixins(slotable).extend({
     appendIconInternal(): string | null {
       return this.disabled || this.readonly ? null : this.appendIcon;
     },
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
     },
     mask(): string {
-      return this.pickerPropsInternal.useSeconds ? '#?#:#?#:#?#' : '#?#:#?#';
+      return this.pickerProps.useSeconds ? '#?#:#?#:#?#' : '#?#:#?#';
     },
     menuNudgeBottom(): number {
       return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
     },
     menuNudgeLeft(): number {
-      return this.pickerOffsetLeft ? 290 /* menu width */ + 5 /* space */ : 0;
-    },
-    menuPropsInternal(): object {
-      return {
-        openOnClick: false,
-        ...this.menuProps,
-      };
-    },
-    pickerPropsInternal(): { useSeconds: boolean } {
-      return {
-        format: '24hr',
-        useSeconds: false,
-        ...this.pickerProps,
-      };
+      return this.pickerOffsetLeft ? 290 /* menu-width */ + 5 /* space */ : 0;
     },
     pickerValue: {
       get(): string | null {
-        const format = this.pickerPropsInternal.useSeconds ? 'HH:mm:ss' : 'HH:mm';
+        const format = this.pickerProps.useSeconds ? 'HH:mm:ss' : 'HH:mm';
         return TimeHelper.isValid(this.model) ? TimeHelper.format(this.model, format) : null;
       },
       set(val: string | null): void {
@@ -128,12 +127,12 @@ export default mixins(slotable).extend({
     onInput(val: string | null): void {
       if (val) {
         if (/^[0-9]::$/.test(val)) {
-          // formatted `0:` to `0::` by v-mask, re-format `0::` to `00:`. `0` is mean `[0-9]`.
+          // formatted `0:` to `0::` by v-mask, re-format `0::` to `00:`.
           this.model = '0' + val.substr(0, 2);
         }
-        if (this.pickerPropsInternal.useSeconds) {
+        if (this.pickerProps.useSeconds) {
           if (/^[0-9]{2}:[0-9]::$/.test(val)) {
-            // formatted `00:0:` to `00:0::` by v-mask, re-format `00:0::` to `00:00:`. `0` is mean `[0-9]`.
+            // formatted `00:0:` to `00:0::` by v-mask, re-format `00:0::` to `00:00:`.
             this.model = val.substr(0, 3) + '0' + val.substr(3, 2);
           }
         }
@@ -144,7 +143,7 @@ export default mixins(slotable).extend({
 </script>
 
 <template>
-  <v-menu v-model="menu" v-bind="menuPropsInternal" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
+  <v-menu v-model="menu" v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
     <template v-slot:activator="{ on }">
       <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onBlur" @click:append="menu = true" @input="onInput">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
@@ -153,6 +152,6 @@ export default mixins(slotable).extend({
         </template>
       </app-text-field>
     </template>
-    <v-time-picker v-if="menu" v-model="pickerValue" v-bind="pickerPropsInternal" @change="menu = false" />
+    <v-time-picker v-if="menu" v-model="pickerValue" v-bind="pickerProps" @change="menu = false" />
   </v-menu>
 </template>

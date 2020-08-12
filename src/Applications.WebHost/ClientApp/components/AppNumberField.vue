@@ -3,6 +3,7 @@ import numbro from 'numbro';
 import mixins from '~/extensions/mixins';
 import * as NumberHelper from '~/extensions/number';
 import slotable from '~/mixins/slotable';
+import { Listeners } from '~/types/vue';
 
 export default mixins(slotable).extend({
   inheritAttrs: false,
@@ -23,7 +24,7 @@ export default mixins(slotable).extend({
     };
   },
   computed: {
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;

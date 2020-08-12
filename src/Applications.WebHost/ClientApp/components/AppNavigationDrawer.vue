@@ -1,7 +1,6 @@
 <script lang="ts">
 import { mdiAccountCircleOutline, mdiBattlenet, mdiCheckCircleOutline, mdiHomeCircleOutline, mdiMenu, mdiMenuOpen } from '@mdi/js';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import Vue from 'vue';
 
 type NavigationRoute = {
   icon: string | null;
@@ -11,7 +10,7 @@ type NavigationRoute = {
   routes: NavigationRoute[] | null;
 };
 
-export default mixins(slotable).extend({
+export default Vue.extend({
   inheritAttrs: false,
   data() {
     return {

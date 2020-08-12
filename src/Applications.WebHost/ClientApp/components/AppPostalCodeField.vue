@@ -5,6 +5,7 @@ import { VueMaskDirective } from 'v-mask';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
 import { AddressModel } from '~/types/api';
+import { Listeners } from '~/types/vue';
 
 export default mixins(slotable).extend({
   directives: {
@@ -66,7 +67,7 @@ export default mixins(slotable).extend({
     appendIconInternal(): string | null {
       return this.disabled || this.readonly ? null : this.appendIcon;
     },
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
@@ -93,21 +94,22 @@ export default mixins(slotable).extend({
       }
     },
     async search(): Promise<void> {
+      if (!this.model) {
+        return;
+      }
       try {
         this.loading = true;
-        if (this.model) {
-          const response = await this.$axios.get<AddressModel[]>(`/addresses/${this.model}`);
-          switch (response.status) {
-            case HttpStatus.OK:
-              this.items.splice(0, this.items.length, ...response.data);
-              break;
-            case HttpStatus.NO_CONTENT:
-              this.items.splice(0, this.items.length, { postalCode: null, address: '該当の郵便番号は見つかりませんでした。' });
-              break;
-          }
-          this.selected = [];
-          this.menu = true;
+        const response = await this.$axios.get<AddressModel[]>(`/addresses/${this.model}`);
+        switch (response.status) {
+          case HttpStatus.OK:
+            this.items.splice(0, this.items.length, ...response.data);
+            break;
+          case HttpStatus.NO_CONTENT:
+            this.items.splice(0, this.items.length, { postalCode: null, address: '該当の郵便番号は見つかりませんでした。' });
+            break;
         }
+        this.selected = [];
+        this.menu = true;
       } finally {
         this.loading = false;
       }

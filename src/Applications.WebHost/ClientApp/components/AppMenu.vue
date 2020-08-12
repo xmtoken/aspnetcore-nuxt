@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { Listeners } from '~/types/vue';
 
 export default Vue.extend({
   inheritAttrs: false,
@@ -19,7 +20,7 @@ export default Vue.extend({
     };
   },
   computed: {
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;

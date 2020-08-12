@@ -1,9 +1,15 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
 import { VueMaskDirective } from 'v-mask';
+import { PropType } from 'vue';
 import * as DateHelper from '~/extensions/date';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
+import { Listeners } from '~/types/vue';
+
+type PickerProps = {
+  type: string;
+};
 
 export default mixins(slotable).extend({
   directives: {
@@ -21,11 +27,11 @@ export default mixins(slotable).extend({
     },
     contentClass: {
       default: undefined,
-      type: [Object, String],
+      type: [Object, String] as PropType<string | object>,
     },
     contentStyle: {
       default: undefined,
-      type: [Object, String],
+      type: [Object, String] as PropType<string | object>,
     },
     dense: {
       default: false,
@@ -37,9 +43,11 @@ export default mixins(slotable).extend({
     },
     menuProps: {
       default(): object {
-        return {};
+        return {
+          openOnClick: false,
+        };
       },
-      type: Object,
+      type: Object as PropType<object>,
     },
     pickerOffsetLeft: {
       default: false,
@@ -50,10 +58,12 @@ export default mixins(slotable).extend({
       type: Boolean,
     },
     pickerProps: {
-      default(): object {
-        return {};
+      default(): PickerProps {
+        return {
+          type: 'date',
+        };
       },
-      type: Object,
+      type: Object as PropType<PickerProps>,
     },
     readonly: {
       default: false,
@@ -74,35 +84,23 @@ export default mixins(slotable).extend({
     appendIconInternal(): string | null {
       return this.disabled || this.readonly ? null : this.appendIcon;
     },
-    listeners(): Record<string, Function | Function[]> {
+    listeners(): Listeners {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       return listeners;
     },
     mask(): string {
-      return this.pickerPropsInternal.type === 'date' ? '####-#?#-#?#' : '####-#?#';
+      return this.pickerProps.type === 'date' ? '####-#?#-#?#' : '####-#?#';
     },
     menuNudgeBottom(): number {
       return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
     },
     menuNudgeLeft(): number {
-      return this.pickerOffsetLeft ? 290 /* menu width */ + 5 /* space */ : 0;
-    },
-    menuPropsInternal(): object {
-      return {
-        openOnClick: false,
-        ...this.menuProps,
-      };
-    },
-    pickerPropsInternal(): { type: string } {
-      return {
-        type: 'date',
-        ...this.pickerProps,
-      };
+      return this.pickerOffsetLeft ? 290 /* menu-width */ + 5 /* space */ : 0;
     },
     pickerValue: {
       get(): string | null {
-        const format = this.pickerPropsInternal.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM';
+        const format = this.pickerProps.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM';
         return DateHelper.isValid(this.model) ? DateHelper.format(this.model, format) : null;
       },
       set(val: string | null): void {
@@ -126,9 +124,9 @@ export default mixins(slotable).extend({
     },
     onInput(val: string | null): void {
       if (val) {
-        if (this.pickerPropsInternal.type === 'date') {
+        if (this.pickerProps.type === 'date') {
           if (/^[0-9]{4}-[0-9]--$/.test(val)) {
-            // formatted `0000-0-` to `0000-0--` by v-mask, re-format `0000-0--` to `0000-00-`. `0` is mean `[0-9]`.
+            // formatted `0000-0-` to `0000-0--` by v-mask, re-format `0000-0--` to `0000-00-`.
             this.model = val.substr(0, 5) + '0' + val.substr(5, 2);
           }
         }
@@ -139,7 +137,7 @@ export default mixins(slotable).extend({
 </script>
 
 <template>
-  <v-menu v-model="menu" v-bind="menuPropsInternal" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
+  <v-menu v-model="menu" v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
     <template v-slot:activator="{ on }">
       <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onBlur" @click:append="menu = true" @input="onInput">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
@@ -148,6 +146,6 @@ export default mixins(slotable).extend({
         </template>
       </app-text-field>
     </template>
-    <app-date-picker v-model="pickerValue" v-bind="pickerPropsInternal" @change="menu = false" />
+    <app-date-picker v-model="pickerValue" v-bind="pickerProps" @change="menu = false" />
   </v-menu>
 </template>

@@ -2,6 +2,7 @@
 import Vue from 'vue';
 
 export default Vue.extend({
+  inheritAttrs: false,
   props: {
     value: {
       default: false,

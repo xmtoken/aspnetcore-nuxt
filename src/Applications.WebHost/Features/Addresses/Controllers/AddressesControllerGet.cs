@@ -24,7 +24,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
         {
             var zipcode = code?.Replace("-", null).Trim();
             var uri = $"https://zipcloud.ibsnet.co.jp/api/search?zipcode={zipcode}";
-            return MemoryCache.GetOrCreateAsync(uri, async entry =>
+            return MemoryCache.GetOrCreateAsync(uri, async _ =>
             {
                 using var client = HttpClientFactory.CreateClient();
                 using var response = await client.GetAsync(new Uri(uri));

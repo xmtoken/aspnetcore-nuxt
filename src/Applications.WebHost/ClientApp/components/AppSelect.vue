@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
+import { PropType } from 'vue';
 import mixins from '~/extensions/mixins';
 import iconTabIndexable from '~/mixins/icon-tab-indexable';
 import requiredMarkable from '~/mixins/required-markable';
@@ -18,7 +19,7 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
           offsetY: true,
         };
       },
-      type: [Array, Object, String],
+      type: Object as PropType<object>,
     },
   },
 });
