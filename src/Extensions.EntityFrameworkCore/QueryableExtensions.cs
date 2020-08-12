@@ -2,6 +2,7 @@ using AspNetCoreNuxt.Extensions.Collections;
 using AspNetCoreNuxt.Extensions.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,31 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         /// <param name="sorting">ソート条件を表す <see cref="IQueryableSorting{T}"/> オブジェクト。</param>
         /// <returns><see cref="IQueryable{T}"/> オブジェクト。</returns>
         public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, IQueryableSorting<T> sorting)
-            => sorting.SortDirection == SortDirection.Ascending ? source.OrderBy(sorting.SortPropertyExpression) : source.OrderByDescending(sorting.SortPropertyExpression);
+            => source.OrderBy(new[] { sorting });
+
+        /// <summary>
+        /// 指定されたソート条件をもとにシーケンスを並び替えます。
+        /// </summary>
+        /// <typeparam name="T">シーケンスの要素の型。</typeparam>
+        /// <param name="source"><see cref="IQueryable{T}"/> オブジェクト。</param>
+        /// <param name="sortings">ソート条件を表す <see cref="IQueryableSorting{T}"/> オブジェクトのコレクション。</param>
+        /// <returns><see cref="IQueryable{T}"/> オブジェクト。</returns>
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, IEnumerable<IQueryableSorting<T>> sortings)
+        {
+            if (sortings.FirstOrDefault() is IQueryableSorting<T> sorting)
+            {
+                var ordered
+                    = sorting.SortDirection == SortDirection.Ascending
+                    ? source.OrderBy(sorting.SortPropertyExpression)
+                    : source.OrderByDescending(sorting.SortPropertyExpression);
+
+                return sortings.Skip(1).Aggregate(ordered, (query, sorting)
+                    => sorting.SortDirection == SortDirection.Ascending
+                     ? query.ThenBy(sorting.SortPropertyExpression)
+                     : query.ThenByDescending(sorting.SortPropertyExpression));
+            }
+            return source;
+        }
 
         /// <summary>
         /// 指定されたページング条件をもとにシーケンスを非同期でページングします。

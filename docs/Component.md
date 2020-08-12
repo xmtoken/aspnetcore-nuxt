@@ -51,6 +51,22 @@
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 
+## app-data-table
+
+`Props`
+
+| Name         | Type        | Default                                                | Description |
+| ------------ | ----------- | ------------------------------------------------------ | ----------- |
+| footer-props | object      | { disableItemsPerPage: true, showFirstLastPage: true } |             |
+| options      | DataOptions | {}                                                     |             |
+| outlined     | boolean     | false                                                  |             |
+
+`Events`
+
+| Name   | Value | Description |
+| ------ | ----- | ----------- |
+| route  | Query |             |
+
 ## app-date-field
 
 `Props`

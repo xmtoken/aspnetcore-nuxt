@@ -62,26 +62,30 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         /// <summary>
         /// <see cref="QueryableSorting{T}"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        /// <param name="expression">並び替えのキーとなるプロパティを示す式ツリー。</param>
-        /// <param name="direction">並び替え方向。</param>
+        /// <param name="expression">並び替えのキーとなるプロパティを示す式ツリーのコレクション。</param>
+        /// <param name="direction">並び替え方向のコレクション。</param>
         public QueryableSorting(Expression<Func<T, object>> expression, SortDirection direction)
         {
             SortPropertyExpression = expression;
             SortDirection = direction;
+            SortPropertyName = ConvertToPropertyName(expression);
 
-            var node
-                = expression.Body.NodeType == ExpressionType.Convert || expression.NodeType == ExpressionType.ConvertChecked
-                ? expression.Body<UnaryExpression>().Operand<MemberExpression>()
-                : expression.Body<MemberExpression>();
-
-            var properties = new List<string>();
-            while (node != null)
+            static string ConvertToPropertyName(Expression<Func<T, object>> expression)
             {
-                properties.Add(node.Member.Name);
-                node = node.Expression as MemberExpression;
-            }
+                var node
+                    = expression.Body.NodeType == ExpressionType.Convert || expression.NodeType == ExpressionType.ConvertChecked
+                    ? expression.Body<UnaryExpression>().Operand<MemberExpression>()
+                    : expression.Body<MemberExpression>();
 
-            SortPropertyName = string.Join('.', properties.AsEnumerable().Reverse());
+                var properties = new List<string>();
+                while (node != null)
+                {
+                    properties.Add(node.Member.Name);
+                    node = node.Expression as MemberExpression;
+                }
+
+                return string.Join('.', properties.AsEnumerable().Reverse());
+            }
         }
     }
 }

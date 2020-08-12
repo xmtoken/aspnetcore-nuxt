@@ -15,14 +15,14 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.UseCases
         /// </summary>
         /// <typeparam name="T">取得したデータをマップするクラスの型。</typeparam>
         /// <param name="specification">シーケンスをフィルターする仕様を表す <see cref="ILinqSpecification{T}"/> オブジェクト。</param>
-        /// <param name="sorting">ソート条件を表す <see cref="IQueryableSorting{T}"/> オブジェクト。</param>
+        /// <param name="sortings">ソート条件を表す <see cref="IQueryableSorting{T}"/> オブジェクトのコレクション。</param>
         /// <param name="fields">取得する項目のプロパティを示す文字列のコレクション。</param>
         /// <returns><typeparamref name="T"/> オブジェクトのコレクション。</returns>
-        public Task<T[]> GetUsersAsync<T>(ILinqSpecification<UserEntity> specification, IQueryableSorting<T> sorting, IEnumerable<string> fields)
+        public Task<T[]> GetUsersAsync<T>(ILinqSpecification<UserEntity> specification, IEnumerable<IQueryableSorting<T>> sortings, IEnumerable<string> fields)
             => Context.Set<UserEntity>()
                       .SatisfiedBy(specification)
-                      .ProjectTo<T>(Mapper.ConfigurationProvider, fields != null ? fields.Append(sorting.SortPropertyName) : new[] { sorting.SortPropertyName })
-                      .OrderBy(sorting)
+                      .ProjectTo<T>(Mapper.ConfigurationProvider, sortings.Select(x => x.SortPropertyName).Concat(fields))
+                      .OrderBy(sortings)
                       .ProjectTo<T>(Mapper.ConfigurationProvider, fields)
                       .ToArrayAsync();
     }

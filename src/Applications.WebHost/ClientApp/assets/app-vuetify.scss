@@ -30,10 +30,6 @@
   }
 
   .v-data-table {
-    &.v-data-table--outlined {
-      border: $data-table-container-border;
-    }
-
     .v-data-table__wrapper {
       border-radius: inherit;
 
