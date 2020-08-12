@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 
 interface ValidationProviderProperties {
   customMessages: object;
   name: string;
-  rules: string | object;
+  rules: string | object | null;
   slim: boolean;
   vid: string;
 }
@@ -16,7 +16,7 @@ export default Vue.extend({
     },
     veeCustomMessages: {
       default: undefined,
-      type: Object,
+      type: Object as PropType<object>,
     },
     veeDisabledRules: {
       default: false,
@@ -28,7 +28,7 @@ export default Vue.extend({
     },
     veeRules: {
       default: undefined,
-      type: [Object, String],
+      type: [Object, String] as PropType<string | object>,
     },
     veeVid: {
       default: undefined,
@@ -40,7 +40,7 @@ export default Vue.extend({
       return {
         customMessages: this.veeCustomMessages,
         name: this.veeName ? this.veeName : this.label,
-        rules: this.veeDisabledRules ? undefined : this.veeRules,
+        rules: this.veeDisabledRules ? null : this.veeRules,
         slim: true,
         vid: this.veeVid,
       };
