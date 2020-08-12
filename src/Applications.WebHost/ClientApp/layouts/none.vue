@@ -10,6 +10,6 @@ export default Vue.extend({});
       <nuxt />
     </v-main>
     <app-notifications :notifications="$store.state.notification.values" />
-    <app-versioning />
+    <app-versioning :value="$store.state.versioning.updatable" />
   </v-app>
 </template>

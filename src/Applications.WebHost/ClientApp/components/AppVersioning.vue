@@ -2,6 +2,12 @@
 import Vue from 'vue';
 
 export default Vue.extend({
+  props: {
+    value: {
+      default: false,
+      type: Boolean,
+    },
+  },
   data() {
     return {
       loading: false,
@@ -17,7 +23,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <v-snackbar color="success" content-class="align-center d-flex" left :timeout="-1" top transition="slide-x-transition" :value="$store.state.versioning.updatable">
+  <v-snackbar color="success" content-class="align-center d-flex" left :timeout="-1" top transition="slide-x-transition" :value="value">
     <span>アプリケーションの新しいバージョンがリリースされています。</span>
     <v-btn :disabled="loading" :loading="loading" text @click="reload">
       更新する
