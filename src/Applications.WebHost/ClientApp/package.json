@@ -16,7 +16,7 @@
     "@nuxtjs/auth": "4.9.1",
     "@nuxtjs/axios": "5.12.1",
     "content-disposition": "0.5.3",
-    "dayjs": "1.8.32",
+    "dayjs": "1.8.33",
     "deep-equal": "2.0.3",
     "file-saver": "2.0.2",
     "fontfaceobserver": "2.1.0",
@@ -25,10 +25,10 @@
     "nuxt": "2.14.1",
     "qs": "6.9.4",
     "v-mask": "2.2.3",
-    "vee-validate": "3.3.8"
+    "vee-validate": "3.3.9"
   },
   "devDependencies": {
-    "@mdi/js": "5.4.55",
+    "@mdi/js": "5.5.55",
     "@nuxt/types": "2.14.1",
     "@nuxt/typescript-build": "2.0.2",
     "@nuxtjs/eslint-config-typescript": "3.0.0",
