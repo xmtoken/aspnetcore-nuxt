@@ -1,1 +1,1 @@
-export type Query = { [key: string]: string | (string | null)[] | null | undefined };
+export type Query = Record<string, string | (string | null)[] | null | undefined>;
