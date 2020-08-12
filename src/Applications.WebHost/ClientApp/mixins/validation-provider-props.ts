@@ -1,12 +1,12 @@
 import Vue, { PropType } from 'vue';
 
-interface ValidationProviderProperties {
+type ValidationProviderProperties = {
   customMessages: object;
   name: string;
   rules: string | object | null;
   slim: boolean;
   vid: string;
-}
+};
 
 export default Vue.extend({
   props: {

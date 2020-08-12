@@ -1,6 +1,6 @@
 import numbro from 'numbro';
 
-export function format(val: string | number | null | undefined, format: string): string {
+export function format(val: string | number | null | undefined, format: string | numbro.Format): string {
   const value = pretty(val);
   return isValid(value) ? numbro(value).format(format) : value?.toString() ?? '';
 }
