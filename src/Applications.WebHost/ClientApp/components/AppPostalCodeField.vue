@@ -1,7 +1,7 @@
 <script lang="ts">
 import { mdiMagnify } from '@mdi/js';
 import HttpStatus from 'http-status-codes';
-import { VueMaskDirective } from 'v-mask';
+import { VueMaskDirective, VueMaskFilter } from 'v-mask';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
 import { AddressModel } from '~/types/api';
@@ -93,6 +93,9 @@ export default mixins(slotable).extend({
         this.$emit('update:address', val.address);
       }
     },
+    onBlur(): void {
+      this.model = VueMaskFilter(this.model || '', this.mask);
+    },
     async search(): Promise<void> {
       if (!this.model) {
         return;
@@ -121,7 +124,7 @@ export default mixins(slotable).extend({
 <template>
   <v-menu v-model="menu" :nudge-bottom="menuNudgeBottom" :open-on-click="false">
     <template v-slot:activator="{}">
-      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :loading="loading" :readonly="readonly" :style="contentStyle" v-on="listeners" @click:append="search">
+      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :loading="loading" :readonly="readonly" :style="contentStyle" v-on="listeners" @blur="onBlur" @click:append="search">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
         <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
           <slot v-bind="scope" :name="scopedSlotKey" />
