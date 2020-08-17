@@ -25,46 +25,45 @@ export default Vue.extend({
   },
   watch: {
     appendIconTabindex(val: number): void {
-      this.setIconTabindex('append', val);
+      setIconTabindex(this.$el, 'append', val);
     },
     appendOuterIconTabindex(val: number): void {
-      this.setIconTabindex('append-outer', val);
+      setIconTabindex(this.$el, 'append-outer', val);
     },
     clearIconTabindex(val: number): void {
-      this.setIconTabindex('clear', val);
+      setIconTabindex(this.$el, 'clear', val);
     },
     prependIconTabindex(val: number): void {
-      this.setIconTabindex('prepend', val);
+      setIconTabindex(this.$el, 'prepend', val);
     },
     prependInnerIconTabindex(val: number): void {
-      this.setIconTabindex('prepend-inner', val);
+      setIconTabindex(this.$el, 'prepend-inner', val);
     },
   },
   mounted(): void {
     if (this.appendIconTabindex) {
-      this.setIconTabindex('append', this.appendIconTabindex);
+      setIconTabindex(this.$el, 'append', this.appendIconTabindex);
     }
     if (this.appendOuterIconTabindex) {
-      this.setIconTabindex('append-outer', this.appendOuterIconTabindex);
+      setIconTabindex(this.$el, 'append-outer', this.appendOuterIconTabindex);
     }
     if (this.clearIconTabindex) {
-      this.setIconTabindex('clear', this.clearIconTabindex);
+      setIconTabindex(this.$el, 'clear', this.clearIconTabindex);
     }
     if (this.prependIconTabindex) {
-      this.setIconTabindex('prepend', this.prependIconTabindex);
+      setIconTabindex(this.$el, 'prepend', this.prependIconTabindex);
     }
     if (this.prependInnerIconTabindex) {
-      this.setIconTabindex('prepend-inner', this.prependInnerIconTabindex);
+      setIconTabindex(this.$el, 'prepend-inner', this.prependInnerIconTabindex);
     }
   },
-  methods: {
-    setIconTabindex(suffix: string, val: number): void {
-      const elements = this.$el.querySelectorAll(`.v-input__icon--${suffix} button.v-icon`);
-      if (val) {
-        elements.forEach(x => x.setAttribute('tabindex', val.toString()));
-      } else {
-        elements.forEach(x => x.removeAttribute('tabindex'));
-      }
-    },
-  },
 });
+
+function setIconTabindex(el: Element, suffix: string, val: number) {
+  const elements = el.querySelectorAll(`.v-input__icon--${suffix} button.v-icon`);
+  if (val) {
+    elements.forEach(x => x.setAttribute('tabindex', val.toString()));
+  } else {
+    elements.forEach(x => x.removeAttribute('tabindex'));
+  }
+}
