@@ -4,7 +4,8 @@
 
 ## NuGet
 
-各パッケージのバージョンは `~/src/Directory.Build.targets` を参照。
+NuGet パッケージのライセンス体系を以下に示す。
+各パッケージのバージョンは `~/src/Directory.Build.targets` を参照すること。
 
 | Package                                               | License                           |
 | ----------------------------------------------------- | --------------------------------- |
@@ -33,9 +34,27 @@
 | Serilog.Sinks.Async                                   | Apache License 2.0                |
 | StyleCop.Analyzers                                    | MIT License                       |
 
+### 推移的依存パッケージのライセンス統計情報
+
+推移的に依存するすべての NuGet パッケージに対するライセンスの統計情報を以下に示す。
+ライセンスチェッカーの仕様に関しては [GitHub](https://github.com/aaronpowell/dotnet-delice) を参照すること。
+
+`CLI : dotnet delice | Where-Object {$_ -like "*License Expression*"} | Sort-Object | Get-Unique`
+
+```
+License Expression: Apache-2.0
+License Expression: BSD-3-Clause
+License Expression: Microsoft Software License
+License Expression: MIT
+License Expression: MS-PL OR Apache-2.0
+License Expression: Project References
+License Expression: Unable to determine
+```
+
 ## npm
 
-各パッケージのバージョンは `~/src/Applications.WebHost/ClientApp/package.json` を参照。
+npm パッケージのライセンス体系を以下に示す。
+各パッケージのバージョンは `~/src/Applications.WebHost/ClientApp/package.json` を参照すること。
 
 | Package                           | License              |
 | --------------------------------- | -------------------- |
@@ -52,7 +71,6 @@
 | @types/fontfaceobserver           | MIT License          |
 | @types/lodash                     | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
-| babel-eslint                      | MIT License          |
 | content-disposition               | MIT License          |
 | dayjs                             | MIT License          |
 | deep-equal                        | MIT License          |
@@ -65,6 +83,7 @@
 | file-saver                        | MIT License          |
 | fontfaceobserver                  | BSD 2-Clause License |
 | http-status-codes                 | MIT License          |
+| license-checker                   | BSD 3-Clause License |
 | npm-run-all                       | MIT License          |
 | numbro                            | MIT License          |
 | nuxt                              | MIT License          |
@@ -79,3 +98,68 @@
 | stylelint-scss                    | MIT License          |
 | v-mask                            | MIT License          |
 | vee-validate                      | MIT License          |
+
+### 推移的依存パッケージのライセンス統計情報
+
+推移的に依存するすべての npm パッケージに対するライセンスの統計情報を以下に示す。
+ライセンスチェッカーの仕様に関しては [GitHub](https://github.com/davglass/license-checker) を参照すること。
+
+`CLI : npm run license:summary`
+
+```
+├─ MIT: 1175
+├─ ISC: 93
+├─ BSD-2-Clause: 28
+├─ CC0-1.0: 24
+├─ BSD-3-Clause: 18
+├─ Apache-2.0: 13
+├─ (MIT OR CC0-1.0): 4
+├─ BSD*: 2
+├─ Public Domain: 2
+├─ (MIT OR Apache-2.0): 1
+├─ CC-BY-4.0: 1
+├─ BSD: 1
+├─ GPL-3.0-or-later OR MIT: 1
+├─ (WTFPL OR MIT): 1
+├─ (MIT AND Zlib): 1
+├─ (MIT AND BSD-3-Clause): 1
+├─ CC-BY-3.0: 1
+├─ (MIT AND CC-BY-3.0): 1
+├─ MIT*: 1
+└─ 0BSD: 1
+```
+
+### ライセンス補足情報
+
+推移的に依存するすべての npm パッケージのうち、自動的にライセンスを識別できないパッケージに関する情報を以下に示す。
+
+`CLI : npm run license:unknown`
+
+```
+├─ css-select@1.2.0
+│  ├─ licenses: BSD*
+│  ├─ repository: https://github.com/fb55/css-select
+│  ├─ publisher: Felix Boehm
+│  ├─ email: me@feedic.com
+│  ├─ path: C:\Users\xm\LocalRepository\aspnetcore-nuxt\src\Applications.WebHost\ClientApp\node_modules\renderkid\node_modules\css-select
+│  └─ licenseFile: C:\Users\xm\LocalRepository\aspnetcore-nuxt\src\Applications.WebHost\ClientApp\node_modules\renderkid\node_modules\css-select\LICENSE
+├─ domutils@1.5.1
+│  ├─ licenses: BSD*
+│  ├─ repository: https://github.com/FB55/domutils
+│  ├─ publisher: Felix Boehm
+│  ├─ email: me@feedic.com
+│  ├─ path: C:\Users\xm\LocalRepository\aspnetcore-nuxt\src\Applications.WebHost\ClientApp\node_modules\renderkid\node_modules\domutils
+│  └─ licenseFile: C:\Users\xm\LocalRepository\aspnetcore-nuxt\src\Applications.WebHost\ClientApp\node_modules\renderkid\node_modules\domutils\LICENSE
+└─ trim@0.0.1
+   ├─ licenses: MIT*
+   ├─ publisher: TJ Holowaychuk
+   ├─ email: tj@vision-media.ca
+   ├─ path: C:\Users\xm\LocalRepository\aspnetcore-nuxt\src\Applications.WebHost\ClientApp\node_modules\trim
+   └─ licenseFile: C:\Users\xm\LocalRepository\aspnetcore-nuxt\src\Applications.WebHost\ClientApp\node_modules\trim\Readme.md
+```
+
+| Package          | License              | Document                                                 |
+| ---------------- | -------------------- | -------------------------------------------------------- |
+| css-select@1.2.0 | BSD 2-Clause License | <https://github.com/fb55/css-select/blob/master/LICENSE> |
+| domutils@1.5.1   | BSD 2-Clause License | <https://github.com/fb55/domutils/blob/master/LICENSE>   |
+| trim@0.0.1       | MIT License          | <https://www.npmjs.com/package/trim#license>             |

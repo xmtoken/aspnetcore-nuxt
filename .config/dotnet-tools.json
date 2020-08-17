@@ -7,6 +7,12 @@
       "commands": [
         "dotnet-ef"
       ]
+    },
+    "dotnet-delice": {
+      "version": "1.5.2",
+      "commands": [
+        "dotnet-delice"
+      ]
     }
   }
 }
