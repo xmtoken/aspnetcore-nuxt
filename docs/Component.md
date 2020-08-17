@@ -63,9 +63,9 @@
 
 `Events`
 
-| Name   | Value | Description |
-| ------ | ----- | ----------- |
-| route  | Query |             |
+| Name  | Value | Description |
+| ----- | ----- | ----------- |
+| route | Query |             |
 
 ## app-date-field
 
@@ -94,6 +94,23 @@
 | ---------- | -------- | ----------------------------------- | ----------- |
 | day-format | function | val => dayjs(val).date().toString() |             |
 | locale     | string   | ja                                  |             |
+
+## app-dialog
+
+`Props`
+
+| Name  | Type    | Default   | Description |
+| ----- | ------- | --------- | ----------- |
+| left  | boolean | false     |             |
+| right | boolean | false     |             |
+| value | boolean | undefined |             |
+
+`Slots`
+
+| Name      | Props                               | Description |
+| --------- | ----------------------------------- | ----------- |
+| activator | { open: function, opened: boolean } |             |
+| default   | { close: function }                 |             |
 
 ## app-email-field
 
