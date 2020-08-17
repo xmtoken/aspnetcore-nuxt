@@ -4,6 +4,7 @@ import { VueMaskDirective } from 'v-mask';
 import { PropType } from 'vue';
 import * as DateHelper from '~/extensions/date';
 import mixins from '~/extensions/mixins';
+import listenable from '~/mixins/listenable';
 import slotable from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
 
@@ -11,7 +12,7 @@ type PickerProps = {
   type: string;
 };
 
-export default mixins(slotable).extend({
+export default mixins(listenable, slotable).extend({
   directives: {
     mask: VueMaskDirective,
   },
@@ -139,7 +140,7 @@ export default mixins(slotable).extend({
 <template>
   <v-menu v-model="menu" v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...on }" @blur="onBlur" @click:append="menu = true" @input="onInput">
+      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...withEmit(on) }" @blur="onBlur" @click:append="menu = true" @input="onInput">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
         <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
           <slot v-bind="scope" :name="scopedSlotKey" />
