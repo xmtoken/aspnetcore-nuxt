@@ -120,6 +120,8 @@ export default mixins($refs, listenable, slotable).extend({
         this.$nextTick(() => {
           this.$refs.picker.activePicker = 'YEAR';
         });
+      } else {
+        this.$refs.picker.activePicker = 'YEAR';
       }
     },
     model(val: string | null): void {
