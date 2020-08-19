@@ -12,6 +12,7 @@ type NavigationRoute = {
 
 export default Vue.extend({
   inheritAttrs: false,
+  props: {},
   data() {
     return {
       icons: {
@@ -54,7 +55,7 @@ export default Vue.extend({
     };
   },
   watch: {
-    isNavigationDrawerMiniVariant(val: any /* typed as boolean, $route becomes any type by vetur or typescript bug. */): void {
+    isNavigationDrawerMiniVariant(val: boolean): void {
       localStorage.setItem('isNavigationDrawerMiniVariant', String(val));
     },
   },
