@@ -65,7 +65,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Validators
                         .Required()
                         .CustomAsync(async (roles, validationContext, cancellationToken) =>
                         {
-                            var roleIds = await context.Set<RoleEntity>().Select(x => x.Id).ToArrayAsync();
+                            var roleIds = await context.Set<RoleEntity>().Select(x => x.Id).ToArrayAsync(cancellationToken);
                             if (roles.Any(x => !roleIds.Contains(x)))
                             {
                                 validationContext.AddFailure($"{validationContext.DisplayName}に無効な値が含まれています。");
