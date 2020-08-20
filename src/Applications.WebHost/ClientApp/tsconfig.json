@@ -1,21 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
+    "baseUrl": ".",
     "esModuleInterop": true,
-    "allowJs": true,
+    "paths": {
+      "~/*": [
+        "./*"
+      ]
+    },
+    "removeComments": true,
     "sourceMap": true,
     "strict": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-      // "@/*": ["./*"]
-    },
+    "target": "ES5",
     "types": [
-      //
       "@nuxt/types",
       "@nuxtjs/axios",
       "@types/deep-equal",
@@ -25,5 +21,4 @@
       "@types/nuxtjs__auth"
     ]
   },
-  "exclude": ["node_modules"]
 }
