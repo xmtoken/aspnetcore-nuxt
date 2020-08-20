@@ -9,29 +9,26 @@ const config: NuxtConfig = {
   //   },
   // },
   build: {
-    extend(config, { isDev }): void {
+    extend(config, { isDev }) {
       if (isDev) {
         config.devtool = 'source-map';
       }
     },
   },
   buildModules: [
-    //
     '@nuxt/typescript-build',
     '@nuxtjs/vuetify',
   ],
   components: true,
   css: ['@/assets/main.scss'],
-  env: {},
   head: {
-    titleTemplate(title) {
-      return title ? `${title} - AspNetCoreNuxt` : 'AspNetCoreNuxt';
-    },
     htmlAttrs: {
       lang: 'ja',
     },
+    link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&display=swap' },
+    ],
     meta: [
-      //
       { charset: 'utf-8' },
       { 'http-equiv': 'x-ua-compatible', content: 'ie=edge' },
       { name: 'description', content: '' },
@@ -40,26 +37,22 @@ const config: NuxtConfig = {
       { name: 'robots', content: 'none' },
       { name: 'viewport', content: 'width=device-width' },
     ],
-    link: [
-      //
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&display=swap' },
-    ],
+    titleTemplate(title) {
+      return title ? `${title} - AspNetCoreNuxt` : 'AspNetCoreNuxt';
+    },
   },
   mode: 'spa',
   modules: [
-    //
     '@nuxtjs/auth',
     '@nuxtjs/axios',
   ],
   plugins: [
-    //
     '~/plugins/axios',
     '~/plugins/injection',
     '~/plugins/vee-validate',
   ],
   router: {
     middleware: [
-      //
       'versioning',
       'auth',
     ],
@@ -77,12 +70,12 @@ const config: NuxtConfig = {
     strategies: {
       local: {
         autoFetchUser: false,
-        tokenRequired: false,
         endpoints: {
           login: { url: '/account/sign-in', method: 'post' },
           logout: { url: '/account/sign-out', method: 'post' },
           user: { url: '/account', method: 'get', propertyName: false },
         },
+        tokenRequired: false,
       },
     },
   },
