@@ -39,7 +39,7 @@ NuGet パッケージのライセンス体系を以下に示す。
 推移的に依存するすべての NuGet パッケージに対するライセンスの統計情報を以下に示す。
 ライセンスチェッカーの仕様に関しては [GitHub](https://github.com/aaronpowell/dotnet-delice) を参照すること。
 
-`CLI : dotnet delice | Where-Object {$_ -like "*License Expression*"} | Sort-Object | Get-Unique`
+`dotnet delice | Where-Object {$_ -like "*License Expression*"} | Sort-Object | Get-Unique`
 
 ```
 License Expression: Apache-2.0
@@ -71,6 +71,7 @@ npm パッケージのライセンス体系を以下に示す。
 | @types/fontfaceobserver           | MIT License          |
 | @types/lodash                     | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
+| @types/ts-nameof                  | MIT License          |
 | content-disposition               | MIT License          |
 | dayjs                             | MIT License          |
 | deep-equal                        | MIT License          |
@@ -96,6 +97,8 @@ npm パッケージのライセンス体系を以下に示す。
 | stylelint-order                   | MIT License          |
 | stylelint-prettier                | MIT License          |
 | stylelint-scss                    | MIT License          |
+| ts-nameof                         | MIT License          |
+| ts-nameof-loader                  | MIT License          |
 | v-mask                            | MIT License          |
 | vee-validate                      | MIT License          |
 
@@ -104,10 +107,10 @@ npm パッケージのライセンス体系を以下に示す。
 推移的に依存するすべての npm パッケージに対するライセンスの統計情報を以下に示す。
 ライセンスチェッカーの仕様に関しては [GitHub](https://github.com/davglass/license-checker) を参照すること。
 
-`CLI : npm run license:summary`
+`npm run license:summary --prefix src/Applications.WebHost/ClientApp`
 
 ```
-├─ MIT: 1175
+├─ MIT: 1181
 ├─ ISC: 93
 ├─ BSD-2-Clause: 28
 ├─ CC0-1.0: 24
@@ -133,7 +136,7 @@ npm パッケージのライセンス体系を以下に示す。
 
 推移的に依存するすべての npm パッケージのうち、自動的にライセンスを識別できないパッケージに関する情報を以下に示す。
 
-`CLI : npm run license:unknown`
+`npm run license:unknown --prefix src/Applications.WebHost/ClientApp`
 
 ```
 ├─ css-select@1.2.0

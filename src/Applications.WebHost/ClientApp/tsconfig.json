@@ -18,7 +18,8 @@
       "@types/fontfaceobserver",
       "@types/lodash",
       "@types/node",
-      "@types/nuxtjs__auth"
+      "@types/nuxtjs__auth",
+      "@types/ts-nameof"
     ]
   },
 }

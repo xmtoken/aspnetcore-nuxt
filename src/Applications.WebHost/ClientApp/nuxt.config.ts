@@ -13,6 +13,7 @@ const config: NuxtConfig = {
       if (isDev) {
         config.devtool = 'source-map';
       }
+      config.module?.rules.push({ loader: 'ts-nameof-loader', test: /\.(ts|vue)$/ });
     },
   },
   buildModules: [
