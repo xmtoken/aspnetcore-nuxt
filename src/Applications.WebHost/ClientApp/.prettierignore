@@ -1,1 +1,5 @@
+.eslintrc.json
+.prettierrc.json
 .stylelintrc.json
+nuxt.config.ts
+tsconfig.json
