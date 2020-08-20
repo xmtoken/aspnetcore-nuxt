@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace SpoonSugar.Extensions.EntityFrameworkCore.Metadata.Builders
+namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata.Builders
 {
     /// <summary>
     /// <see cref="PropertyBuilder{T}"/> クラスの拡張機能を提供します。

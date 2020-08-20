@@ -6,9 +6,7 @@ using System.Collections.Generic;
 
 namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Models
 {
-    /// <summary>
-    /// ユーザーの検索条件を表します。
-    /// </summary>
+    /// <inheritdoc cref="IUserSearchConditions"/>
     public class UserSearchConditions : IUserSearchConditions
     {
         /// <summary>

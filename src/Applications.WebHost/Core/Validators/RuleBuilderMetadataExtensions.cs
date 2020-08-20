@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text.RegularExpressions;
 
-namespace SpoonSugar.Applications.WebHost.Core.Validators
+namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
 {
     /// <summary>
     /// <see cref="IRuleBuilder{T, TProperty}"/> インターフェイスの拡張機能を提供します。
