@@ -19,11 +19,11 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         /// </summary>
         /// <typeparam name="T">オブジェクトの型。</typeparam>
         /// <param name="ruleBuilder"><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</param>
-        /// <param name="entityMetadataProvider"><see cref="IEntityMetadataProvider"/> オブジェクト。</param>
+        /// <param name="metadata"><see cref="IEntityMetadata"/> オブジェクト。</param>
         /// <returns><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</returns>
-        public static IRuleBuilder<T, string> SetValidatorByMetadata<T>(this IRuleBuilder<T, string> ruleBuilder, IEntityMetadataProvider entityMetadataProvider)
+        public static IRuleBuilder<T, string> SetValidatorByMetadata<T>(this IRuleBuilder<T, string> ruleBuilder, IEntityMetadata metadata)
         {
-            var property = ruleBuilder.GetProperty(entityMetadataProvider);
+            var property = ruleBuilder.GetProperty(metadata);
             return ruleBuilder
                 .SetNotNullValidator(property)
                 .SetIsInEnumValidator()
@@ -37,11 +37,11 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         /// <typeparam name="T">オブジェクトの型。</typeparam>
         /// <typeparam name="TProperty">プロパティの型。</typeparam>
         /// <param name="ruleBuilder"><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</param>
-        /// <param name="entityMetadataProvider"><see cref="IEntityMetadataProvider"/> オブジェクト。</param>
+        /// <param name="metadata"><see cref="IEntityMetadata"/> オブジェクト。</param>
         /// <returns><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</returns>
-        public static IRuleBuilder<T, TProperty> SetValidatorByMetadata<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IEntityMetadataProvider entityMetadataProvider)
+        public static IRuleBuilder<T, TProperty> SetValidatorByMetadata<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IEntityMetadata metadata)
         {
-            var property = ruleBuilder.GetProperty(entityMetadataProvider);
+            var property = ruleBuilder.GetProperty(metadata);
             return ruleBuilder
                 .SetNotNullValidator(property)
                 .SetIsInEnumValidator()
@@ -54,12 +54,12 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         /// <typeparam name="T">オブジェクトの型。</typeparam>
         /// <typeparam name="TProperty">プロパティの型。</typeparam>
         /// <param name="ruleBuilder"><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</param>
-        /// <param name="entityMetadataProvider"><see cref="IEntityMetadataProvider"/> オブジェクト。</param>
+        /// <param name="metadata"><see cref="IEntityMetadata"/> オブジェクト。</param>
         /// <returns><see cref="IProperty"/> オブジェクト。</returns>
-        private static IProperty GetProperty<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IEntityMetadataProvider entityMetadataProvider)
+        private static IProperty GetProperty<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IEntityMetadata metadata)
         {
             var internalRuleBuilder = (RuleBuilder<T, TProperty>)ruleBuilder;
-            return entityMetadataProvider.Entity<T>().FindProperty(internalRuleBuilder.Rule.Expression);
+            return metadata.FindProperty(internalRuleBuilder.Rule.Expression);
         }
 
         /// <summary>
