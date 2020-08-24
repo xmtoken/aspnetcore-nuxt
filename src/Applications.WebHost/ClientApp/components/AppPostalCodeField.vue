@@ -104,10 +104,10 @@ export default mixins(slotable).extend({
         this.loading = true;
         const response = await this.$axios.get<AddressModel[]>(`/addresses/${this.model}`);
         switch (response.status) {
-          case HttpStatus.OK:
+          case HttpStatus.StatusCodes.OK:
             this.items.splice(0, this.items.length, ...response.data);
             break;
-          case HttpStatus.NO_CONTENT:
+          case HttpStatus.StatusCodes.NO_CONTENT:
             this.items.splice(0, this.items.length, { postalCode: null, address: '該当の郵便番号は見つかりませんでした。' });
             break;
         }

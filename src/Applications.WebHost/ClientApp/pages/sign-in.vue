@@ -48,7 +48,7 @@ export default mixins($refs).extend({
 
         const response: AxiosResponse = await this.$auth.loginWith('local', { data: this.credentials });
         switch (response.status) {
-          case HttpStatus.OK:
+          case HttpStatus.StatusCodes.OK:
             // if (window.PasswordCredential) {
             //   const credentials = new window.PasswordCredential({ id: this.credentials.userName, password: this.credentials.password });
             //   await navigator.credentials.store(credentials);
@@ -56,7 +56,7 @@ export default mixins($refs).extend({
             await this.$auth.fetchUser();
             break;
 
-          case HttpStatus.BAD_REQUEST:
+          case HttpStatus.StatusCodes.BAD_REQUEST:
             this.$refs.observer.setErrors(response.data.errors ?? {});
             this.$refs.snackbar.setErrors(response.data.errors, '');
             break;
