@@ -1,5 +1,5 @@
 import { Plugin } from '@nuxt/types';
-import HttpStatus from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 
 const HTTP_HEADER_KEY_API_VERSION = 'x-api-version';
 const HTTP_HEADER_KEY_SPA_VERSION = 'x-spa-version';
@@ -20,14 +20,14 @@ const plugin: Plugin = context => {
 
   context.$axios.onResponseError(error => {
     const status = error.response?.status;
-    if (status === HttpStatus.BAD_REQUEST || status === HttpStatus.UNAUTHORIZED || status === HttpStatus.FORBIDDEN) {
+    if (status === StatusCodes.BAD_REQUEST || status === StatusCodes.UNAUTHORIZED || status === StatusCodes.FORBIDDEN) {
       return Promise.resolve(error.response);
     }
     return Promise.reject(error);
   });
 
   context.$axios.onResponse(response => {
-    if (response.status === HttpStatus.BAD_REQUEST) {
+    if (response.status === StatusCodes.BAD_REQUEST) {
       const code = response.data?.error?.code;
       if (code === 'AmbiguousApiVersion' || code === 'ApiVersionUnspecified' || code === 'InvalidApiVersion' || code === 'UnsupportedApiVersion') {
         context.store.commit('versioning/updatable', true);
@@ -37,7 +37,7 @@ const plugin: Plugin = context => {
   });
 
   context.$axios.onResponse(response => {
-    if (response.status === HttpStatus.UNAUTHORIZED || response.status === HttpStatus.FORBIDDEN) {
+    if (response.status === StatusCodes.UNAUTHORIZED || response.status === StatusCodes.FORBIDDEN) {
       context.$auth.setUser(undefined);
       context.$auth.redirect('login');
     }

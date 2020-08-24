@@ -1,7 +1,7 @@
 <script lang="ts">
 import { mdiAccount, mdiBattlenet, mdiLock } from '@mdi/js';
 import { AxiosResponse } from 'axios';
-import HttpStatus from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { ValidationObserver } from 'vee-validate';
 import Vue, { VueConstructor } from 'vue';
 import AppAlertSnackbar from '~/components/AppAlertSnackbar.vue';
@@ -48,7 +48,7 @@ export default mixins($refs).extend({
 
         const response: AxiosResponse = await this.$auth.loginWith('local', { data: this.credentials });
         switch (response.status) {
-          case HttpStatus.StatusCodes.OK:
+          case StatusCodes.OK:
             // if (window.PasswordCredential) {
             //   const credentials = new window.PasswordCredential({ id: this.credentials.userName, password: this.credentials.password });
             //   await navigator.credentials.store(credentials);
@@ -56,7 +56,7 @@ export default mixins($refs).extend({
             await this.$auth.fetchUser();
             break;
 
-          case HttpStatus.StatusCodes.BAD_REQUEST:
+          case StatusCodes.BAD_REQUEST:
             this.$refs.observer.setErrors(response.data.errors ?? {});
             this.$refs.snackbar.setErrors(response.data.errors, '');
             break;

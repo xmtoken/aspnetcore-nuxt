@@ -1,6 +1,6 @@
 <script lang="ts">
 import { mdiMagnify } from '@mdi/js';
-import HttpStatus from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { VueMaskDirective, VueMaskFilter } from 'v-mask';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
@@ -104,10 +104,10 @@ export default mixins(slotable).extend({
         this.loading = true;
         const response = await this.$axios.get<AddressModel[]>(`/addresses/${this.model}`);
         switch (response.status) {
-          case HttpStatus.StatusCodes.OK:
+          case StatusCodes.OK:
             this.items.splice(0, this.items.length, ...response.data);
             break;
-          case HttpStatus.StatusCodes.NO_CONTENT:
+          case StatusCodes.NO_CONTENT:
             this.items.splice(0, this.items.length, { postalCode: null, address: '該当の郵便番号は見つかりませんでした。' });
             break;
         }
