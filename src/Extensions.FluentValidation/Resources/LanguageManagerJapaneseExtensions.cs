@@ -20,16 +20,15 @@ namespace AspNetCoreNuxt.Extensions.FluentValidation.Resources
         public static void AddJapaneseTranslations(this ILanguageManager source)
         {
             var languageManager = (LanguageManager)source;
-            languageManager
-                .AddTranslation<AspNetCoreCompatibleEmailValidator>(Culture, "{PropertyName}は有効なメールアドレスではありません。")
-                .AddTranslation<EnumValidator>(Culture, "{PropertyName}は有効な値ではありません。")
-                .AddTranslation<GreaterThanOrEqualValidator>(Culture, "{PropertyName}は{ComparisonValue}以上の値を入力してください。")
-                .AddTranslation<InclusiveBetweenValidator>(Culture, "{PropertyName}は{From}から{To}までの値を入力してください。")
-                .AddTranslation<LengthValidator>(Culture, "{PropertyName}は{MaxLength}文字で入力してください。")
-                .AddTranslation<LessThanOrEqualValidator>(Culture, "{PropertyName}は{ComparisonValue}以下の値を入力してください。")
-                .AddTranslation<MaximumLengthValidator>(Culture, "{PropertyName}は{MaxLength}文字以下で入力してください。")
-                .AddTranslation<MinimumLengthValidator>(Culture, "{PropertyName}は{MinLength}文字以上で入力してください。")
-                .AddTranslation<NotNullValidator>(Culture, "{PropertyName}を入力してください。");
+            languageManager.AddTranslation(Culture, "EmailValidator", "{PropertyName}は有効なメールアドレスではありません。");
+            languageManager.AddTranslation(Culture, nameof(EnumValidator), "{PropertyName}は有効な値ではありません。");
+            languageManager.AddTranslation(Culture, nameof(GreaterThanOrEqualValidator), "{PropertyName}は{ComparisonValue}以上の値を入力してください。");
+            languageManager.AddTranslation(Culture, nameof(InclusiveBetweenValidator), "{PropertyName}は{From}から{To}までの値を入力してください。");
+            languageManager.AddTranslation(Culture, nameof(LengthValidator), "{PropertyName}は{MaxLength}文字で入力してください。");
+            languageManager.AddTranslation(Culture, nameof(LessThanOrEqualValidator), "{PropertyName}は{ComparisonValue}以下の値を入力してください。");
+            languageManager.AddTranslation(Culture, nameof(MaximumLengthValidator), "{PropertyName}は{MaxLength}文字以下で入力してください。");
+            languageManager.AddTranslation(Culture, nameof(MinimumLengthValidator), "{PropertyName}は{MinLength}文字以上で入力してください。");
+            languageManager.AddTranslation(Culture, nameof(NotNullValidator), "{PropertyName}を入力してください。");
         }
     }
 }
