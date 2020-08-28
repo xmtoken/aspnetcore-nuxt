@@ -25,14 +25,14 @@
     "fontfaceobserver": "2.1.0",
     "http-status-codes": "2.1.2",
     "numbro": "2.3.1",
-    "nuxt": "2.14.3",
+    "nuxt": "2.14.4",
     "qs": "6.9.4",
     "v-mask": "2.2.3",
     "vee-validate": "3.3.9"
   },
   "devDependencies": {
     "@mdi/js": "5.5.55",
-    "@nuxt/types": "2.14.3",
+    "@nuxt/types": "2.14.4",
     "@nuxt/typescript-build": "2.0.2",
     "@nuxtjs/eslint-config-typescript": "3.0.0",
     "@nuxtjs/vuetify": "1.11.2",
