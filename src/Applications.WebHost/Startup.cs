@@ -156,13 +156,18 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     {
                         config.RegisterValidatorsFromAssemblyContaining<Startup>();
                         config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                        ValidatorOptions.Global.CascadeMode = CascadeMode.Stop;
+#pragma warning disable CS0618
+                        ValidatorOptions.Global.CascadeMode = CascadeMode.StopOnFirstFailure;
+#pragma warning restore CS0618
                         ValidatorOptions.Global.LanguageManager.AddJapaneseTranslations();
                     })
                     .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver()
                         {
+#pragma warning disable CS0618
+                            DefaultMembersSearchFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+#pragma warning restore CS0618
                             NamingStrategy = new CamelCaseNamingStrategy()
                             {
                                 ProcessDictionaryKeys = true,
