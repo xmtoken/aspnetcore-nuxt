@@ -54,18 +54,10 @@ export default mixins(slotable).extend({
 </script>
 
 <template>
-  <app-text-field v-model="model" v-bind="$attrs" v-on="listeners" @blur="onBlue" @focus="onFocus">
+  <app-text-field v-model="model" v-bind="$attrs" class="text-right" v-on="listeners" @blur="onBlue" @focus="onFocus">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
   </app-text-field>
 </template>
-
-<style lang="scss" scoped>
-.v-input ::v-deep {
-  input {
-    text-align: right;
-  }
-}
-</style>
