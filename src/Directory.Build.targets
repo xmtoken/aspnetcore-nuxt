@@ -23,6 +23,7 @@
     <PackageReference Update="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Update="NSwag.AspNetCore" Version="13.7.0" />
     <PackageReference Update="NSwag.CodeGeneration.TypeScript" Version="13.7.0" />
+    <PackageReference Update="NSwag.Generation" Version="13.7.0" />
     <PackageReference Update="NSwag.MSBuild" Version="13.7.0" />
     <PackageReference Update="Oracle.EntityFrameworkCore" Version="3.19.0-beta1" />
     <PackageReference Update="Polly" Version="7.2.1" />

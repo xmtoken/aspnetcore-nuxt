@@ -8,6 +8,7 @@ using AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata;
 using AspNetCoreNuxt.Extensions.FluentValidation.Resources;
 using AspNetCoreNuxt.Extensions.Identity;
 using AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters;
+using AspNetCoreNuxt.Extensions.NSwag.Generation.Processors;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -96,6 +97,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
             services.AddOpenApiDocument(settings =>
                     {
                         settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
+                        settings.DocumentProcessors.Add(new SchemaProcessor<Startup>());
                         settings.Title = typeof(Startup).Namespace;
                         settings.AddOperationFilter(context =>
                         {

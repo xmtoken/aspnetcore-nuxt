@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Extensions.EntityFrameworkCore.SqlServer\Extensions.EntityFrameworkCore.SqlServer.csproj" />
     <ProjectReference Include="..\Extensions.FluentValidation\Extensions.FluentValidation.csproj" />
     <ProjectReference Include="..\Extensions.Newtonsoft.Json\Extensions.Newtonsoft.Json.csproj" />
+    <ProjectReference Include="..\Extensions.NSwag\Extensions.NSwag.csproj" />
     <ProjectReference Include="..\Extensions.Polly\Extensions.Polly.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -31,7 +32,7 @@
   </PropertyGroup>
   <Target Name="GenerateClientInterfaces" AfterTargets="Build">
     <Exec Command="$(NSwagExe_Core31) aspnetcore2openapi /assembly:$(TargetPath) /documentName:$(Version) /output:swagger.json" />
-    <Exec Command="$(NSwagExe_Core31) openapi2tsclient /GenerateClientClasses:false /MarkOptionalProperties:false /NullValue:Null /TypeStyle:Interface /input:swagger.json /output:$(SpaRoot)/types/api.ts" />
+    <Exec Command="$(NSwagExe_Core31) openapi2tsclient /GenerateClientClasses:false /GenerateConstructorInterface:false /MarkOptionalProperties:false /NullValue:Null /TypeStyle:Class /input:swagger.json /output:$(SpaRoot)/types/api.ts" />
   </Target>
   <Target Name="PublishClientApp" AfterTargets="ComputeFilesToPublish">
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci --no-optional" />

@@ -27,6 +27,7 @@ NuGet パッケージのライセンス体系を以下に示す。
 | Newtonsoft.Json                                       | MIT License                       |
 | NSwag.AspNetCore                                      | MIT License                       |
 | NSwag.CodeGeneration.TypeScript                       | MIT License                       |
+| NSwag.Generation                                      | MIT License                       |
 | NSwag.MSBuild                                         | MIT License                       |
 | Oracle.EntityFrameworkCore                            | Oracle Technology Network License |
 | Polly                                                 | BSD 3-Clause License              |
