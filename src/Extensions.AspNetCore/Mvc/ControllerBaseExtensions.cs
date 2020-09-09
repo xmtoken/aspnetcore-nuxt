@@ -1,4 +1,4 @@
-using AspNetCoreNuxt.Extensions.AspNetCore.ModelBinding;
+using AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

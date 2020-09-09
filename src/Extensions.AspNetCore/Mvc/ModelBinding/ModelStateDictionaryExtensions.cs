@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace AspNetCoreNuxt.Extensions.AspNetCore.ModelBinding
+namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ModelBinding
 {
     /// <summary>
     /// <see cref="ModelStateDictionary"/> クラスの拡張機能を提供します。
