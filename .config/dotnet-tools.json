@@ -3,12 +3,16 @@
   "isRoot": true,
   "tools": {
     "dotnet-ef": {
-      "version": "3.1.7",
-      "commands": ["dotnet-ef"]
+      "version": "3.1.8",
+      "commands": [
+        "dotnet-ef"
+      ]
     },
     "dotnet-delice": {
       "version": "1.5.2",
-      "commands": ["dotnet-delice"]
+      "commands": [
+        "dotnet-delice"
+      ]
     }
   }
 }
