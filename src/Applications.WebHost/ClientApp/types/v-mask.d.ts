@@ -1,5 +1,5 @@
 declare module 'v-mask' {
   export const VueMaskDirective: any;
-  export const VueMaskFilter: (value: string, mask: string) => string;
+  export const VueMaskFilter: any;
   export const VueMaskPlugin: any;
 }
