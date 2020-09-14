@@ -19,6 +19,9 @@ const plugin: Plugin = context => {
   });
 
   context.$axios.onResponseError(error => {
+    if (context.$axios.isCancel(error)) {
+      return Promise.resolve(error);
+    }
     const status = error.response?.status;
     if (status === StatusCodes.BAD_REQUEST || status === StatusCodes.UNAUTHORIZED || status === StatusCodes.FORBIDDEN) {
       return Promise.resolve(error.response);
