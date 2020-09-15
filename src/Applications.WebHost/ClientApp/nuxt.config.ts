@@ -42,14 +42,12 @@ const config: NuxtConfig = {
       return title ? `${title} - AspNetCoreNuxt` : 'AspNetCoreNuxt';
     },
   },
-  mode: 'spa',
   modules: [
     '@nuxtjs/auth',
     '@nuxtjs/axios',
   ],
   plugins: [
     '~/plugins/axios',
-    '~/plugins/injection',
     '~/plugins/vee-validate',
   ],
   router: {
@@ -58,6 +56,7 @@ const config: NuxtConfig = {
       'auth',
     ],
   },
+  ssr: false,
   telemetry: false,
   auth: {
     cookie: false,
