@@ -128,7 +128,7 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore
         /// <returns>変換に成功した場合は変換された値。それ以外の場合は null。</returns>
         public static TEnum? ConvertToEnum<TEnum>(string value)
             where TEnum : struct, Enum
-            => Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed) ? parsed : (TEnum?)null;
+            => Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed) && Enum.IsDefined(typeof(TEnum), parsed) ? parsed : (TEnum?)null;
 
         /// <summary>
         /// 指定された文字列のコレクションを <typeparamref name="TEnum"/> 型のコレクションへ変換します。
@@ -145,7 +145,7 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore
             }
             foreach (var value in values)
             {
-                if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed))
+                if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed) && Enum.IsDefined(typeof(TEnum), parsed))
                 {
                     yield return parsed;
                 }
