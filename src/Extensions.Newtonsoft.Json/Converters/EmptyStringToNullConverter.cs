@@ -4,7 +4,7 @@ using System;
 namespace AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters
 {
     /// <summary>
-    /// JSON から値を読み込むときに空文字を null に変換するコンバーターを表します。
+    /// 空文字を null に変換するコンバーターを表します。
     /// </summary>
     public class EmptyStringToNullConverter : JsonConverter<string>
     {
@@ -17,6 +17,6 @@ namespace AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters
 
         /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, string value, JsonSerializer serializer)
-            => writer.WriteValue(value);
+            => writer.WriteValue(string.IsNullOrEmpty(value) ? null : value);
     }
 }
