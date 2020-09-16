@@ -42,6 +42,9 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Profiles
                 // ソート後にキーを省いて同一モデル間のマッピングを行うために構成します。
                 CreateMap(entityType, entityType)
                     .ForAllMembers(x => x.ExplicitExpansion());
+
+                // API で公開するモデルからデータモデルへのマッピングを構成します。
+                CreateMap(entityType, entityInterface.GenericTypeArguments[0]);
             }
         }
     }
