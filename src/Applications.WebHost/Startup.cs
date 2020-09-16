@@ -26,6 +26,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -70,13 +71,17 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     .AddAutoMapper(typeof(Startup))
                     .AddCsvHelper<Startup>()
                     .AddEntityMetadataProvider<AppDbContext>()
-                    .AddEnumLabelProviders<Startup>()
-                    .AddHttpClient()
-                    .AddMemoryCache()
-                    .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
+                    .AddEnumLabelProviders<Startup>();
+
+            services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
                     .AddSingleton<ILookupNormalizer, UpperInvariantLookupNormalizer>()
-                    .AddSingleton<IStringHasher, StringHasher>()
-                    .AddDbContextPool<AppDbContext>(options =>
+                    .AddSingleton<IStringHasher, StringHasher>();
+
+            services.AddHttpClient()
+                    .AddLocalization()
+                    .AddMemoryCache();
+
+            services.AddDbContextPool<AppDbContext>(options =>
                     {
                         options.ConfigureWarnings(x =>
                         {
@@ -211,9 +216,9 @@ namespace AspNetCoreNuxt.Applications.WebHost
 
             app.UseRequestLocalization(options =>
             {
-                options.DefaultRequestCulture = new RequestCulture("ja-JP");
-                options.SupportedCultures = new[] { new CultureInfo("ja-JP") };
-                options.SupportedUICultures = new[] { new CultureInfo("ja-JP") };
+                options.DefaultRequestCulture = new RequestCulture("ja");
+                options.SupportedCultures = new[] { new CultureInfo("ja") };
+                options.SupportedUICultures = new[] { new CultureInfo("ja") };
             });
 
             app.Use(async (context, next) =>
