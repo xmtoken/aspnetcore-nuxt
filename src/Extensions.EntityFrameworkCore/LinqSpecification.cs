@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
 {
     /// <inheritdoc cref="ILinqSpecification{T}"/>
-    public abstract class LinqSpecification<T> : ILinqSpecification<T>
+    public abstract partial class LinqSpecification<T> : ILinqSpecification<T>
     {
         /// <inheritdoc/>
         public bool IsSatisfiedBy(T obj)
