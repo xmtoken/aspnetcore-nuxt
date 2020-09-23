@@ -10,7 +10,7 @@ export default mixins(slotable).extend({
   props: {
     format: {
       default: '0',
-      type: String,
+      type: [Object, String],
     },
     value: {
       default: undefined,
