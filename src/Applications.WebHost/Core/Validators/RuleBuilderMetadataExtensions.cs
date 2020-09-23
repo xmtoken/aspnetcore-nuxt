@@ -5,7 +5,6 @@ using FluentValidation.Internal;
 using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Text.RegularExpressions;
 
 namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
 {
@@ -24,12 +23,21 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         public static IRuleBuilder<T, string> SetValidatorByMetadata<T>(this IRuleBuilder<T, string> ruleBuilder, IEntityMetadata metadata)
         {
             var property = ruleBuilder.GetProperty(metadata);
-            return ruleBuilder
-                .SetNotNullValidator(property)
-                .SetIsInEnumValidator()
-                .SetMaximumLengthValidator(property)
-                .SetScalePrecisionValidator(property);
+            return SetValidatorByMetadata(ruleBuilder, property);
         }
+
+        /// <summary>
+        /// プロパティのメタデータをもとに検証ロジックを適用します。
+        /// </summary>
+        /// <typeparam name="T">オブジェクトの型。</typeparam>
+        /// <param name="ruleBuilder"><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</param>
+        /// <param name="property"><see cref="IProperty"/> オブジェクト。</param>
+        /// <returns><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</returns>
+        public static IRuleBuilder<T, string> SetValidatorByMetadata<T>(this IRuleBuilder<T, string> ruleBuilder, IProperty property)
+            => ruleBuilder.SetNotNullValidator(property)
+                          .SetIsInEnumValidator()
+                          .SetMaximumLengthValidator(property)
+                          .SetScalePrecisionValidator(property);
 
         /// <summary>
         /// プロパティのメタデータをもとに検証ロジックを適用します。
@@ -42,11 +50,21 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         public static IRuleBuilder<T, TProperty> SetValidatorByMetadata<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IEntityMetadata metadata)
         {
             var property = ruleBuilder.GetProperty(metadata);
-            return ruleBuilder
-                .SetNotNullValidator(property)
-                .SetIsInEnumValidator()
-                .SetScalePrecisionValidator(property);
+            return SetValidatorByMetadata(ruleBuilder, property);
         }
+
+        /// <summary>
+        /// プロパティのメタデータをもとに検証ロジックを適用します。
+        /// </summary>
+        /// <typeparam name="T">オブジェクトの型。</typeparam>
+        /// <typeparam name="TProperty">プロパティの型。</typeparam>
+        /// <param name="ruleBuilder"><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</param>
+        /// <param name="property"><see cref="IProperty"/> オブジェクト。</param>
+        /// <returns><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</returns>
+        public static IRuleBuilder<T, TProperty> SetValidatorByMetadata<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IProperty property)
+            => ruleBuilder.SetNotNullValidator(property)
+                          .SetIsInEnumValidator()
+                          .SetScalePrecisionValidator(property);
 
         /// <summary>
         /// 検証プロパティのメタデータを取得します。
@@ -110,12 +128,10 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         /// <returns><see cref="IRuleBuilder{T, TProperty}"/> オブジェクト。</returns>
         private static IRuleBuilder<T, TProperty> SetScalePrecisionValidator<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IProperty property)
         {
-            var columnType = property.GetColumnType();
-            if (columnType != null && Regex.Match(columnType, @"^decimal\(([0-9]+),\s*([0-9]+)\)$") is Match match && match.Success)
+            var precision = property.GetPrecision();
+            if (precision.HasValue)
             {
-                var scale = int.Parse(match.Groups[2].Value);
-                var precision = int.Parse(match.Groups[1].Value);
-                return ruleBuilder.ScalePrecision(scale, precision);
+                return ruleBuilder.ScalePrecision(precision.Value.Scale, precision.Value.Precision);
             }
             return ruleBuilder;
         }
