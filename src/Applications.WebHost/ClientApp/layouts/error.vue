@@ -1,7 +1,11 @@
 <script lang="ts">
+import { Context } from '@nuxt/types';
 import Vue, { PropType } from 'vue';
 
 export default Vue.extend({
+  layout(ctx: Context): string {
+    return ctx.$auth.loggedIn ? 'default' : 'none';
+  },
   props: {
     error: {
       default: undefined,
