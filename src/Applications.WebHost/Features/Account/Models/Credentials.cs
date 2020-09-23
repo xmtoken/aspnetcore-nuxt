@@ -6,13 +6,13 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Account.Models
     public class Credentials
     {
         /// <summary>
-        /// ユーザー名を取得または設定します。
+        /// ユーザー名を取得します。
         /// </summary>
-        public string UserName { get; set; }
+        public string UserName { get; private set; }
 
         /// <summary>
-        /// パスワードを取得または設定します。
+        /// パスワードを取得します。
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; private set; }
     }
 }
