@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { VueMaskDirective } from 'v-mask';
 import Vue, { VueConstructor, PropType } from 'vue';
 import AppDatePicker from '~/components/AppDatePicker.vue';
-import * as DateHelper from '~/extensions/date';
+import * as DateFormatter from '~/extensions/formatters/date-formatter';
 import mixins from '~/extensions/mixins';
 import listenable from '~/mixins/listenable';
 import slotable from '~/mixins/slotable';
@@ -107,7 +107,7 @@ export default mixins($refs, listenable, slotable).extend({
     },
     pickerValue: {
       get(): string | null {
-        return DateHelper.isValid(this.model) ? DateHelper.format(this.model, 'YYYY-MM-DD') : null;
+        return DateFormatter.isValid(this.model) ? DateFormatter.format(this.model, 'YYYY-MM-DD') : null;
       },
       set(val: string | null): void {
         this.model = val;
