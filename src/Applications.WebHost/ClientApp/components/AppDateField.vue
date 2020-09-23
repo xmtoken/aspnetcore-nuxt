@@ -2,7 +2,7 @@
 import { mdiCalendar } from '@mdi/js';
 import { VueMaskDirective } from 'v-mask';
 import { PropType } from 'vue';
-import * as DateHelper from '~/extensions/date';
+import * as DateFormatter from '~/extensions/formatters/date-formatter';
 import mixins from '~/extensions/mixins';
 import listenable from '~/mixins/listenable';
 import slotable from '~/mixins/slotable';
@@ -102,7 +102,7 @@ export default mixins(listenable, slotable).extend({
     pickerValue: {
       get(): string | null {
         const format = this.pickerProps.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM';
-        return DateHelper.isValid(this.model) ? DateHelper.format(this.model, format) : null;
+        return DateFormatter.isValid(this.model) ? DateFormatter.format(this.model, format) : null;
       },
       set(val: string | null): void {
         this.model = val;
