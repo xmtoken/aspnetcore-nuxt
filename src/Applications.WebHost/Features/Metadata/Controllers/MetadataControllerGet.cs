@@ -39,6 +39,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Metadata.Controllers
                     entityProperties.Add(memberMap.DestinationName, new EntityPropertyMetadata()
                     {
                         MaxLength = propertyMetadata.GetMaxLength(),
+                        Required = !propertyMetadata.IsColumnNullable(),
                     });
                 }
 
