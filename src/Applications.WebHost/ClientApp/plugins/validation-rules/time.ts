@@ -1,8 +1,11 @@
-import * as TimeHelper from '~/extensions/time';
+import { ValidationRule } from 'vee-validate/dist/types/types';
+import * as TimeFormatter from '~/extensions/formatters/time-formatter';
 
-export default {
+const rule: ValidationRule = {
   message: '{_field_}は有効な時刻ではありません。',
   validate(val: string | null | undefined): boolean {
-    return TimeHelper.isValid(val);
+    return TimeFormatter.isValid(val);
   },
 };
+
+export default rule;

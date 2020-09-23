@@ -1,10 +1,13 @@
 import dayjs from 'dayjs';
-import * as DateHelper from '~/extensions/date';
+import { ValidationRule } from 'vee-validate/dist/types/types';
+import * as DateFormatter from '~/extensions/formatters/date-formatter';
 
-export default {
+const rule: ValidationRule = {
   message: '{_field_}は過去の日付を入力してください。',
   validate(val: string | null | undefined): boolean {
-    const value = DateHelper.pretty(val);
-    return DateHelper.isValid(value) && dayjs(value).format('YYYYMMDD') < dayjs().format('YYYYMMDD');
+    const value = DateFormatter.pretty(val);
+    return DateFormatter.isValid(value) && dayjs(value).format('YYYYMMDD') < dayjs().format('YYYYMMDD');
   },
 };
+
+export default rule;

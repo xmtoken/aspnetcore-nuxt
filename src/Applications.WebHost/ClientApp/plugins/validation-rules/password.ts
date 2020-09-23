@@ -1,15 +1,16 @@
+import { ValidationRule } from 'vee-validate/dist/types/types';
+
 const REQUIRED_LENGTH = 8;
 const REQUIRED_DIGIT = true;
 const REQUIRED_LOWERCASE = true;
 const REQUIRED_UPPERCASE = true;
 
-export default {
+const rule: ValidationRule = {
   message(field: string): string {
     let message = `${field}は`;
     if (REQUIRED_DIGIT || REQUIRED_LOWERCASE || REQUIRED_UPPERCASE) {
       const symbols = [
-        //
-        REQUIRED_DIGIT ? '数字' : null,
+        REQUIRED_DIGIT ? '数字' : null, //
         REQUIRED_LOWERCASE ? '英小文字' : null,
         REQUIRED_UPPERCASE ? '英大文字' : null,
       ];
@@ -34,3 +35,5 @@ export default {
     return true;
   },
 };
+
+export default rule;
