@@ -6,6 +6,10 @@ import slotable from '~/mixins/slotable';
 export default mixins(slotable).extend({
   inheritAttrs: false,
   props: {
+    appendIcon: {
+      default: mdiOpenInNew,
+      type: String,
+    },
     appendIconTabindex: {
       default: -1,
       type: Number,
@@ -19,13 +23,6 @@ export default mixins(slotable).extend({
       type: String,
     },
   },
-  data() {
-    return {
-      icons: {
-        mdiOpenInNew,
-      },
-    };
-  },
 });
 </script>
 
@@ -38,7 +35,7 @@ export default mixins(slotable).extend({
     <template v-slot:append>
       <v-btn :href="value" icon small :tabindex="appendIconTabindex">
         <v-icon>
-          {{ icons.mdiOpenInNew }}
+          {{ appendIcon }}
         </v-icon>
       </v-btn>
     </template>
