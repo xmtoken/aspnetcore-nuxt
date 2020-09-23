@@ -2,8 +2,8 @@
 import { mdiClockOutline } from '@mdi/js';
 import { VueMaskDirective } from 'v-mask';
 import { PropType } from 'vue';
+import * as TimeFormatter from '~/extensions/formatters/time-formatter';
 import mixins from '~/extensions/mixins';
-import * as TimeHelper from '~/extensions/time';
 import listenable from '~/mixins/listenable';
 import slotable from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
@@ -99,12 +99,12 @@ export default mixins(listenable, slotable).extend({
       return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
     },
     menuNudgeLeft(): number {
-      return this.pickerOffsetLeft ? 290 /* menu-width */ + 5 /* space */ : 0;
+      return this.pickerOffsetLeft ? 295 : 0;
     },
     pickerValue: {
       get(): string | null {
         const format = this.pickerProps.useSeconds ? 'HH:mm:ss' : 'HH:mm';
-        return TimeHelper.isValid(this.model) ? TimeHelper.format(this.model, format) : null;
+        return TimeFormatter.isValid(this.model) ? TimeFormatter.format(this.model, format) : null;
       },
       set(val: string | null): void {
         this.model = val;
