@@ -15,7 +15,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
         /// <summary>
         /// 指定された郵便番号に紐づく住所の情報を非同期に取得します。
         /// </summary>
-        /// <param name="code">7 桁の郵便番号、もしくはハイフンを含む 8 桁の郵便番号。</param>
+        /// <param name="code">7 桁もしくはハイフンを含む 8 桁の郵便番号。</param>
         /// <returns>住所の情報を表す <see cref="AddressModel"/> オブジェクトのコレクション。</returns>
         /// <remarks>郵便番号データ配信サービス zip-cloud は CORS が許可されていないため API アクセスをプロキシします。</remarks>
         [HttpGet]
