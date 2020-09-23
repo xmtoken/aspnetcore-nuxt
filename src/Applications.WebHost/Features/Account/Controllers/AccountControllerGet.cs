@@ -18,11 +18,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Account.Controllers
         {
             var userName = User.Claims.Single(x => x.Type == ClaimTypes.Name).Value;
             var permissions = User.Claims.Where(x => x.Type == ClaimTypes.Role).ToDictionary(x => x.Value, _ => true);
-            return new AccountIdentity()
-            {
-                UserName = userName,
-                Permissions = permissions,
-            };
+            return new AccountIdentity(userName, permissions);
         }
     }
 }
