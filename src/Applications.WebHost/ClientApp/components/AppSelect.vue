@@ -19,7 +19,7 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
           offsetY: true,
         };
       },
-      type: Object as PropType<object>,
+      type: [Object, String] as PropType<string | object>,
     },
   },
 });
