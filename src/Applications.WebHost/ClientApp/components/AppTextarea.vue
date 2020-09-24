@@ -37,7 +37,7 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
   },
   watch: {
     internalValue(val: any): void {
-      this.$emit('input', val);
+      this.$emit('update:internal-value', val);
     },
     value(val: any): void {
       this.internalValue = val;
@@ -45,13 +45,15 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
   },
   methods: {
     onChange(val: any): void {
+      this.internalValue = val;
       if (this.lazy) {
-        this.internalValue = val;
+        this.$emit('input', val);
       }
     },
     onInput(val: any): void {
+      this.internalValue = val;
       if (!this.lazy) {
-        this.internalValue = val;
+        this.$emit('input', val);
       }
     },
   },

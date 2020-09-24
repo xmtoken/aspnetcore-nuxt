@@ -1,5 +1,6 @@
 <script lang="ts">
 import { mdiOpenInNew } from '@mdi/js';
+import { PropType } from 'vue';
 import mixins from '~/extensions/mixins';
 import slotable from '~/mixins/slotable';
 
@@ -20,20 +21,30 @@ export default mixins(slotable).extend({
     },
     value: {
       default: undefined,
-      type: String,
+      type: (null as any) as PropType<any>,
+    },
+  },
+  data() {
+    return {
+      internalValue: this.value,
+    };
+  },
+  methods: {
+    onUpdateInternalValue(val: any): void {
+      this.internalValue = val;
     },
   },
 });
 </script>
 
 <template>
-  <app-text-field v-bind="$attrs" :type="type" v-on="$listeners">
+  <app-text-field v-bind="$attrs" :type="type" :value="value" v-on="$listeners" @update:internal-value="onUpdateInternalValue">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
     <template v-slot:append>
-      <v-btn :href="value" icon small :tabindex="appendIconTabindex">
+      <v-btn :href="internalValue" icon small :tabindex="appendIconTabindex">
         <v-icon>
           {{ appendIcon }}
         </v-icon>
