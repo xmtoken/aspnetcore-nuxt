@@ -1,9 +1,9 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
-import validationProviderProps from '../mixins/validation-provider-props';
 import mixins from '~/extensions/mixins';
 import requiredMarkable from '~/mixins/required-markable';
 import slotable from '~/mixins/slotable';
+import validationProviderProps from '~/mixins/validation-provider-props';
 
 export default mixins(requiredMarkable, slotable, validationProviderProps).extend({
   components: {
