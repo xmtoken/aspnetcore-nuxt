@@ -13,6 +13,10 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
   },
   inheritAttrs: false,
   props: {
+    clearable: {
+      default: false,
+      type: Boolean,
+    },
     menuProps: {
       default(): object {
         return {
@@ -22,12 +26,17 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
       type: [String, Object] as PropType<string | object>,
     },
   },
+  computed: {
+    internalClearable(): boolean {
+      return this.clearable && !this.readonly;
+    },
+  },
 });
 </script>
 
 <template>
   <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
-    <v-autocomplete v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :disabled="disabled" :error-messages="errors" :label="label" :menu-props="menuProps" :readonly="readonly" v-on="$listeners">
+    <v-autocomplete v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :clearable="internalClearable" :disabled="disabled" :error-messages="errors" :label="label" :menu-props="menuProps" :readonly="readonly" v-on="$listeners">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />

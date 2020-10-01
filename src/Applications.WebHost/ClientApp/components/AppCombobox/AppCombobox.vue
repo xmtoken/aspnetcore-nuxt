@@ -11,12 +11,23 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
     ValidationProvider,
   },
   inheritAttrs: false,
+  props: {
+    clearable: {
+      default: false,
+      type: Boolean,
+    },
+  },
+  computed: {
+    internalClearable(): boolean {
+      return this.clearable && !this.readonly;
+    },
+  },
 });
 </script>
 
 <template>
   <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
-    <v-combobox v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :disabled="disabled" :error-messages="errors" :label="label" :readonly="readonly" v-on="$listeners">
+    <v-combobox v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :clearable="internalClearable" :disabled="disabled" :error-messages="errors" :label="label" :readonly="readonly" v-on="$listeners">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
