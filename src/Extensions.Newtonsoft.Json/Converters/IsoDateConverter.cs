@@ -14,7 +14,31 @@ namespace AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var value = base.ReadJson(reader, objectType, existingValue, serializer);
-            return value is DateTime dateTime ? dateTime.Date : value;
+            switch (value)
+            {
+                case DateTime dateTime:
+                    if (DateTimeStyles.HasFlag(DateTimeStyles.AdjustToUniversal) ||
+                        DateTimeStyles.HasFlag(DateTimeStyles.AssumeUniversal))
+                    {
+                        return dateTime.ToUniversalTime().Date;
+                    }
+                    else
+                    {
+                        return dateTime.Date;
+                    }
+                case DateTimeOffset dateTimeOffset:
+                    if (DateTimeStyles.HasFlag(DateTimeStyles.AdjustToUniversal) ||
+                        DateTimeStyles.HasFlag(DateTimeStyles.AssumeUniversal))
+                    {
+                        return dateTimeOffset.ToUniversalTime().Date;
+                    }
+                    else
+                    {
+                        return dateTimeOffset.Date;
+                    }
+                default:
+                    return value;
+            }
         }
 
         /// <inheritdoc/>
