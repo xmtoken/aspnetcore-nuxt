@@ -1,7 +1,7 @@
 @import 'variables.scss';
 
 html {
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
 
   *::-webkit-scrollbar {
     height: $scrollbar-size;
