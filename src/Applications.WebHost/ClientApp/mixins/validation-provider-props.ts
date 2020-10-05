@@ -11,9 +11,17 @@ type ValidationProviderProperties = {
 
 export default Vue.extend({
   props: {
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
     label: {
       default: undefined,
       type: String,
+    },
+    readonly: {
+      default: false,
+      type: Boolean,
     },
     veeCustomMessages: {
       default: undefined,
@@ -46,7 +54,7 @@ export default Vue.extend({
         customMessages: this.veeCustomMessages,
         disabled: this.veeDisabled,
         name: this.veeName ? this.veeName : this.label,
-        rules: this.veeDisabledRules ? null : this.veeRules,
+        rules: this.disabled || this.readonly || this.veeDisabledRules ? null : this.veeRules,
         slim: true,
         vid: this.veeVid,
       };
