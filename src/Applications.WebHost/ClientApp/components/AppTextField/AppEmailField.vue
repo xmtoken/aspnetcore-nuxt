@@ -6,6 +6,9 @@ import slotable from '~/mixins/slotable';
 
 export default mixins(slotable).extend({
   inheritAttrs: false,
+  model: {
+    event: 'input:value',
+  },
   props: {
     appendIcon: {
       default: mdiOpenInNew,
@@ -29,8 +32,13 @@ export default mixins(slotable).extend({
       internalValue: this.value,
     };
   },
+  watch: {
+    value(val: any): void {
+      this.internalValue = val;
+    },
+  },
   methods: {
-    onUpdateInternalValue(val: any): void {
+    onInputValue(val: any): void {
       this.internalValue = val;
     },
   },
@@ -38,7 +46,7 @@ export default mixins(slotable).extend({
 </script>
 
 <template>
-  <app-text-field v-bind="$attrs" :type="type" :value="value" v-on="$listeners" @update:internal-value="onUpdateInternalValue">
+  <app-text-field v-bind="$attrs" :type="type" :value="value" v-on="$listeners" @input:value="onInputValue">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />

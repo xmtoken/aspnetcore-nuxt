@@ -6,6 +6,9 @@ import slotable from '~/mixins/slotable';
 
 export default mixins(slotable).extend({
   inheritAttrs: false,
+  model: {
+    event: 'input:value',
+  },
   props: {
     appendIcon: {
       default: mdiOpenInNew,
@@ -14,6 +17,14 @@ export default mixins(slotable).extend({
     appendIconTabindex: {
       default: -1,
       type: Number,
+    },
+    rel: {
+      default: 'noopener noreferrer',
+      type: String,
+    },
+    target: {
+      default: '_blank',
+      type: String,
     },
     type: {
       default: 'url',
@@ -26,25 +37,30 @@ export default mixins(slotable).extend({
   },
   data() {
     return {
-      internalValue: this.value,
+      internalValue: this.value?.toString(),
     };
   },
+  watch: {
+    value(val: any): void {
+      this.internalValue = val?.toString();
+    },
+  },
   methods: {
-    onUpdateInternalValue(val: any): void {
-      this.internalValue = val;
+    onInputValue(val: any): void {
+      this.internalValue = val?.toString();
     },
   },
 });
 </script>
 
 <template>
-  <app-text-field v-bind="$attrs" :type="type" :value="value" v-on="$listeners" @update:internal-value="onUpdateInternalValue">
+  <app-text-field v-bind="$attrs" :type="type" :value="value" v-on="$listeners" @input:value="onInputValue">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
     <template v-slot:append>
-      <v-btn :href="internalValue" icon small :tabindex="appendIconTabindex">
+      <v-btn :href="internalValue" icon :rel="rel" small :tabindex="appendIconTabindex" :target="target">
         <v-icon>
           {{ appendIcon }}
         </v-icon>

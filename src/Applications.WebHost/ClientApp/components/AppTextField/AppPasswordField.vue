@@ -5,6 +5,9 @@ import slotable from '~/mixins/slotable';
 
 export default mixins(slotable).extend({
   inheritAttrs: false,
+  model: {
+    event: 'input:value',
+  },
   props: {
     appendIconTabindex: {
       default: -1,
