@@ -1,6 +1,5 @@
 <script lang="ts">
 import { mdiClockOutline } from '@mdi/js';
-import { VueMaskDirective } from 'v-mask';
 import { PropType } from 'vue';
 import * as TimeFormatter from '~/extensions/formatters/time-formatter';
 import mixins from '~/extensions/mixins';
@@ -14,10 +13,10 @@ type PickerProps = {
 };
 
 export default mixins(listenable, slotable).extend({
-  directives: {
-    mask: VueMaskDirective,
-  },
   inheritAttrs: false,
+  model: {
+    event: 'input:value',
+  },
   props: {
     appendIcon: {
       default: mdiClockOutline,
@@ -29,11 +28,11 @@ export default mixins(listenable, slotable).extend({
     },
     contentClass: {
       default: undefined,
-      type: [Object, String] as PropType<string | object>,
+      type: [String, Object] as PropType<string | object>,
     },
     contentStyle: {
       default: undefined,
-      type: [Object, String] as PropType<string | object>,
+      type: [String, Object] as PropType<string | object>,
     },
     dense: {
       default: false,
@@ -74,13 +73,12 @@ export default mixins(listenable, slotable).extend({
     },
     value: {
       default: undefined,
-      type: String,
+      type: (null as any) as PropType<any>,
     },
   },
   data() {
     return {
-      menu: false,
-      model: this.value as string | null,
+      internalValue: this.value,
     };
   },
   computed: {
@@ -89,54 +87,37 @@ export default mixins(listenable, slotable).extend({
     },
     listeners(): Listeners {
       const listeners = { ...this.$listeners };
-      delete listeners.input;
+      delete listeners['input:value'];
       return listeners;
-    },
-    mask(): string {
-      return this.pickerProps.useSeconds ? '#?#:#?#:#?#' : '#?#:#?#';
     },
     menuNudgeBottom(): number {
       return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
     },
     menuNudgeLeft(): number {
-      return this.pickerOffsetLeft ? 295 : 0;
+      return this.pickerOffsetLeft ? 290 /* menu-width */ + 5 /* space */ : 0;
     },
     pickerValue: {
       get(): string | null {
         const format = this.pickerProps.useSeconds ? 'HH:mm:ss' : 'HH:mm';
-        return TimeFormatter.isValid(this.model) ? TimeFormatter.format(this.model, format) : null;
+        return TimeFormatter.isValid(this.internalValue) ? TimeFormatter.format(this.internalValue, format) : null;
       },
       set(val: string | null): void {
-        this.model = val;
+        this.internalValue = val;
       },
     },
   },
   watch: {
-    model(val: string | null): void {
-      this.$emit('input', val);
+    internalValue(val: any): void {
+      this.$emit('input:value', val);
     },
-    value(val: string | null): void {
-      this.model = val;
+    value(val: any): void {
+      this.internalValue = val;
     },
   },
   methods: {
     onBlur(): void {
       if (this.pickerValue) {
-        this.model = this.pickerValue;
-      }
-    },
-    onInput(val: string | null): void {
-      if (val) {
-        if (/^[0-9]::$/.test(val)) {
-          // formatted `0:` to `0::` by v-mask, re-format `0::` to `00:`.
-          this.model = '0' + val.substr(0, 2);
-        }
-        if (this.pickerProps.useSeconds) {
-          if (/^[0-9]{2}:[0-9]::$/.test(val)) {
-            // formatted `00:0:` to `00:0::` by v-mask, re-format `00:0::` to `00:00:`.
-            this.model = val.substr(0, 3) + '0' + val.substr(3, 2);
-          }
-        }
+        this.internalValue = this.pickerValue;
       }
     },
   },
@@ -144,15 +125,17 @@ export default mixins(listenable, slotable).extend({
 </script>
 
 <template>
-  <v-menu v-model="menu" v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
-    <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...withEmit(on) }" @blur="onBlur" @click:append="menu = true" @input="onInput">
+  <app-menu v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
+    <template v-slot:activator="{ on, open }">
+      <app-text-field v-model="internalValue" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...withEmit(on) }" @blur="onBlur" @click:append="open">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
         <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
           <slot v-bind="scope" :name="scopedSlotKey" />
         </template>
       </app-text-field>
     </template>
-    <v-time-picker v-if="menu" v-model="pickerValue" v-bind="pickerProps" @change="menu = false" />
-  </v-menu>
+    <template v-slot="{ close, opend }">
+      <v-time-picker v-if="opend" v-model="pickerValue" v-bind="pickerProps" @change="close" />
+    </template>
+  </app-menu>
 </template>

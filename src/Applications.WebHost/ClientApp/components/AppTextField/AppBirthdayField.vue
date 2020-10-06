@@ -1,9 +1,8 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
-import { VueMaskDirective } from 'v-mask';
 import Vue, { VueConstructor, PropType } from 'vue';
-import AppDatePicker from '~/components/AppDatePicker.vue';
+import AppDatePicker from '~/components/AppDatePicker/AppDatePicker.vue';
 import * as DateFormatter from '~/extensions/formatters/date-formatter';
 import mixins from '~/extensions/mixins';
 import listenable from '~/mixins/listenable';
@@ -19,10 +18,10 @@ const $refs = Vue as VueConstructor<
 >;
 
 export default mixins($refs, listenable, slotable).extend({
-  directives: {
-    mask: VueMaskDirective,
-  },
   inheritAttrs: false,
+  model: {
+    event: 'input:value',
+  },
   props: {
     appendIcon: {
       default: mdiCalendar,
@@ -34,11 +33,11 @@ export default mixins($refs, listenable, slotable).extend({
     },
     contentClass: {
       default: undefined,
-      type: [Object, String] as PropType<string | object>,
+      type: [String, Object] as PropType<string | object>,
     },
     contentStyle: {
       default: undefined,
-      type: [Object, String] as PropType<string | object>,
+      type: [String, Object] as PropType<string | object>,
     },
     dense: {
       default: false,
@@ -67,7 +66,7 @@ export default mixins($refs, listenable, slotable).extend({
     pickerProps: {
       default(): object {
         return {
-          max: dayjs().format('YYYY-MM-DD'),
+          max: dayjs().subtract(1, 'day').format('YYYY-MM-DD'),
         };
       },
       type: Object as PropType<object>,
@@ -78,13 +77,13 @@ export default mixins($refs, listenable, slotable).extend({
     },
     value: {
       default: undefined,
-      type: String,
+      type: (null as any) as PropType<any>,
     },
   },
   data() {
     return {
+      internalValue: this.value,
       menu: false,
-      model: this.value as string | null,
     };
   },
   computed: {
@@ -93,11 +92,8 @@ export default mixins($refs, listenable, slotable).extend({
     },
     listeners(): Listeners {
       const listeners = { ...this.$listeners };
-      delete listeners.input;
+      delete listeners['input:value'];
       return listeners;
-    },
-    mask(): string {
-      return '####-#?#-#?#';
     },
     menuNudgeBottom(): number {
       return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
@@ -107,14 +103,17 @@ export default mixins($refs, listenable, slotable).extend({
     },
     pickerValue: {
       get(): string | null {
-        return DateFormatter.isValid(this.model) ? DateFormatter.format(this.model, 'YYYY-MM-DD') : null;
+        return DateFormatter.isValid(this.internalValue) ? DateFormatter.format(this.internalValue, 'YYYY-MM-DD') : null;
       },
       set(val: string | null): void {
-        this.model = val;
+        this.internalValue = val;
       },
     },
   },
   watch: {
+    internalValue(val: any): void {
+      this.$emit('input:value', val);
+    },
     menu(val: boolean): void {
       if (val) {
         this.$nextTick(() => {
@@ -124,25 +123,14 @@ export default mixins($refs, listenable, slotable).extend({
         this.$refs.picker.activePicker = 'YEAR';
       }
     },
-    model(val: string | null): void {
-      this.$emit('input', val);
-    },
-    value(val: string | null): void {
-      this.model = val;
+    value(val: any): void {
+      this.internalValue = val;
     },
   },
   methods: {
     onBlur(): void {
       if (this.pickerValue) {
-        this.model = this.pickerValue;
-      }
-    },
-    onInput(val: string | null): void {
-      if (val) {
-        if (/^[0-9]{4}-[0-9]--$/.test(val)) {
-          // formatted `0000-0-` to `0000-0--` by v-mask, re-format `0000-0--` to `0000-00-`.
-          this.model = val.substr(0, 5) + '0' + val.substr(5, 2);
-        }
+        this.internalValue = this.pickerValue;
       }
     },
   },
@@ -152,7 +140,7 @@ export default mixins($refs, listenable, slotable).extend({
 <template>
   <v-menu v-model="menu" v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
     <template v-slot:activator="{ on }">
-      <app-text-field v-model="model" v-mask="mask" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...withEmit(on) }" @blur="onBlur" @click:append="menu = true" @input="onInput">
+      <app-text-field v-model="internalValue" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...withEmit(on) }" @blur="onBlur" @click:append="menu = true">
         <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
         <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
           <slot v-bind="scope" :name="scopedSlotKey" />
