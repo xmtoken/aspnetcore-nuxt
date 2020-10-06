@@ -1,6 +1,7 @@
 using AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,29 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
         {
             var zipcode = code?.Replace("-", null).Trim();
             var uri = $"https://zipcloud.ibsnet.co.jp/api/search?zipcode={zipcode}";
-            return MemoryCache.GetOrCreateAsync(uri, async _ =>
+            return MemoryCache.GetOrCreateAsync(uri, async cache =>
             {
                 using var client = HttpClientFactory.CreateClient();
-                using var response = await client.GetAsync(new Uri(uri));
-                var content = await response.Content.ReadAsStringAsync();
+                var response = default(HttpResponseMessage);
+                var content = default(string);
+                try
+                {
+                    try
+                    {
+                        response = await client.GetAsync(new Uri(uri));
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        Logger.LogWarning(ex, ex.Message);
+                        cache.AbsoluteExpirationRelativeToNow = TimeSpan.FromTicks(1);
+                        return null;
+                    }
+                    content = await response.Content.ReadAsStringAsync();
+                }
+                finally
+                {
+                    response?.Dispose();
+                }
 
                 // http://zipcloud.ibsnet.co.jp/doc/api
                 var anonymouseType = new
