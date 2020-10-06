@@ -8,10 +8,26 @@ namespace AspNetCoreNuxt.Extensions
     public static class StringExtensions
     {
         /// <summary>
-        /// 指定された文字列をケバブケースへ変換します。
+        /// 文字列に含まれる半角の片仮名を全角に変換した文字列を返します。
+        /// </summary>
+        /// <param name="value">変換する文字列。</param>
+        /// <returns>変換された文字列。</returns>
+        public static string ToFullWidthKatakana(this string value)
+            => KatakanaConverter.Instance.ConvertToFullWidthKatakana(value);
+
+        /// <summary>
+        /// 文字列に含まれる全角の片仮名を半角に変換した文字列を返します。
+        /// </summary>
+        /// <param name="value">変換する文字列。</param>
+        /// <returns>変換された文字列。</returns>
+        public static string ToHalfWidthKatakana(this string value)
+            => KatakanaConverter.Instance.ConvertToHalfWidthKatakana(value);
+
+        /// <summary>
+        /// ケバブケースへ変換した文字列を返します。
         /// </summary>
         /// <param name="value">パスカルケースもしくはスネークケースで表現された文字列。</param>
-        /// <returns>ケバブケースで表現された文字列。</returns>
+        /// <returns>変換された文字列。</returns>
         public static string ToKebabCace(this string value)
         {
             var kebabcase = value;
@@ -22,10 +38,10 @@ namespace AspNetCoreNuxt.Extensions
         }
 
         /// <summary>
-        /// 指定された文字列をスネークケースへ変換します。
+        /// スネークケースへ変換した文字列を返します。
         /// </summary>
         /// <param name="value">パスカルケースもしくはケバブケースで表現された文字列。</param>
-        /// <returns>スネークケースで表現された文字列。</returns>
+        /// <returns>変換された文字列。</returns>
         public static string ToSnakeCace(this string value)
         {
             var snakecase = value;
