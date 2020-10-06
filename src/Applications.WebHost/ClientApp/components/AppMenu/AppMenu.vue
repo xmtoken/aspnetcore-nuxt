@@ -10,13 +10,13 @@ export default Vue.extend({
       type: Boolean,
     },
     value: {
-      default: undefined,
+      default: false,
       type: Boolean,
     },
   },
   data() {
     return {
-      model: this.value,
+      opend: this.value,
     };
   },
   computed: {
@@ -27,31 +27,31 @@ export default Vue.extend({
     },
   },
   watch: {
-    model(val: boolean): void {
+    opend(val: boolean): void {
       this.$emit('input', val);
     },
     value(val: boolean): void {
-      this.model = val;
+      this.opend = val;
     },
   },
   methods: {
     close(): void {
-      this.model = false;
+      this.opend = false;
     },
     open(): void {
-      this.model = true;
+      this.opend = true;
     },
   },
 });
 </script>
 
 <template>
-  <v-menu v-model="model" v-bind="$attrs" :close-on-content-click="closeOnContentClick" v-on="listeners">
+  <v-menu v-model="opend" v-bind="$attrs" :close-on-content-click="closeOnContentClick" v-on="listeners">
     <template v-slot>
-      <slot v-bind="{ close }" />
+      <slot v-bind="{ close, opend }" />
     </template>
     <template v-slot:activator="scope">
-      <slot v-bind="{ ...scope, open, opend: model }" name="activator" />
+      <slot v-bind="{ ...scope, open, opend }" name="activator" />
     </template>
   </v-menu>
 </template>
