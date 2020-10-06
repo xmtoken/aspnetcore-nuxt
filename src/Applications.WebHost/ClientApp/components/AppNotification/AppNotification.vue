@@ -12,13 +12,18 @@ export default Vue.extend({
       type: Array as PropType<Notification[]>,
     },
   },
+  methods: {
+    clear(key: string): void {
+      this.$store.commit('notification/remove', key);
+    },
+  },
 });
 </script>
 
 <template>
   <v-slide-x-reverse-transition class="notifications" group>
     <v-snackbar v-for="notification in notifications" :key="notification.key" v-bind="$attrs" color="white" :timeout="-1" :value="true" v-on="$listeners">
-      <v-alert :color="notification.color" outlined text :type="notification.type">
+      <v-alert class="cursor-pointer" :color="notification.color" outlined text :type="notification.type" @click="clear(notification.key)">
         <template v-if="notification.isHtml">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <span v-html="notification.content" />

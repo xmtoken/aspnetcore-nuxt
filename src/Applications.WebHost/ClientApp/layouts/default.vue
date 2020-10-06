@@ -27,7 +27,7 @@ export default Vue.extend({
         <nuxt />
       </v-container>
     </v-main>
-    <app-notifications :notifications="$store.state.notification.values" />
+    <app-notification :notifications="$store.state.notification.values" />
     <app-versioning :value="$store.state.versioning.updatable" />
   </v-app>
 </template>
