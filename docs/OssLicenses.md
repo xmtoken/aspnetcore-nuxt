@@ -1,4 +1,4 @@
-# OSS License
+# OSS LICENSES
 
 本システムで扱う OSS のパッケージとそのライセンス体系を以下に示す。
 
@@ -40,9 +40,8 @@ NuGet パッケージのライセンス体系を以下に示す。
 推移的に依存するすべての NuGet パッケージに対するライセンスの統計情報を以下に示す。
 ライセンスチェッカーの仕様に関しては [GitHub](https://github.com/aaronpowell/dotnet-delice) を参照すること。
 
-`dotnet delice | Where-Object {$_ -like "*License Expression*"} | Sort-Object | Get-Unique`
-
-```
+```Console
+CLI > dotnet delice | Where-Object {$_ -like "*License Expression*"} | Sort-Object | Get-Unique
 License Expression: Apache-2.0
 License Expression: BSD-3-Clause
 License Expression: Microsoft Software License
@@ -73,6 +72,7 @@ npm パッケージのライセンス体系を以下に示す。
 | @types/lodash                     | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
 | @types/ts-nameof                  | MIT License          |
+| axios-cache-adapter               | MIT License          |
 | content-disposition               | MIT License          |
 | dayjs                             | MIT License          |
 | deep-equal                        | MIT License          |
@@ -108,15 +108,14 @@ npm パッケージのライセンス体系を以下に示す。
 推移的に依存するすべての npm パッケージに対するライセンスの統計情報を以下に示す。
 ライセンスチェッカーの仕様に関しては [GitHub](https://github.com/davglass/license-checker) を参照すること。
 
-`npm run license:summary --prefix src/Applications.WebHost/ClientApp`
-
-```
-├─ MIT: 1181
+```Console
+CLI > npm run license:summary --prefix src/Applications.WebHost/ClientApp
+├─ MIT: 1187
 ├─ ISC: 93
-├─ BSD-2-Clause: 28
+├─ BSD-2-Clause: 29
 ├─ CC0-1.0: 24
-├─ BSD-3-Clause: 18
-├─ Apache-2.0: 13
+├─ BSD-3-Clause: 20
+├─ Apache-2.0: 14
 ├─ (MIT OR CC0-1.0): 4
 ├─ BSD*: 2
 ├─ Public Domain: 2
@@ -137,9 +136,8 @@ npm パッケージのライセンス体系を以下に示す。
 
 推移的に依存するすべての npm パッケージのうち、自動的にライセンスを識別できないパッケージに関する情報を以下に示す。
 
-`npm run license:unknown --prefix src/Applications.WebHost/ClientApp`
-
-```
+```Console
+CLI > npm run license:unknown --prefix src/Applications.WebHost/ClientApp
 ├─ css-select@1.2.0
 │  ├─ licenses: BSD*
 │  ├─ repository: https://github.com/fb55/css-select
