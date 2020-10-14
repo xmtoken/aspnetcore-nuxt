@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace AspNetCoreNuxt.Applications.WebHost
 {
@@ -27,6 +28,9 @@ namespace AspNetCoreNuxt.Applications.WebHost
                 Log.Information($"Application assembly version: {typeof(Program).Assembly.GetName().Version.ToString(3)}");
                 Log.Information($"Application api version: {AppApiVersion.Latest.ToVersion()}");
                 Log.Information($"Application spa version: {AppSpaVersion.Latest.ToVersion()}");
+
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
@@ -46,11 +50,11 @@ namespace AspNetCoreNuxt.Applications.WebHost
         /// <returns><see cref="IHostBuilder"/> オブジェクト。</returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-                .UseSerilog();
+                });
 
         /// <summary>
         /// <see cref="ILogger"/> オブジェクトを作成します。
