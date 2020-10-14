@@ -83,6 +83,9 @@ const config: NuxtConfig = {
     baseURL: '/api',
   },
   vuetify: {
+    breakpoint: {
+      mobileBreakpoint: 0,
+    },
     defaultAssets: {
       font: false,
       icons: false,
