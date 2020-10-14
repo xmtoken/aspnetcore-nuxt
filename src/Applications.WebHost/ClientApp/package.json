@@ -29,7 +29,8 @@
     "nuxt": "2.14.6",
     "qs": "6.9.4",
     "v-mask": "2.2.3",
-    "vee-validate": "3.4.1"
+    "vee-validate": "3.4.1",
+    "vue-dragscroll": "2.1.0"
   },
   "devDependencies": {
     "@mdi/js": "5.7.55",

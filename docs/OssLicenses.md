@@ -103,6 +103,7 @@ npm パッケージのライセンス体系を以下に示す。
 | ts-nameof-loader                  | MIT License          |
 | v-mask                            | MIT License          |
 | vee-validate                      | MIT License          |
+| vue-dragscroll                    | MIT License          |
 
 ### 推移的依存パッケージのライセンス統計情報
 
@@ -111,12 +112,12 @@ npm パッケージのライセンス体系を以下に示す。
 
 ```Console
 CLI > npm run license:summary --prefix src/Applications.WebHost/ClientApp
-├─ MIT: 1187
+├─ MIT: 1188
 ├─ ISC: 93
 ├─ BSD-2-Clause: 28
 ├─ CC0-1.0: 24
 ├─ BSD-3-Clause: 20
-├─ Apache-2.0: 14
+├─ Apache-2.0: 15
 ├─ (MIT OR CC0-1.0): 4
 ├─ BSD*: 2
 ├─ Public Domain: 2
