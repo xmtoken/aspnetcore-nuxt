@@ -27,7 +27,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Addresses.Controllers
             var uri = $"https://zipcloud.ibsnet.co.jp/api/search?zipcode={zipcode}";
             return MemoryCache.GetOrCreateAsync(uri, async cache =>
             {
-                using var client = HttpClientFactory.CreateClient();
+                var client = HttpClientFactory.CreateClient();
                 var response = default(HttpResponseMessage);
                 var content = default(string);
                 try
