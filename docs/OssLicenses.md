@@ -34,6 +34,7 @@ NuGet パッケージのライセンス体系を以下に示す。
 | Serilog.AspNetCore                                    | Apache License 2.0                |
 | Serilog.Sinks.Async                                   | Apache License 2.0                |
 | StyleCop.Analyzers                                    | MIT License                       |
+| System.Text.Encoding.CodePages                        | MIT License                       |
 
 ### 推移的依存パッケージのライセンス統計情報
 
@@ -112,7 +113,7 @@ npm パッケージのライセンス体系を以下に示す。
 CLI > npm run license:summary --prefix src/Applications.WebHost/ClientApp
 ├─ MIT: 1187
 ├─ ISC: 93
-├─ BSD-2-Clause: 29
+├─ BSD-2-Clause: 28
 ├─ CC0-1.0: 24
 ├─ BSD-3-Clause: 20
 ├─ Apache-2.0: 14

@@ -25,6 +25,7 @@
     <PackageReference Include="NSwag.MSBuild" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
   </ItemGroup>
   <PropertyGroup>
     <SpaRoot>ClientApp</SpaRoot>
