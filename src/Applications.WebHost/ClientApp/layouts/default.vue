@@ -1,22 +1,12 @@
 <script lang="ts">
 import Vue from 'vue';
-import * as Responsive from '~/extensions/responsive';
 
-export default Vue.extend({
-  methods: {
-    onResize(): void {
-      const elements = Responsive.getResponsiveElements();
-      if (elements.length) {
-        Responsive.setResponsiveMaxHeight(elements);
-      }
-    },
-  },
-});
+export default Vue.extend({});
 </script>
 
 <template>
-  <v-app v-resize="onResize" class="noto-sans-jp">
-    <v-app-bar id="app-bar" app :elevation="0" height="64">
+  <v-app class="noto-sans-jp">
+    <v-app-bar id="app-bar" app elevate-on-scroll height="64">
       <v-toolbar-title>
         Nuxt.js
       </v-toolbar-title>
