@@ -16,7 +16,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata.Builders
         /// <param name="precision">有効桁数。</param>
         /// <returns><see cref="PropertyBuilder{T}"/> オブジェクト。</returns>
         public static PropertyBuilder<T> HasPrecision<T>(this PropertyBuilder<T> builder, int precision)
-            => builder.HasColumnType($"decimal({precision},{0})");
+            => HasPrecision(builder, precision, scale: 0);
 
         /// <summary>
         /// プロパティの有効桁数と小数点以下桁数を設定します。
