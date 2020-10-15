@@ -67,6 +67,7 @@ npm パッケージのライセンス体系を以下に示す。
 | @nuxtjs/axios                     | MIT License          |
 | @nuxtjs/eslint-config-typescript  | MIT License          |
 | @nuxtjs/vuetify                   | MIT License          |
+| @types/content-disposition        | MIT License          |
 | @types/deep-equal                 | MIT License          |
 | @types/file-saver                 | MIT License          |
 | @types/fontfaceobserver           | MIT License          |
@@ -112,7 +113,7 @@ npm パッケージのライセンス体系を以下に示す。
 
 ```Console
 CLI > npm run license:summary --prefix src/Applications.WebHost/ClientApp
-├─ MIT: 1188
+├─ MIT: 1189
 ├─ ISC: 93
 ├─ BSD-2-Clause: 28
 ├─ CC0-1.0: 24
