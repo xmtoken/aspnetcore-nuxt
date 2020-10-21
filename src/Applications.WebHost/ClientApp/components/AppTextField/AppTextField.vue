@@ -1,4 +1,5 @@
 <script lang="ts">
+import { mdiAlertCircleOutline } from '@mdi/js';
 import { ValidationProvider } from 'vee-validate';
 import mixins from '~/extensions/mixins';
 import iconTabIndexable from '~/mixins/icon-tab-indexable';
@@ -19,21 +20,59 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
       default: false,
       type: Boolean,
     },
+    hideDetails: {
+      default: false,
+      type: [String, Boolean],
+    },
     lazy: {
       default: false,
       type: Boolean,
     },
   },
+  data() {
+    return {
+      focused: false,
+      hovered: false,
+      icons: {
+        mdiAlertCircleOutline,
+      },
+    };
+  },
   computed: {
+    classes(): object {
+      return {
+        'v-input--tooltip-details': this.isEnabledTooltipMessage,
+      };
+    },
     internalClearable(): boolean {
       return this.clearable && !this.readonly;
     },
+    internalHideDetails(): string | boolean {
+      return this.isEnabledTooltipMessage ? 'auto' : this.hideDetails;
+    },
+    isEnabledTooltipMessage(): boolean {
+      return this.hideDetails === 'tooltip';
+    },
+  },
+  mounted(): void {
+    this.$el.addEventListener('mouseenter', () => {
+      this.hovered = true;
+    });
+    this.$el.addEventListener('mouseleave', () => {
+      this.hovered = false;
+    });
   },
   methods: {
+    onBlur(): void {
+      this.focused = false;
+    },
     onChange(val: any): void {
       if (this.lazy) {
         this.$emit('input:value', val);
       }
+    },
+    onFocus(): void {
+      this.focused = true;
     },
     onInput(val: any): void {
       if (!this.lazy) {
@@ -45,12 +84,42 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
 </script>
 
 <template>
-  <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
-    <v-text-field v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :clearable="internalClearable" :disabled="disabled" :error-messages="errors" :label="label" :readonly="readonly" v-on="$listeners" @change="onChange" @input="onInput">
+  <validation-provider v-slot="{ errors, failed, required }" v-bind="veeProviderProps">
+    <v-text-field ref="field" v-bind="$attrs" :class="{ ...classes, required, 'required-marker': required && !disabledRequiredMarker }" :clearable="internalClearable" :disabled="disabled" :error-messages="errors" :hide-details="internalHideDetails" :label="label" :readonly="readonly" v-on="$listeners" @blur="onBlur" @change="onChange" @focus="onFocus" @input="onInput">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
+      <template v-if="failed && isEnabledTooltipMessage" v-slot:append-outer>
+        <v-icon color="error" small>
+          {{ icons.mdiAlertCircleOutline }}
+        </v-icon>
+      </template>
+      <template v-if="isEnabledTooltipMessage" v-slot:message="{ message }">
+        <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="focused || hovered">
+          {{ message }}
+        </v-tooltip>
+      </template>
     </v-text-field>
   </validation-provider>
 </template>
+
+<style lang="scss" scoped>
+.v-input--tooltip-details ::v-deep {
+  .v-input__control {
+    .v-input__slot {
+      margin-bottom: 0;
+    }
+
+    .v-text-field__details {
+      height: 0;
+      min-height: 0;
+    }
+  }
+
+  .v-input__append-outer {
+    align-self: flex-end;
+    margin-left: 0;
+  }
+}
+</style>
