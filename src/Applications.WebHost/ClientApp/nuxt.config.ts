@@ -48,6 +48,7 @@ const config: NuxtConfig = {
   ],
   plugins: [
     '~/plugins/axios',
+    '~/plugins/string-format',
     '~/plugins/vee-validate',
   ],
   router: {
