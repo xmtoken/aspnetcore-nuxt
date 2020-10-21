@@ -28,6 +28,7 @@
     "numbro": "2.3.1",
     "nuxt": "2.14.7",
     "qs": "6.9.4",
+    "string-format": "2.0.0",
     "v-mask": "2.2.3",
     "vee-validate": "3.4.2",
     "vue-dragscroll": "2.1.0"
@@ -44,6 +45,7 @@
     "@types/fontfaceobserver": "0.0.6",
     "@types/lodash": "4.14.162",
     "@types/nuxtjs__auth": "4.8.5",
+    "@types/string-format": "2.0.0",
     "@types/ts-nameof": "4.2.1",
     "eslint": "7.11.0",
     "eslint-config-prettier": "6.13.0",

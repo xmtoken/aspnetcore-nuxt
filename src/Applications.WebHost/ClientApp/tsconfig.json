@@ -20,6 +20,7 @@
       "@types/lodash",
       "@types/node",
       "@types/nuxtjs__auth",
+      "@types/string-format",
       "@types/ts-nameof"
     ]
   }

@@ -73,6 +73,7 @@ npm パッケージのライセンス体系を以下に示す。
 | @types/fontfaceobserver           | MIT License          |
 | @types/lodash                     | MIT License          |
 | @types/nuxtjs__auth               | MIT License          |
+| @types/string-format              | MIT License          |
 | @types/ts-nameof                  | MIT License          |
 | axios-cache-adapter               | MIT License          |
 | content-disposition               | MIT License          |
@@ -93,6 +94,7 @@ npm パッケージのライセンス体系を以下に示す。
 | nuxt                              | MIT License          |
 | prettier                          | MIT License          |
 | qs                                | BSD 3-Clause License |
+| string-format                     | WTFPL                |
 | stylelint                         | MIT License          |
 | stylelint-config-prettier         | MIT License          |
 | stylelint-config-recommended-scss | MIT License          |
@@ -113,7 +115,7 @@ npm パッケージのライセンス体系を以下に示す。
 
 ```Console
 CLI > npm run license:summary --prefix src/Applications.WebHost/ClientApp
-├─ MIT: 1189
+├─ MIT: 1190
 ├─ ISC: 93
 ├─ BSD-2-Clause: 28
 ├─ CC0-1.0: 24
@@ -131,6 +133,7 @@ CLI > npm run license:summary --prefix src/Applications.WebHost/ClientApp
 ├─ (MIT AND BSD-3-Clause): 1
 ├─ CC-BY-3.0: 1
 ├─ (MIT AND CC-BY-3.0): 1
+├─ WTFPL OR MIT: 1
 ├─ MIT*: 1
 └─ 0BSD: 1
 ```
