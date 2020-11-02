@@ -1,25 +1,24 @@
 import { Plugin } from '@nuxt/types';
 import { extend, setInteractionMode } from 'vee-validate';
 import { confirmed, length, max, min, required } from 'vee-validate/dist/rules';
-import { between, birthday, date, email, maxValue, minValue, password, postalCode, time, username } from './validation-rules';
+import { between, birthday, date, email, maxValue, minValue, postalCode, time } from './validation-rules';
+import * as MESSAGES from '~/resources/validation-rule-messages';
 
 const plugin: Plugin = () => {
   setInteractionMode('eager');
-  extend('confirmed', { ...confirmed, message: '{_field_}が{target}と一致しません。' });
-  extend('length', { ...length, message: '{_field_}は{length}文字で入力してください。' });
-  extend('max', { ...max, message: '{_field_}は{length}文字以下で入力してください。' });
-  extend('min', { ...min, message: '{_field_}は{length}文字以上で入力してください。' });
-  extend('required', { ...required, message: '{_field_}を入力してください。' });
-  extend('between', between);
-  extend('birthday', birthday);
-  extend('date', date);
-  extend('email', email);
-  extend('max_value', maxValue);
-  extend('min_value', minValue);
-  extend('password', password);
-  extend('postal_code', postalCode);
-  extend('time', time);
-  extend('username', username);
+  extend('between', { ...between, message: MESSAGES.BETWEEN });
+  extend('birthday', { ...birthday, message: MESSAGES.BIRTHDAY });
+  extend('confirmed', { ...confirmed, message: MESSAGES.CONFIRMED });
+  extend('date', { ...date, message: MESSAGES.DATE });
+  extend('email', { ...email, message: MESSAGES.EMAIL });
+  extend('length', { ...length, message: MESSAGES.LENGTH });
+  extend('max', { ...max, message: MESSAGES.MAX });
+  extend('max_value', { ...maxValue, message: MESSAGES.MAX_VALUE });
+  extend('min', { ...min, message: MESSAGES.MIN });
+  extend('min_value', { ...minValue, message: MESSAGES.MIN_VALUE });
+  extend('postal_code', { ...postalCode, message: MESSAGES.POSTAL_CODE });
+  extend('required', { ...required, message: MESSAGES.REQUIRED });
+  extend('time', { ...time, message: MESSAGES.TIME });
 };
 
 export default plugin;
