@@ -53,7 +53,7 @@ export default mixins(requiredMarkable, slotable, validationProviderProps).exten
 
 <template>
   <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
-    <v-switch v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :disabled="disabled" :error-messages="errors" :false-value="falseValue" :label="label" :readonly="readonly" :true-value="trueValue" v-on="$listeners">
+    <v-switch v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :disabled="disabled" :error-messages="errors" :false-value="falseValue" :input-value="inputValue" :label="label" :readonly="readonly" :true-value="trueValue" v-on="$listeners">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
