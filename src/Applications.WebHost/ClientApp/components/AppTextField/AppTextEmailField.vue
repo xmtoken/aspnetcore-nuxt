@@ -29,17 +29,17 @@ export default mixins(slotable).extend({
   },
   data() {
     return {
-      internalValue: this.value,
+      internalValue: this.value?.toString(),
     };
   },
   watch: {
     value(val: any): void {
-      this.internalValue = val;
+      this.internalValue = val?.toString();
     },
   },
   methods: {
     onInputValue(val: any): void {
-      this.internalValue = val;
+      this.internalValue = val?.toString();
     },
   },
 });
