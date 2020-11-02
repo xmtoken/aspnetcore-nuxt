@@ -17,7 +17,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         public static IServiceCollection AddEntityMetadataProvider<TContext>(this IServiceCollection services)
             where TContext : DbContext
         {
-            services.AddScoped<IEntityMetadataProvider, EntityMetadataProvider<TContext>>();
+            services.AddScoped<IEntityMetadataProvider<TContext>, EntityMetadataProvider<TContext>>();
             return services;
         }
     }

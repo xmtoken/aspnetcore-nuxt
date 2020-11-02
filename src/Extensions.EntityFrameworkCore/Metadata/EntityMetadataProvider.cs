@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
 {
-    /// <inheritdoc cref="IEntityMetadataProvider"/>
-    /// <typeparam name="TContext">メタデータを取得する <see cref="DbContext"/> クラスの型。</typeparam>
-    public class EntityMetadataProvider<TContext> : IEntityMetadataProvider
+    /// <inheritdoc cref="IEntityMetadataProvider{TContext}"/>
+    public class EntityMetadataProvider<TContext> : IEntityMetadataProvider<TContext>
         where TContext : DbContext
     {
         /// <summary>
