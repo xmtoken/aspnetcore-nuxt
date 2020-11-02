@@ -23,7 +23,6 @@ namespace AspNetCoreNuxt.Extensions.DependencyInjection
                     services.AddScoped(type);
                 }
             }
-
             return services;
         }
     }
