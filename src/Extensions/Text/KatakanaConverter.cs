@@ -69,7 +69,6 @@ namespace AspNetCoreNuxt.Extensions
             {
                 return source;
             }
-
             return HalfWidthCharactorRegex.Replace(source, match
                 => match.Success ? HalfKeyFullValueDictionary[match.Value] : match.Value);
         }
@@ -85,7 +84,6 @@ namespace AspNetCoreNuxt.Extensions
             {
                 return source;
             }
-
             return FullWidthCharactorRegex.Replace(source, match
                 => match.Success ? FullKeyHalfValueDictionary[match.Value] : match.Value);
         }
