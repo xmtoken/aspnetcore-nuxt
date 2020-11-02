@@ -21,11 +21,8 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
         /// <returns><see cref="IQueryableSorting{T}"/> オブジェクト。</returns>
         public static IEnumerable<IQueryableSorting<T>> ToQueryableOrDefault<T>(this IEnumerable<ISorting> source, params (Expression<Func<T, object>> Expression, SortDirection Direction)[] defaults)
         {
-            var sortings = source
-                .Select(x => new QueryableSorting<T>(x.SortPropertyName, x.SortDirection))
-                .Where(x => x.IsValid())
-                .ToArray();
-            return sortings.Any() ? sortings : defaults.Select(x => new QueryableSorting<T>(x.Expression, x.Direction)).ToArray();
+            var sortings = source.Select(x => new QueryableSorting<T>(x.SortPropertyName, x.SortDirection)).ToArray();
+            return sortings.All(x => x.IsValid()) ? sortings : defaults.Select(x => new QueryableSorting<T>(x.Expression, x.Direction)).ToArray();
         }
     }
 }
