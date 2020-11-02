@@ -77,6 +77,7 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
         <v-icon color="error" small>
           {{ icons.mdiAlertCircleOutline }}
         </v-icon>
+        <slot name="append-outer" />
       </template>
       <template v-if="isEnabledTooltipMessage" v-slot:message="{ message }">
         <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="focused || hovered">
