@@ -17,7 +17,7 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata
         public static (int Precision, int Scale)? GetPrecision(this IProperty property)
         {
             var columnType = property.GetColumnType();
-            if (columnType != null && Regex.Match(columnType, @"^decimal\(([0-9]+)(\s*,\s*[0-9]+)*\)$", RegexOptions.IgnoreCase) is Match match && match.Success)
+            if (columnType != null && Regex.Match(columnType, @"^decimal\(([0-9]+),([0-9]+)\)$") is Match match && match.Success)
             {
                 var precision = int.Parse(match.Groups[1].Value);
                 var scale = int.Parse(match.Groups[2].Value);
