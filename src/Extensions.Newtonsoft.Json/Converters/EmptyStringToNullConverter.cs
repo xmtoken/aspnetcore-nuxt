@@ -11,12 +11,12 @@ namespace AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters
         /// <inheritdoc/>
         public override string ReadJson(JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var value = reader.Value?.ToString();
+            var value = ReadJson(reader, objectType, existingValue, serializer) as string;
             return string.IsNullOrEmpty(value) ? null : value;
         }
 
         /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, string value, JsonSerializer serializer)
-            => writer.WriteValue(string.IsNullOrEmpty(value) ? null : value);
+            => WriteJson(writer, string.IsNullOrEmpty(value) ? (object)null : value, serializer);
     }
 }
