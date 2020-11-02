@@ -13,9 +13,12 @@ namespace AspNetCoreNuxt.Extensions.NSwag.Generation.Processors
         /// <inheritdoc/>
         public void Process(DocumentProcessorContext context)
         {
-            foreach (var type in typeof(T).Assembly.GetTypes().Where(x => typeof(IOpenApiSchema).IsAssignableFrom(x)))
+            foreach (var type in typeof(T).Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract))
             {
-                context.SchemaGenerator.Generate(type, context.SchemaResolver);
+                if (typeof(IOpenApiSchema).IsAssignableFrom(type))
+                {
+                    context.SchemaGenerator.Generate(type, context.SchemaResolver);
+                }
             }
         }
     }
