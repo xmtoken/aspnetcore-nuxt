@@ -1,9 +1,9 @@
 namespace AspNetCoreNuxt.Extensions.NSwag.Generation.Processors
 {
     /// <summary>
-    /// スキーマを表します。
+    /// Open API のスキーマを表します。
     /// </summary>
-    public interface ISchema
+    public interface IOpenApiSchema
     {
     }
 }

@@ -82,47 +82,47 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     .AddMemoryCache();
 
             services.AddDbContextPool<AppDbContext>(options =>
-                    {
-                        options.ConfigureWarnings(x =>
-                        {
-                            x.Ignore(CoreEventId.SensitiveDataLoggingEnabledWarning);
-                        });
-                        options.EnableSensitiveDataLogging();
-                        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.EnableRetryOnFailure());
-                    });
+            {
+                options.ConfigureWarnings(x =>
+                {
+                    x.Ignore(CoreEventId.SensitiveDataLoggingEnabledWarning);
+                });
+                options.EnableSensitiveDataLogging();
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.EnableRetryOnFailure());
+            });
 
             services.AddHsts(options =>
-                    {
-                        options.IncludeSubDomains = true;
-                        options.MaxAge = TimeSpan.FromDays(365);
-                        options.Preload = true;
-                    });
+            {
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+                options.Preload = true;
+            });
 
             services.AddOpenApiDocument(settings =>
+            {
+                settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
+                settings.DocumentProcessors.Add(new OpenApiSchemaProcessor<Startup>());
+                settings.Title = typeof(Startup).Namespace;
+                settings.AddOperationFilter(context =>
+                {
+                    if (context.MethodInfo.GetCustomAttribute<ApiVersionNeutralAttribute>() == null)
                     {
-                        settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
-                        settings.DocumentProcessors.Add(new SchemaProcessor<Startup>());
-                        settings.Title = typeof(Startup).Namespace;
-                        settings.AddOperationFilter(context =>
+                        context.OperationDescription.Operation.Parameters.Add(new OpenApiParameter()
                         {
-                            if (context.MethodInfo.GetCustomAttribute<ApiVersionNeutralAttribute>() == null)
-                            {
-                                context.OperationDescription.Operation.Parameters.Add(new OpenApiParameter()
-                                {
-                                    Kind = OpenApiParameterKind.Header,
-                                    Name = "x-api-version",
-                                    Default = AppApiVersion.Latest.ToVersion(),
-                                });
-                            }
-                            return true;
+                            Kind = OpenApiParameterKind.Header,
+                            Name = "x-api-version",
+                            Default = AppApiVersion.Latest.ToVersion(),
                         });
-                    });
+                    }
+                    return true;
+                });
+            });
 
             services.AddRouting(options =>
-                    {
-                        options.LowercaseUrls = true;
-                    });
+            {
+                options.LowercaseUrls = true;
+            });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
@@ -146,17 +146,17 @@ namespace AspNetCoreNuxt.Applications.WebHost
             services.AddAuthorization();
 
             services.AddApiVersioning(options =>
-                    {
-                        options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
-                        options.Conventions.Add(new InterleavingControllerConvention(ApiVersion.Default, typeof(Startup).Assembly));
-                        options.DefaultApiVersion = ApiVersion.Default;
-                        options.ReportApiVersions = true;
-                    });
+            {
+                options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+                options.Conventions.Add(new InterleavingControllerConvention(ApiVersion.Default, typeof(Startup).Assembly));
+                options.DefaultApiVersion = ApiVersion.Default;
+                options.ReportApiVersions = true;
+            });
 
             services.AddControllers(options =>
-                    {
-                        options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
-                    })
+            {
+                options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+            })
                     .AddFluentValidation(config =>
                     {
                         config.RegisterValidatorsFromAssemblyContaining<Startup>();
@@ -187,9 +187,9 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     });
 
             services.AddSpaStaticFiles(options =>
-                    {
-                        options.RootPath = "ClientApp/dist";
-                    });
+            {
+                options.RootPath = "ClientApp/dist";
+            });
         }
 
         /// <summary>
