@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AspNetCoreNuxt.Extensions
@@ -7,6 +8,14 @@ namespace AspNetCoreNuxt.Extensions
     /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// キャメルケースへ変換した文字列を返します。
+        /// </summary>
+        /// <param name="value">パスカルケースで表現された文字列。</param>
+        /// <returns>変換された文字列。</returns>
+        public static string ToCamelCase(this string value)
+            => string.Join(string.Empty, value.Take(1).Select(x => char.ToLowerInvariant(x)).Concat(value.Skip(1)));
+
         /// <summary>
         /// 文字列に含まれる半角の片仮名を全角に変換した文字列を返します。
         /// </summary>
