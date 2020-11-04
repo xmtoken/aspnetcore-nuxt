@@ -1,11 +1,10 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
-import Vue, { VueConstructor, PropType } from 'vue';
+import Vue, { PropType, VueConstructor } from 'vue';
 import AppDatePicker from '~/components/AppDatePicker/AppDatePicker.vue';
 import * as DateFormatter from '~/extensions/formatters/date-formatter';
 import mixins from '~/extensions/mixins';
-import listenable from '~/mixins/listenable';
 import slotable from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
 
@@ -17,7 +16,7 @@ const $refs = Vue as VueConstructor<
   }
 >;
 
-export default mixins($refs, listenable, slotable).extend({
+export default mixins($refs, slotable).extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',
@@ -31,14 +30,6 @@ export default mixins($refs, listenable, slotable).extend({
       default: -1,
       type: Number,
     },
-    contentClass: {
-      default: undefined,
-      type: [String, Object] as PropType<string | object>,
-    },
-    contentStyle: {
-      default: undefined,
-      type: [String, Object] as PropType<string | object>,
-    },
     dense: {
       default: false,
       type: Boolean,
@@ -47,13 +38,9 @@ export default mixins($refs, listenable, slotable).extend({
       default: false,
       type: Boolean,
     },
-    menuProps: {
-      default(): object {
-        return {
-          openOnClick: false,
-        };
-      },
-      type: Object as PropType<object>,
+    label: {
+      default: undefined,
+      type: String,
     },
     pickerOffsetLeft: {
       default: false,
@@ -133,20 +120,33 @@ export default mixins($refs, listenable, slotable).extend({
         this.internalValue = this.pickerValue;
       }
     },
+    onChange(): void {
+      if (this.pickerValue) {
+        this.internalValue = this.pickerValue;
+      }
+    },
+    openPickerMenu(): void {
+      this.menu = true;
+    },
   },
 });
 </script>
 
 <template>
-  <v-menu v-model="menu" v-bind="menuProps" :close-on-content-click="false" :disabled="readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft">
-    <template v-slot:activator="{ on }">
-      <app-text-field v-model="internalValue" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :class="contentClass" :dense="dense" :disabled="disabled" :readonly="readonly" :style="contentStyle" v-on="{ ...listeners, ...withEmit(on) }" @blur="onBlur" @click:append="menu = true">
-        <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
-        <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
-          <slot v-bind="scope" :name="scopedSlotKey" />
-        </template>
-      </app-text-field>
+  <app-text-field ref="field" v-model="internalValue" v-bind="$attrs" :append-icon="appendIconInternal" :append-icon-tabindex="appendIconTabindex" :dense="dense" :disabled="disabled" :label="label" :readonly="readonly" v-on="listeners" @blur="onBlur" @change="onChange" @click:append="openPickerMenu">
+    <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
+    <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
+      <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
-    <app-date-picker ref="picker" v-model="pickerValue" v-bind="pickerProps" @change="menu = false" />
-  </v-menu>
+    <template v-slot:label>
+      <app-menu v-model="menu" :activator="$refs.field" :close-on-content-click="false" :disabled="disabled || readonly" min-width="inherit" :nudge-bottom="menuNudgeBottom" :nudge-left="menuNudgeLeft" :open-on-click="false">
+        <template v-slot="{ close }">
+          <app-date-picker ref="picker" v-model="pickerValue" v-bind="pickerProps" @change="close" />
+        </template>
+      </app-menu>
+      <slot name="label">
+        {{ label }}
+      </slot>
+    </template>
+  </app-text-field>
 </template>
