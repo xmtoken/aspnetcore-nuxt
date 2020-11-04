@@ -32,6 +32,7 @@ export default mixins(slotable).extend({
   computed: {
     listeners(): Listeners {
       const listeners = { ...this.$listeners };
+      delete listeners.change;
       delete listeners['input:value'];
       return listeners;
     },
@@ -53,6 +54,15 @@ export default mixins(slotable).extend({
       this.focused = false;
       this.internalValue = NumberFormatter.format(this.internalValue, this.format);
     },
+    onChange(val: any): void {
+      this.internalValue = NumberFormatter.format(val, this.format);
+      const unformatted = numbro.unformat(val, {});
+      if (unformatted?.toString()) {
+        this.$emit('change', unformatted);
+      } else {
+        this.$emit('change', val);
+      }
+    },
     onFocus(): void {
       this.focused = true;
       const input = this.$el.querySelector<HTMLInputElement>(':scope > .v-input__control > .v-input__slot > .v-text-field__slot > input');
@@ -60,7 +70,7 @@ export default mixins(slotable).extend({
       if (focusedByTabKey) {
         this.$nextTick(() => input?.select());
       }
-      const unformatted = numbro.unformat(this.internalValue?.toString() || '', {});
+      const unformatted = numbro.unformat(this.internalValue, {});
       if (unformatted?.toString()) {
         this.internalValue = unformatted?.toString();
       }
@@ -78,7 +88,7 @@ export default mixins(slotable).extend({
 </script>
 
 <template>
-  <app-text-field v-model="internalValue" v-bind="$attrs" class="text-right" v-on="listeners" @blur="onBlue" @focus="onFocus" @input:value="onInputValue">
+  <app-text-field v-model="internalValue" v-bind="$attrs" class="text-right" v-on="listeners" @blur="onBlue" @change="onChange" @focus="onFocus" @input:value="onInputValue">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />
