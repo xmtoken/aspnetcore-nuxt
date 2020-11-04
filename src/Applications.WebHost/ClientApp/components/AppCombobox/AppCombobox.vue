@@ -79,10 +79,11 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
         </v-icon>
         <slot name="append-outer" />
       </template>
-      <template v-if="isEnabledTooltipMessage" v-slot:message="{ message }">
+      <template v-if="isEnabledTooltipMessage" v-slot:message="scope">
         <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="focused || hovered">
-          {{ message }}
+          {{ scope.message }}
         </v-tooltip>
+        <slot v-bind="scope" name="message" />
       </template>
     </v-combobox>
   </validation-provider>
