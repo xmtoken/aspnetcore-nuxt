@@ -20,7 +20,7 @@
     "@nuxtjs/axios": "5.12.2",
     "axios-cache-adapter": "2.5.0",
     "content-disposition": "0.5.3",
-    "dayjs": "1.9.4",
+    "dayjs": "1.9.6",
     "deep-equal": "2.0.4",
     "file-saver": "2.0.2",
     "fontfaceobserver": "2.1.0",
@@ -30,7 +30,7 @@
     "qs": "6.9.4",
     "string-format": "2.0.0",
     "v-mask": "2.2.3",
-    "vee-validate": "3.4.3",
+    "vee-validate": "3.4.4",
     "vue-dragscroll": "2.1.0"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "@types/deep-equal": "1.0.1",
     "@types/file-saver": "2.0.1",
     "@types/fontfaceobserver": "0.0.6",
-    "@types/lodash": "4.14.162",
+    "@types/lodash": "4.14.165",
     "@types/nuxtjs__auth": "4.8.5",
     "@types/string-format": "2.0.0",
     "@types/ts-nameof": "4.2.1",
