@@ -1,4 +1,8 @@
 #app.v-application {
+  .cursor-col-resize {
+    cursor: col-resize;
+  }
+
   .cursor-move {
     cursor: move;
   }
