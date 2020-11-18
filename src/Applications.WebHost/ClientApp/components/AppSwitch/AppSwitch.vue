@@ -34,12 +34,12 @@ export default mixins(requiredMarkable, slotable, validationProviderProps).exten
     },
   },
   watch: {
-    inputValue(): void {
-      this.updateMandatory();
+    inputValue: {
+      handler(): void {
+        this.updateMandatory();
+      },
+      immediate: true,
     },
-  },
-  created(): void {
-    this.updateMandatory();
   },
   methods: {
     updateMandatory(): void {
