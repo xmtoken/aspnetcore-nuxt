@@ -11,6 +11,7 @@ NuGet パッケージのライセンス体系を以下に示す。
 | ----------------------------------------------------- | --------------------------------- |
 | AutoMapper                                            | MIT License                       |
 | AutoMapper.Extensions.Microsoft.DependencyInjection   | MIT License                       |
+| ClosedXML                                             | MIT License                       |
 | CsvHelper                                             | Apache License 2.0 & MS-PL        |
 | FluentValidation                                      | Apache License 2.0                |
 | FluentValidation.AspNetCore                           | Apache License 2.0                |
