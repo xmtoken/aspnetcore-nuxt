@@ -1,0 +1,13 @@
+table {
+  thead tr th.invisible,
+  tbody tr td.invisible {
+    border: none !important;
+    display: table-column;
+    max-width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
+    padding: 0 !important;
+    white-space: nowrap;
+    width: 0 !important;
+  }
+}
