@@ -1,4 +1,5 @@
 <script lang="ts">
+import '~/components/AppInput/AppInput.scss';
 import { mdiAlertCircleOutline } from '@mdi/js';
 import { ValidationProvider } from 'vee-validate';
 import mixins from '~/extensions/mixins';
@@ -77,13 +78,13 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
-      <template v-if="failed && isEnabledTooltipMessage" v-slot:append-outer>
+      <template v-if="failed && isEnabledTooltipMessage" #append-outer>
         <v-icon color="error" small>
           {{ icons.mdiAlertCircleOutline }}
         </v-icon>
         <slot name="append-outer" />
       </template>
-      <template v-if="isEnabledTooltipMessage" v-slot:message="scope">
+      <template v-if="isEnabledTooltipMessage" #message="scope">
         <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="focused || hovered">
           {{ scope.message }}
         </v-tooltip>
@@ -92,23 +93,3 @@ export default mixins(iconTabIndexable, requiredMarkable, slotable, validationPr
     </v-file-input>
   </validation-provider>
 </template>
-
-<style lang="scss" scoped>
-.v-input--tooltip-details ::v-deep {
-  .v-input__control {
-    .v-input__slot {
-      margin-bottom: 0;
-    }
-
-    .v-text-field__details {
-      height: 0;
-      min-height: 0;
-    }
-  }
-
-  .v-input__append-outer {
-    align-self: flex-end;
-    margin-left: 0;
-  }
-}
-</style>

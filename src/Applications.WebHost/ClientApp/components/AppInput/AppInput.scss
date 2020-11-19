@@ -1,0 +1,23 @@
+.v-input {
+  &.v-input--lazy-rendering {
+    margin-top: 0;
+  }
+
+  &.v-input--tooltip-details {
+    .v-input__control {
+      .v-input__slot {
+        margin-bottom: 0;
+      }
+
+      .v-text-field__details {
+        height: 0;
+        min-height: 0;
+      }
+    }
+
+    .v-input__append-outer {
+      align-self: flex-end;
+      margin-left: 0;
+    }
+  }
+}
