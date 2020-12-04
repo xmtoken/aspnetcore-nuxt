@@ -32,10 +32,10 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)/**;</DefaultItemExcludes>
   </PropertyGroup>
   <Target Name="GenerateClientInterfaces" AfterTargets="Build">
-    <Exec Command="$(NSwagExe_Core31) aspnetcore2openapi /assembly:$(TargetPath) /documentName:$(Version) /output:swagger.json" />
-    <Exec Command="$(NSwagExe_Core31) openapi2tsclient /GenerateClientClasses:false /GenerateConstructorInterface:false /MarkOptionalProperties:false /NullValue:Null /TypeStyle:Class /input:swagger.json /output:$(SpaRoot)/types/api.ts" />
+    <Exec Command="$(NSwagExe_Net50) aspnetcore2openapi /assembly:$(TargetPath) /documentName:$(Version) /output:swagger.json" />
+    <Exec Command="$(NSwagExe_Net50) openapi2tsclient /GenerateClientClasses:false /GenerateConstructorInterface:false /MarkOptionalProperties:false /NullValue:Null /TypeStyle:Class /input:swagger.json /output:$(SpaRoot)/types/api.ts" />
   </Target>
-  <Target Name="PublishClientApp" AfterTargets="ComputeFilesToPublish">
+  <Target Name="PublishClientApp" AfterTargets="ComputeFilesToPublish" Condition="'$(NpmCI)'=='true'">
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci --no-optional" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
     <ItemGroup>
