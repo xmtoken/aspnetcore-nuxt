@@ -9,6 +9,8 @@ using AspNetCoreNuxt.Extensions.FluentValidation.Resources;
 using AspNetCoreNuxt.Extensions.Identity;
 using AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters;
 using AspNetCoreNuxt.Extensions.NSwag.Generation.Processors;
+using AspNetCoreNuxt.Extensions.OpenXml.Abstractions.Excel;
+using AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -75,7 +77,8 @@ namespace AspNetCoreNuxt.Applications.WebHost
 
             services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
                     .AddSingleton<ILookupNormalizer, UpperInvariantLookupNormalizer>()
-                    .AddSingleton<IStringHasher, StringHasher>();
+                    .AddSingleton<IStringHasher, StringHasher>()
+                    .AddSingleton<IWorkbookFactory, WorkbookFactory>();
 
             services.AddHttpClient()
                     .AddLocalization()

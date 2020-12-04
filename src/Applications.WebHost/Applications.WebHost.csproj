@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Extensions.Newtonsoft.Json\Extensions.Newtonsoft.Json.csproj" />
     <ProjectReference Include="..\Extensions.NSwag\Extensions.NSwag.csproj" />
     <ProjectReference Include="..\Extensions.Polly\Extensions.Polly.csproj" />
+    <ProjectReference Include="..\Infrastructures.OpenXml.ClosedXml\Infrastructures.OpenXml.ClosedXml.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
