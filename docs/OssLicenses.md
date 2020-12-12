@@ -66,6 +66,7 @@ npm パッケージのライセンス体系を以下に示す。
 | @nuxt/typescript-runtime          | MIT License          |
 | @nuxtjs/auth                      | MIT License          |
 | @nuxtjs/axios                     | MIT License          |
+| @nuxtjs/dotenv                    | MIT License          |
 | @nuxtjs/eslint-config-typescript  | MIT License          |
 | @nuxtjs/vuetify                   | MIT License          |
 | @types/content-disposition        | MIT License          |

@@ -18,6 +18,7 @@ const config: NuxtConfig = {
   },
   buildModules: [
     '@nuxt/typescript-build',
+    '@nuxtjs/dotenv',
     '@nuxtjs/vuetify',
   ],
   components: true,
