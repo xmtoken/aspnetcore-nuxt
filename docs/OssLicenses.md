@@ -79,6 +79,7 @@ npm パッケージのライセンス体系を以下に示す。
 | @types/ts-nameof                  | MIT License          |
 | axios-cache-adapter               | MIT License          |
 | content-disposition               | MIT License          |
+| cross-env                         | MIT License          |
 | dayjs                             | MIT License          |
 | deep-equal                        | MIT License          |
 | eslint                            | MIT License          |

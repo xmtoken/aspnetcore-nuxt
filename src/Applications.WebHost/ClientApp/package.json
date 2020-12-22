@@ -48,6 +48,7 @@
     "@types/nuxtjs__auth": "4.8.5",
     "@types/string-format": "2.0.0",
     "@types/ts-nameof": "4.2.1",
+    "cross-env": "7.0.3",
     "eslint": "7.12.1",
     "eslint-config-prettier": "6.15.0",
     "eslint-loader": "4.0.2",
