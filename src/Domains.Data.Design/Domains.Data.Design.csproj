@@ -2,7 +2,6 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn),1591</NoWarn>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domains.Data\Domains.Data.csproj" />

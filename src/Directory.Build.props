@@ -15,5 +15,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>8.0</LangVersion>
     <RootNamespace>$(ProjectPrefixName).$(MSBuildProjectName)</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 </Project>
