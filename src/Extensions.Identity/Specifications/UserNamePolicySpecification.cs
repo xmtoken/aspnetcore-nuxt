@@ -24,7 +24,7 @@ namespace AspNetCoreNuxt.Extensions.Identity.Specifications
         /// <inheritdoc/>
         public bool IsSatisfiedBy(string obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }

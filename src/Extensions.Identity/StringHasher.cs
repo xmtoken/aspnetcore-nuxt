@@ -16,8 +16,8 @@ namespace AspNetCoreNuxt.Extensions.Identity
 
         /// <inheritdoc/>
         public bool VerifyHashedValue(string hashedValue, string providedValue)
-            => hashedValue != null
-            && providedValue != null
+            => hashedValue is not null
+            && providedValue is not null
             && PasswordHasher.VerifyHashedPassword(user: null, hashedValue, providedValue)
             != PasswordVerificationResult.Failed;
     }
