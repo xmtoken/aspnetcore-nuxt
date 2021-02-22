@@ -1,5 +1,6 @@
 using AspNetCoreNuxt.Extensions.OpenXml.Abstractions.Excel;
 using ClosedXML.Excel;
+using System;
 using System.IO;
 
 namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
@@ -7,6 +8,8 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
     /// <inheritdoc cref="IWorkbook"/>
     internal class Workbook : IWorkbook
     {
+        private bool Disposed;
+
         /// <summary>
         /// <see cref="IXLWorkbook"/> オブジェクトを取得します。
         /// </summary>
@@ -23,6 +26,25 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
         {
             WorkbookInstance = workbook;
             Worksheets = new Worksheets(WorkbookInstance.Worksheets);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed)
+            {
+                return;
+            }
+            if (disposing)
+            {
+                WorkbookInstance.Dispose();
+            }
+            Disposed = true;
         }
 
         /// <inheritdoc/>
