@@ -4,6 +4,9 @@ using System.Linq.Expressions;
 
 namespace AspNetCoreNuxt.Extensions.Linq.Expressions
 {
+    /// <summary>
+    /// 比較を行う式ツリーに関する機能を提供します。
+    /// </summary>
     public static class ExpressionComparer
     {
         /// <summary>
