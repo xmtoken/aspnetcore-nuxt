@@ -7,7 +7,7 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
     /// <summary>
     /// 比較を行う式ツリーに関する機能を提供します。
     /// </summary>
-    public static class ExpressionComparer
+    public static class ComparisonExpression
     {
         /// <summary>
         /// 左辺の値が右辺の値と等しいことを評価する式ツリーを返します。

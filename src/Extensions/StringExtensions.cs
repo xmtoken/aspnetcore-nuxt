@@ -11,10 +11,15 @@ namespace AspNetCoreNuxt.Extensions
         /// <summary>
         /// キャメルケースへ変換した文字列を返します。
         /// </summary>
-        /// <param name="value">パスカルケースで表現された文字列。</param>
+        /// <param name="value">パスカルケース、ケバブケースもしくはスネークケースで表現された文字列。</param>
         /// <returns>変換された文字列。</returns>
         public static string ToCamelCase(this string value)
-            => string.Join(string.Empty, value.Take(1).Select(x => char.ToLowerInvariant(x)).Concat(value.Skip(1)));
+        {
+            var values = value.ToKebabCace().Split("-").ToArray();
+            var value1 = values.Take(1).SelectMany(val => val.Select(x => char.ToLowerInvariant(x)));
+            var value2 = values.Skip(1).SelectMany(val => val.Select(x => x));
+            return string.Join(string.Empty, Enumerable.Concat(value1, value2));
+        }
 
         /// <summary>
         /// 文字列に含まれる半角の片仮名を全角に変換した文字列を返します。
@@ -35,7 +40,7 @@ namespace AspNetCoreNuxt.Extensions
         /// <summary>
         /// ケバブケースへ変換した文字列を返します。
         /// </summary>
-        /// <param name="value">パスカルケースもしくはスネークケースで表現された文字列。</param>
+        /// <param name="value">キャメルケース、パスカルケースもしくはスネークケースで表現された文字列。</param>
         /// <returns>変換された文字列。</returns>
         public static string ToKebabCace(this string value)
         {
@@ -49,7 +54,7 @@ namespace AspNetCoreNuxt.Extensions
         /// <summary>
         /// スネークケースへ変換した文字列を返します。
         /// </summary>
-        /// <param name="value">パスカルケースもしくはケバブケースで表現された文字列。</param>
+        /// <param name="value">キャメルケース、パスカルケースもしくはケバブケースで表現された文字列。</param>
         /// <returns>変換された文字列。</returns>
         public static string ToSnakeCace(this string value)
         {

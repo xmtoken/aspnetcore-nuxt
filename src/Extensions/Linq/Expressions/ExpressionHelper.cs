@@ -13,7 +13,7 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
     public static class ExpressionHelper
     {
         /// <summary>
-        /// 指定されたプロパティ名をコンポーネントの型を基準としたプロパティへのアクセスを表す式ツリーへ変換できるかどうかを返します。
+        /// 指定されたプロパティ名をプロパティへのアクセスを表す式ツリーへ変換できるかどうかを返します。
         /// </summary>
         /// <typeparam name="T">コンポーネントの型。</typeparam>
         /// <param name="chainPropertyName">ピリオドで区切られたプロパティ名。</param>
@@ -54,11 +54,11 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
         }
 
         /// <summary>
-        /// 指定されたプロパティ名をコンポーネントの型を基準としたプロパティへのアクセスを表す式ツリーへ変換します。
+        /// 指定されたプロパティ名をプロパティへのアクセスを表す式ツリーへ変換します。
         /// </summary>
         /// <typeparam name="T">コンポーネントの型。</typeparam>
         /// <param name="chainPropertyName">ピリオドで区切られたプロパティ名。</param>
-        /// <returns>コンポーネントの型を基準としたプロパティへのアクセスを表す式ツリー。</returns>
+        /// <returns>プロパティへのアクセスを表す式ツリー。</returns>
         /// <remarks>コレクション型のプロパティを含む式ツリーへの変換は行えません。</remarks>
         public static Expression<Func<T, object>> ConvertToExpression<T>(string chainPropertyName)
         {
@@ -100,7 +100,7 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
         }
 
         /// <summary>
-        /// 指定されたプロパティ名がコンポーネントの型で <see cref="IEnumerable"/> インターフェイスのプロパティを含むかどうかを返します。
+        /// 指定されたプロパティ名が <see cref="IEnumerable"/> インターフェイスのプロパティを含むかどうかを返します。
         /// </summary>
         /// <typeparam name="T">コンポーネントの型。</typeparam>
         /// <param name="chainPropertyName">ピリオドで区切られたプロパティ名。</param>
@@ -134,11 +134,11 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
         }
 
         /// <summary>
-        /// 指定されたコンポーネントの型をもとにプロパティ名を正規化します。
+        /// 指定されたプロパティ名を正規化します。
         /// </summary>
         /// <typeparam name="T">コンポーネントの型。</typeparam>
         /// <param name="chainPropertyName">ピリオドで区切られたプロパティ名。</param>
-        /// <returns>コンポーネントの型をもとに正規化されたプロパティ名。</returns>
+        /// <returns>正規化されたプロパティ名。</returns>
         public static string Normalize<T>(string chainPropertyName)
         {
             var breaked = false;
@@ -178,11 +178,11 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
         }
 
         /// <summary>
-        /// 指定されたリテラル値をオブジェクトで内包しパラメーター化された値へのアクセスを表す式ツリーへ変換します。
+        /// 指定されたリテラル値を匿名オブジェクトのプロパティへのアクセスを表す式ツリーへ変換します。
         /// </summary>
-        /// <typeparam name="T">パラメーター化する値の型。</typeparam>
-        /// <param name="value">パラメーター化する値。</param>
-        /// <returns>パラメーター化された値へのアクセスを表す式ツリー。</returns>
+        /// <typeparam name="T">匿名オブジェクトでオブジェクト化する値の型。</typeparam>
+        /// <param name="value">匿名オブジェクトでオブジェクト化する値。</param>
+        /// <returns>匿名オブジェクトのプロパティへのアクセスを表す式ツリー。</returns>
         public static MemberExpression Parameterize<T>(T value)
         {
             var component = new { Value = value };
@@ -190,11 +190,11 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
         }
 
         /// <summary>
-        /// 指定されたプロパティ名がコンポーネントの型で有効かどうかを返します。
+        /// 指定されたプロパティ名が有効かどうかを返します。
         /// </summary>
         /// <typeparam name="T">コンポーネントの型。</typeparam>
         /// <param name="chainPropertyName">ピリオドで区切られたプロパティ名。</param>
-        /// <returns>指定されたプロパティ名がコンポーネントの型で有効な場合は true。それ以外の場合は false。</returns>
+        /// <returns>指定されたプロパティ名が有効な場合は true。それ以外の場合は false。</returns>
         public static bool Validate<T>(string chainPropertyName)
         {
             if (string.IsNullOrEmpty(chainPropertyName))
