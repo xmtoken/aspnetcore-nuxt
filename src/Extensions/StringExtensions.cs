@@ -22,22 +22,6 @@ namespace AspNetCoreNuxt.Extensions
         }
 
         /// <summary>
-        /// 文字列に含まれる半角の片仮名を全角に変換した文字列を返します。
-        /// </summary>
-        /// <param name="value">変換する文字列。</param>
-        /// <returns>変換された文字列。</returns>
-        public static string ToFullWidthKatakana(this string value)
-            => KatakanaConverter.Instance.ConvertToFullWidthKatakana(value);
-
-        /// <summary>
-        /// 文字列に含まれる全角の片仮名を半角に変換した文字列を返します。
-        /// </summary>
-        /// <param name="value">変換する文字列。</param>
-        /// <returns>変換された文字列。</returns>
-        public static string ToHalfWidthKatakana(this string value)
-            => KatakanaConverter.Instance.ConvertToHalfWidthKatakana(value);
-
-        /// <summary>
         /// ケバブケースへ変換した文字列を返します。
         /// </summary>
         /// <param name="value">キャメルケース、パスカルケースもしくはスネークケースで表現された文字列。</param>
