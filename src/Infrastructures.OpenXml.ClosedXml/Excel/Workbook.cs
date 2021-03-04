@@ -8,12 +8,15 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
     /// <inheritdoc cref="IWorkbook"/>
     internal class Workbook : IWorkbook
     {
+        /// <summary>
+        /// リソースを開放済みかどうかを表します。
+        /// </summary>
         private bool Disposed;
 
         /// <summary>
-        /// <see cref="IXLWorkbook"/> オブジェクトを取得します。
+        /// <see cref="IXLWorkbook"/> オブジェクトを表します。
         /// </summary>
-        internal IXLWorkbook WorkbookInstance { get; }
+        private readonly IXLWorkbook WorkbookInstance;
 
         /// <inheritdoc/>
         public IWorksheets Worksheets { get; }
@@ -28,12 +31,15 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
             Worksheets = new Worksheets(WorkbookInstance.Worksheets);
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
 
+        /// <inheritdoc cref="IDisposable.Dispose()"/>
+        /// <param name="disposing">マネージドリソースを開放する場合は true。それ以外の場合は false。</param>
         protected virtual void Dispose(bool disposing)
         {
             if (Disposed)

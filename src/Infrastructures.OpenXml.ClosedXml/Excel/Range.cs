@@ -7,9 +7,9 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
     internal class Range : IRange
     {
         /// <summary>
-        /// <see cref="IXLRange"/> オブジェクトを取得します。
+        /// <see cref="IXLRange"/> オブジェクトを表します。
         /// </summary>
-        internal IXLRange RangeInstance { get; }
+        private readonly IXLRange RangeInstance;
 
         /// <summary>
         /// <see cref="Range"/> クラスの新しいインスタンスを作成します。

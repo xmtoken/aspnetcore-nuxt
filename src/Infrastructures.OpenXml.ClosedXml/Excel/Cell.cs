@@ -7,9 +7,9 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
     internal class Cell : ICell
     {
         /// <summary>
-        /// <see cref="IXLCell"/> オブジェクトを取得します。
+        /// <see cref="IXLCell"/> オブジェクトを表します。
         /// </summary>
-        internal IXLCell CellInstance { get; }
+        private readonly IXLCell CellInstance;
 
         /// <inheritdoc/>
         public object Value

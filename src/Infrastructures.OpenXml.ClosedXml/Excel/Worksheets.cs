@@ -7,9 +7,9 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
     internal class Worksheets : IWorksheets
     {
         /// <summary>
-        /// <see cref="IXLWorksheets"/> オブジェクトを取得します。
+        /// <see cref="IXLWorksheets"/> オブジェクトを表します。
         /// </summary>
-        internal IXLWorksheets WorksheetsInstance { get; }
+        private readonly IXLWorksheets WorksheetsInstance;
 
         /// <summary>
         /// <see cref="Worksheets"/> クラスの新しいインスタンスを作成します。
