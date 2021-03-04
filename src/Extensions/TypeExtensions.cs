@@ -13,6 +13,6 @@ namespace AspNetCoreNuxt.Extensions
         /// <param name="type"><see cref="Type"/> オブジェクト。</param>
         /// <returns><see cref="Nullable{T}"/> 型の場合は true。それ以外の場合は false。</returns>
         public static bool IsNullable(this Type type)
-            => Nullable.GetUnderlyingType(type) != null;
+            => Nullable.GetUnderlyingType(type) is not null;
     }
 }

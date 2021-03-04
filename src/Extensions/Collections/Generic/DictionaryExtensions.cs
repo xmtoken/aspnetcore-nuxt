@@ -9,7 +9,7 @@ namespace AspNetCoreNuxt.Extensions.Collections.Generic
     public static class DictionaryExtensions
     {
         /// <summary>
-        /// 読み取り専用の <see cref="IReadOnlyDictionary{TKey, TValue}"/> オブジェクトを返します。
+        /// <see cref="IReadOnlyDictionary{TKey, TValue}"/> オブジェクトを返します。
         /// </summary>
         /// <typeparam name="TKey">キーの型。</typeparam>
         /// <typeparam name="TValue">値の型。</typeparam>
