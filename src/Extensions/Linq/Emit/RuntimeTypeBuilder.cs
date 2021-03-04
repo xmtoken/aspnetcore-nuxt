@@ -25,15 +25,15 @@ namespace AspNetCoreNuxt.Extensions.Linq.Emit
                 .DefineDynamicModule(DynamicAssemblyName.Name);
 
         /// <summary>
-        /// 動的に生成した型のキャッシュを表します。
+        /// 動的に作成した型のキャッシュを表します。
         /// </summary>
         private static readonly ConcurrentDictionary<string, Type> TypeCache = new();
 
         /// <summary>
-        /// 指定されたプロパティを含むクラスの型を動的に生成します。
+        /// 指定されたプロパティを含むクラスの型を動的に作成します。
         /// </summary>
         /// <param name="properties">クラスに含めるプロパティの名前と型のコレクション。</param>
-        /// <returns>動的に生成したクラスの型。</returns>
+        /// <returns>動的に作成したクラスの型。</returns>
         public static Type CreateDynamicType(IDictionary<string, Type> properties)
         {
             if (properties.Any(x => x.Key.StartsWith("#", StringComparison.Ordinal)) ||
