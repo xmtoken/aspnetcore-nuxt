@@ -229,17 +229,22 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
             return breaked;
         }
 
-
-
-
-
-
+        /// <summary>
+        /// 指定されたオブジェクト初期化子の式ツリーをすべてのメンバーの初期化子を含めた式ツリーへ変換します。
+        /// </summary>
+        /// <typeparam name="T">コンポーネントの型。</typeparam>
+        /// <param name="expression"></param>
+        /// <returns>すべてのメンバーの初期化子を含めた式ツリー。</returns>
+        /// <remarks>概念としてはレコード型 (C# 9.0) の with 式と同じです。</remarks>
         public static Expression<Func<T, T>> With<T>(Expression<Func<T, T>> expression)
         {
-            var bindings = new List<MemberAssignment>();
-            var sourceInitExpression = (MemberInitExpression)expression.Body;
-
             var parameterExpression = Expression.Parameter(typeof(T), "x");
+
+            var visitor = new ReplacingExpressionVisitor(expression.Parameters.Single(), parameterExpression);
+            var visitorExpression = visitor.Visit(expression.Body);
+            var sourceInitExpression = (MemberInitExpression)visitorExpression;
+
+            var bindings = new List<MemberAssignment>();
 
             foreach (var property in typeof(T).GetProperties().Where(x => x.CanRead && x.CanWrite))
             {
@@ -253,10 +258,7 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
 
             foreach (var assignment in sourceInitExpression.Bindings.Cast<MemberAssignment>())
             {
-                var visitor = new ReplacingParameterExpressionVisitor<T>(parameterExpression);
-                var visitExpression = visitor.Visit(assignment.Expression);
-
-                var assignmentExpression = Expression.Bind(assignment.Member, visitExpression);
+                var assignmentExpression = Expression.Bind(assignment.Member, assignment.Expression);
                 bindings.Add(assignmentExpression);
             }
 
@@ -264,63 +266,6 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
             var initExpression = Expression.MemberInit(newExpression, bindings);
 
             return (Expression<Func<T, T>>)Expression.Lambda(initExpression, parameterExpression);
-        }
-
-        public static Expression<Func<T1, T2, T1>> With<T1, T2>(Expression<Func<T1, T2, T1>> expression)
-        {
-            var bindings = new List<MemberAssignment>();
-            var sourceInitExpression = (MemberInitExpression)expression.Body;
-
-            var parameter1Expression = Expression.Parameter(typeof(T1), "x1");
-            var parameter2Expression = Expression.Parameter(typeof(T2), "x2");
-
-            foreach (var property in typeof(T1).GetProperties().Where(x => x.CanRead && x.CanWrite))
-            {
-                if (sourceInitExpression.Bindings.All(x => x.Member.Name != property.Name))
-                {
-                    var propertyExpression = Expression.Property(parameter1Expression, property.Name);
-                    var assignmentExpression = Expression.Bind(property, propertyExpression);
-                    bindings.Add(assignmentExpression);
-                }
-            }
-
-            foreach (var assignment in sourceInitExpression.Bindings.Cast<MemberAssignment>())
-            {
-                var visitor1 = new ReplacingParameterExpressionVisitor<T1>(parameter1Expression);
-                var visitExpression1 = visitor1.Visit(assignment.Expression);
-
-                var visitor2 = new ReplacingParameterExpressionVisitor<T2>(parameter2Expression);
-                var visitExpression2 = visitor2.Visit(visitExpression1);
-
-                var assignmentExpression = Expression.Bind(assignment.Member, visitExpression2);
-                bindings.Add(assignmentExpression);
-            }
-
-            var newExpression = Expression.New(typeof(T1));
-            var initExpression = Expression.MemberInit(newExpression, bindings);
-
-            return (Expression<Func<T1, T2, T1>>)Expression.Lambda(initExpression, parameter1Expression, parameter2Expression);
-        }
-
-        private class ReplacingParameterExpressionVisitor<T> : ExpressionVisitor
-        {
-            /// <summary>
-            /// 対象と差し替える式ツリーを表します。
-            /// </summary>
-            private readonly Expression Replacement;
-
-            /// <summary>
-            /// <see cref="ReplacingParameterExpressionVisitor{T}"/> クラスの新しいインスタンスを作成します。
-            /// </summary>
-            /// <param name="replacement">対象と差し替える式ツリー。</param>
-            public ReplacingParameterExpressionVisitor(Expression replacement)
-            {
-                Replacement = replacement;
-            }
-
-            /// <inheritdoc/>
-            public override Expression Visit(Expression node)
-                => node?.NodeType == ExpressionType.Parameter && node.Type == typeof(T) ? Replacement : base.Visit(node);
         }
     }
 }
