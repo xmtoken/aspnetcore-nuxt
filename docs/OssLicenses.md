@@ -24,7 +24,6 @@ NuGet パッケージのライセンス体系を以下に示す。
 | Microsoft.EntityFrameworkCore.SqlServer               | Apache License 2.0                |
 | Microsoft.Extensions.DependencyInjection.Abstractions | Apache License 2.0                |
 | Microsoft.Extensions.Hosting                          | Apache License 2.0                |
-| Microsoft.Extensions.Identity.Core                    | Apache License 2.0                |
 | Newtonsoft.Json                                       | MIT License                       |
 | NSwag.AspNetCore                                      | MIT License                       |
 | NSwag.CodeGeneration.TypeScript                       | MIT License                       |
