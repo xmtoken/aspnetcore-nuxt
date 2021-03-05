@@ -17,7 +17,7 @@ namespace AspNetCoreNuxt.Extensions.DependencyInjection
         /// <returns><see cref="IServiceCollection"/> オブジェクト。</returns>
         public static IServiceCollection AddDependencyInjectionServices<T>(this IServiceCollection services)
         {
-            foreach (var implementationType in typeof(T).Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract))
+            foreach (var implementationType in typeof(T).Assembly.GetTypes().Where(x => x.IsClass && x.IsConcrete()))
             {
                 if (implementationType.GetInterface(typeof(IDependencyInjectionService<>).Name) is Type interfaceType)
                 {

@@ -13,7 +13,7 @@ namespace AspNetCoreNuxt.Extensions.NSwag.Generation.Processors
         /// <inheritdoc/>
         public void Process(DocumentProcessorContext context)
         {
-            foreach (var type in typeof(T).Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract))
+            foreach (var type in typeof(T).Assembly.GetTypes().Where(x => x.IsClass && x.IsConcrete()))
             {
                 if (typeof(IOpenApiSchema).IsAssignableFrom(type))
                 {

@@ -161,7 +161,7 @@ namespace AspNetCoreNuxt.Extensions.Linq.Expressions
         /// </summary>
         /// <typeparam name="TProperty">左辺のプロパティの型。</typeparam>
         /// <param name="instance">左辺のプロパティへのアクセスを表す式ツリー。</param>
-        /// <param name="value">比較する右辺の値を表す式ツリー。</param>
+        /// <param name="value">右辺の値を表す式ツリー。</param>
         /// <returns>比較用に変換された左辺と右辺の式ツリー。</returns>
         private static (Expression left, Expression right) ConvertExpression<TProperty>(Expression instance, Expression value)
         {

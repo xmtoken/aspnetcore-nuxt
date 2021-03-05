@@ -1,7 +1,7 @@
 namespace AspNetCoreNuxt.Extensions.Collections
 {
     /// <summary>
-    /// 並び替え方向を表します。
+    /// ソート方向を表します。
     /// </summary>
     public enum SortDirection
     {
