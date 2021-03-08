@@ -17,7 +17,7 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.Versioning.Conventions
     /// Action-C に API バージョン 2.0 を指定した場合、
     /// Action-A は 1.0, 1.1, 2.0、
     /// Action-B は 1.1, 2.0、
-    /// Action-C は 2.0 の API バージョンをそれぞれサポートします。
+    /// Action-C は 2.0 の API バージョンをそれぞれ自動でサポートします。
     /// </remarks>
     public class InterleavingControllerConvention : IControllerConvention
     {
@@ -34,15 +34,23 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.Versioning.Conventions
         public InterleavingControllerConvention(ApiVersion defaultApiVersion, params Assembly[] assemblies)
         {
             var versions = new List<ApiVersion>() { defaultApiVersion };
-            foreach (var controllerType in assemblies.SelectMany(x => x.GetTypes()).Where(type => type.IsClass && !type.IsAbstract && typeof(ControllerBase).IsAssignableFrom(type)))
+            var controllerTypes = assemblies
+                .SelectMany(x => x.GetTypes())
+                .Where(type => type.IsClass && type.IsConcrete() && typeof(ControllerBase).IsAssignableFrom(type));
+            foreach (var controllerType in controllerTypes)
             {
                 versions.AddRange(controllerType.GetCustomAttributes<ApiVersionAttribute>().SelectMany(x => x.Versions));
-                foreach (var actionMethod in controllerType.GetMethods().Where(x => x.GetCustomAttribute<NonActionAttribute>() == null))
+                foreach (var actionMethod in controllerType.GetMethods().Where(x => x.GetCustomAttribute<NonActionAttribute>() is null))
                 {
                     versions.AddRange(actionMethod.GetCustomAttributes<ApiVersionAttribute>().SelectMany(x => x.Versions));
                 }
             }
-            Versions = versions.OrderBy(version => version).Select(x => x.ToString()).Distinct().Select(version => ApiVersion.Parse(version)).ToArray();
+            Versions = versions
+                .OrderBy(version => version)
+                .Select(x => x.ToString())
+                .Distinct()
+                .Select(version => ApiVersion.Parse(version))
+                .ToArray();
         }
 
         /// <inheritdoc/>
@@ -54,9 +62,8 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.Versioning.Conventions
                 {
                     continue;
                 }
-
                 var version = action.Attributes.OfType<ApiVersionAttribute>().SelectMany(x => x.Versions).OrderBy(x => x).LastOrDefault();
-                if (version == null)
+                if (version is null)
                 {
                     controller.Action(action.ActionMethod).HasApiVersions(Versions);
                 }
