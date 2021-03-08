@@ -1,9 +1,9 @@
 <script lang="ts">
 import { mdiClockOutline } from '@mdi/js';
 import { PropType } from 'vue';
+import { VueBuilder } from '~/core/vue';
 import * as TimeFormatter from '~/extensions/formatters/time-formatter';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { Slotable } from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
 
 type PickerProps = {
@@ -11,7 +11,11 @@ type PickerProps = {
   useSeconds: boolean;
 };
 
-export default mixins(slotable).extend({
+const Vue = VueBuilder.create() //
+  .mixin(Slotable)
+  .build();
+
+export default Vue.extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',

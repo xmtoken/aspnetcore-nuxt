@@ -1,10 +1,14 @@
 <script lang="ts">
 import { mdiOpenInNew } from '@mdi/js';
 import { PropType } from 'vue';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { VueBuilder } from '~/core/vue';
+import { Slotable } from '~/mixins/slotable';
 
-export default mixins(slotable).extend({
+const Vue = VueBuilder.create() //
+  .mixin(Slotable)
+  .build();
+
+export default Vue.extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',

@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace AspNetCoreNuxt.Extensions.CsvHelper
 {
+    // TODO:check
+
     /// <summary>
     /// CSV ファイル読み込みの結果を表します。
     /// </summary>

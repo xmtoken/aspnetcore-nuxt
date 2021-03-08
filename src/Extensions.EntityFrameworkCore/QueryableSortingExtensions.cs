@@ -5,13 +5,13 @@ namespace AspNetCoreNuxt.Extensions.EntityFrameworkCore
     /// </summary>
     public static class QueryableSortingExtensions
     {
-        /// <summary>
-        /// ソート条件が有効かどうかを返します。
-        /// </summary>
-        /// <typeparam name="T">並び替えのキーとなるプロパティのトップレベルのオブジェクトの型。</typeparam>
-        /// <param name="sorting"><see cref="IQueryableSorting{T}"/> オブジェクト。</param>
-        /// <returns>ソート条件が有効な場合は true。それ以外の場合は false。</returns>
-        public static bool IsValid<T>(this IQueryableSorting<T> sorting)
-            => sorting.SortPropertyExpression != null;
+        ///// <summary>
+        ///// ソート条件が有効かどうかを返します。
+        ///// </summary>
+        ///// <typeparam name="T">並び替えのキーとなるプロパティのトップレベルのオブジェクトの型。</typeparam>
+        ///// <param name="sorting"><see cref="IQueryableSorting{T}"/> オブジェクト。</param>
+        ///// <returns>ソート条件が有効な場合は true。それ以外の場合は false。</returns>
+        //public static bool IsValid<T>(this IQueryableSorting<T> sorting)
+        //    => sorting.SortPropertyExpression != null;
     }
 }

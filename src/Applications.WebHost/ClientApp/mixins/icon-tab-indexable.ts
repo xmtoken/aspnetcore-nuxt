@@ -1,6 +1,9 @@
-import Vue from 'vue';
+import { VueBuilder } from '~/core/vue';
 
-export default Vue.extend({
+const Vue = VueBuilder.create() //
+  .build();
+
+export const IconTabIndexable = Vue.extend({
   props: {
     appendIconTabindex: {
       default: 0,
@@ -24,23 +27,23 @@ export default Vue.extend({
     },
   },
   watch: {
-    appendIconTabindex(val: number): void {
+    appendIconTabindex(val: number) {
       setIconTabindex(this.$el, 'append', val);
     },
-    appendOuterIconTabindex(val: number): void {
+    appendOuterIconTabindex(val: number) {
       setIconTabindex(this.$el, 'append-outer', val);
     },
-    clearIconTabindex(val: number): void {
+    clearIconTabindex(val: number) {
       setIconTabindex(this.$el, 'clear', val);
     },
-    prependIconTabindex(val: number): void {
+    prependIconTabindex(val: number) {
       setIconTabindex(this.$el, 'prepend', val);
     },
-    prependInnerIconTabindex(val: number): void {
+    prependInnerIconTabindex(val: number) {
       setIconTabindex(this.$el, 'prepend-inner', val);
     },
   },
-  mounted(): void {
+  mounted() {
     if (this.appendIconTabindex) {
       setIconTabindex(this.$el, 'append', this.appendIconTabindex);
     }

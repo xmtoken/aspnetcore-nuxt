@@ -1,22 +1,20 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
-import Vue, { PropType, VueConstructor } from 'vue';
 import AppDatePicker from '~/components/AppDatePicker/AppDatePicker.vue';
+import { VueBuilder } from '~/core/vue';
 import * as DateFormatter from '~/extensions/formatters/date-formatter';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { Slotable } from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
 
-const $refs = Vue as VueConstructor<
-  Vue & {
-    $refs: {
-      picker: InstanceType<typeof AppDatePicker>;
-    };
-  }
->;
+const Vue = VueBuilder.create() //
+  .$refs<{
+    picker: InstanceType<typeof AppDatePicker>;
+  }>()
+  .mixin(Slotable)
+  .build();
 
-export default mixins($refs, slotable).extend({
+export default Vue.extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',

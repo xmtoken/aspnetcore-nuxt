@@ -3,6 +3,8 @@ using FluentValidation.Validators;
 
 namespace AspNetCoreNuxt.Extensions.FluentValidation.Resources
 {
+    // TODO:check
+
     /// <summary>
     /// <see cref="ILanguageManager"/> インターフェイスの拡張機能を提供します。
     /// </summary>

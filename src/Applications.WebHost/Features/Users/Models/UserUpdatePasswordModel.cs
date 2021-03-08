@@ -6,13 +6,13 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Models
     public class UserUpdatePasswordModel
     {
         /// <summary>
-        /// 現在のパスワードを取得または設定します。
+        /// 現在のパスワードを取得します。
         /// </summary>
-        public string CurrentPassword { get; set; }
+        public string CurrentPassword { get; private set; }
 
         /// <summary>
-        /// 新しいパスワードを取得または設定します。
+        /// 新しいパスワードを取得します。
         /// </summary>
-        public string NewPassword { get; set; }
+        public string NewPassword { get; private set; }
     }
 }

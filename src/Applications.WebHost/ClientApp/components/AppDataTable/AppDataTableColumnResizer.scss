@@ -1,0 +1,34 @@
+.col-resizer {
+  cursor: col-resize;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 5px;
+}
+
+.col-resizer-divider {
+  background-color: #90caf9;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1px;
+  z-index: 4;
+}
+
+.v-data-table.v-data-table--resizable {
+  .v-data-table__wrapper {
+    position: relative;
+  }
+}
+
+.v-data-table.v-data-table--resizing {
+  .v-data-table__wrapper {
+    cursor: col-resize !important;
+
+    * {
+      cursor: col-resize !important;
+    }
+  }
+}

@@ -1,5 +1,17 @@
 .v-input {
-  &.v-input--lazy-rendering {
+  &.v-input--dense {
+    .v-text-field__slot {
+      .v-text-field__prefix {
+        margin-top: 2px;
+      }
+
+      .v-text-field__suffix {
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &.v-input--dense-x {
     margin-top: 0;
   }
 
@@ -16,8 +28,9 @@
     }
 
     .v-input__append-outer {
-      align-self: flex-end;
-      margin-left: 0;
+      align-self: center;
+      margin-left: 2px;
+      margin-top: 6px !important;
     }
   }
 }

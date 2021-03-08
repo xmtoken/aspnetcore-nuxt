@@ -1,6 +1,9 @@
-import Vue from 'vue';
+import { VueBuilder } from '~/core/vue';
 
-export default Vue.extend({
+const Vue = VueBuilder.create() //
+  .build();
+
+export const RequiredMarkable = Vue.extend({
   props: {
     disabledRequiredMarker: {
       default: false,

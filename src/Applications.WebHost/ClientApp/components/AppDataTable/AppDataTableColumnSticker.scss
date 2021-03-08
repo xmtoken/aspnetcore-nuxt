@@ -1,0 +1,37 @@
+@import '~/assets/variables.scss';
+
+table {
+  thead tr th {
+    width: auto !important;
+  }
+
+  thead tr th.sticky,
+  tbody tr td.sticky {
+    background-color: $data-table-default-background-color;
+    position: sticky;
+  }
+
+  thead tr th.sticky {
+    z-index: 3 !important;
+  }
+
+  thead tr th:not(.sticky) {
+    z-index: 2 !important;
+  }
+
+  tbody tr td.sticky {
+    z-index: 1 !important;
+  }
+
+  tbody tr td:not(.sticky) {
+    z-index: 0 !important;
+  }
+
+  tbody tr.v-data-table__selected td.sticky {
+    background-color: $data-table-selected-background-color;
+  }
+
+  tbody tr:hover td.sticky {
+    background-color: $data-table-hover-background-color;
+  }
+}

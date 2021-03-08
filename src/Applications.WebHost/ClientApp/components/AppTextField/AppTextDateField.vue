@@ -1,16 +1,20 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
 import { PropType } from 'vue';
+import { VueBuilder } from '~/core/vue';
 import * as DateFormatter from '~/extensions/formatters/date-formatter';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { Slotable } from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
 
 type PickerProps = {
   type: string;
 };
 
-export default mixins(slotable).extend({
+const Vue = VueBuilder.create() //
+  .mixin(Slotable)
+  .build();
+
+export default Vue.extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',

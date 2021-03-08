@@ -1,104 +1,130 @@
 <script lang="ts">
 import '~/components/AppInput/AppInput.scss';
-import { mdiAlertCircleOutline } from '@mdi/js';
 import { ValidationProvider } from 'vee-validate';
-import mixins from '~/extensions/mixins';
-import iconTabIndexable from '~/mixins/icon-tab-indexable';
-import requiredMarkable from '~/mixins/required-markable';
-import slotable from '~/mixins/slotable';
-import validationProviderProps from '~/mixins/validation-provider-props';
+import { VueBuilder, VuePropHelper } from '~/core/vue';
+import { Clearable, ClearableProps } from '~/mixins/clearable';
+import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
+import { InputableProps } from '~/mixins/inputable';
+import { LazyRenderable } from '~/mixins/lazy-renderable';
+import { RequiredMarkable } from '~/mixins/required-markable';
+import { Slotable } from '~/mixins/slotable';
+import { UIElementState } from '~/mixins/ui-element-state';
+import { Validatable, ValidatableProps } from '~/mixins/validatable';
 
-export default mixins(iconTabIndexable, requiredMarkable, slotable, validationProviderProps).extend({
+type ComponentProps = ClearableProps & InputableProps & ValidatableProps;
+
+type ComponentRefs = {
+  field: HTMLElement;
+  provider: InstanceType<typeof ValidationProvider>;
+};
+
+const Vue = VueBuilder.create() //
+  .$attrs<ComponentProps>()
+  .$refs<ComponentRefs>()
+  .mixin(Clearable)
+  .mixin(IconTabIndexable)
+  .mixin(LazyRenderable)
+  .mixin(RequiredMarkable)
+  .mixin(Slotable)
+  .mixin(UIElementState)
+  .mixin(Validatable)
+  .build();
+
+export default Vue.extend({
   components: {
     ValidationProvider,
   },
   inheritAttrs: false,
-  model: {
-    event: 'input:value',
-  },
   props: {
-    clearable: {
-      default: false,
-      type: Boolean,
-    },
-    hideDetails: {
-      default: false,
-      type: [String, Boolean],
-    },
-    lazy: {
+    denseX: {
       default: false,
       type: Boolean,
     },
   },
   data() {
     return {
-      focused: false,
-      hovered: false,
-      icons: {
-        mdiAlertCircleOutline,
-      },
+      $_: null as any,
+      xErrors: [] as string[],
     };
   },
-  computed: {
-    classes(): object {
+  watch: {
+    $attrs: {
+      handler() {
+        this.$emit('xxx', this.$attrs);
+      },
+      immediate: true,
+    },
+  },
+  mounted() {
+    //
+    // this.$refs.provider.setErrors(this.$attrs.errors);
+    console.log(this.$props);
+  },
+  methods: {
+    classes(required: boolean) {
       return {
+        required,
+        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
+        'v-input--dense-x': VuePropHelper.toBoolean(this.denseX),
         'v-input--tooltip-details': this.isEnabledTooltipMessage,
       };
     },
-    internalClearable(): boolean {
-      return this.clearable && !this.readonly;
+    props(errors: string[]) {
+      const defaults: ComponentProps = {
+        //
+      };
+      const attrs: ComponentProps = {
+        ...defaults,
+        ...this.attrs,
+      };
+      const overrides: ComponentProps = {
+        clearable: VuePropHelper.toBoolean(attrs.clearable) && !VuePropHelper.toBoolean(attrs.readonly),
+        dense: VuePropHelper.toBoolean(attrs.dense) || VuePropHelper.toBoolean(this.denseX),
+        errorMessages: this.mergeErrorMessages(errors),
+        hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
+      };
+      return {
+        ...attrs,
+        ...overrides,
+      };
     },
-    internalHideDetails(): string | boolean {
-      return this.isEnabledTooltipMessage ? 'auto' : this.hideDetails;
+    onUpdateError(errors: string[]) {
+      this.$emit('update:error-messages', errors);
     },
-    isEnabledTooltipMessage(): boolean {
-      return this.hideDetails === 'tooltip';
+    onFocusLabel() {
+      this.isLazing = false;
+      this.$nextTick(() => {
+        this.$refs.field.focus();
+        this.$refs.provider.setErrors(this.xErrors);
+      });
     },
-  },
-  mounted(): void {
-    this.$el.addEventListener('mouseenter', () => {
-      this.hovered = true;
-    });
-    this.$el.addEventListener('mouseleave', () => {
-      this.hovered = false;
-    });
-  },
-  methods: {
-    onBlur(): void {
-      this.focused = false;
-    },
-    onChange(val: any): void {
-      if (this.lazy) {
-        this.$emit('input:value', val);
-      }
-    },
-    onFocus(): void {
-      this.focused = true;
-    },
-    onInput(val: any): void {
-      if (!this.lazy) {
-        this.$emit('input:value', val);
-      }
+    onBlurInput() {
+      this.xErrors = [...this.$refs.provider.errors];
+      this.isLazing = true;
     },
   },
 });
 </script>
 
 <template>
-  <validation-provider v-slot="{ errors, failed, required }" v-bind="veeProviderProps">
-    <v-text-field ref="field" v-bind="$attrs" :class="{ ...classes, required, 'required-marker': required && !disabledRequiredMarker }" :clearable="internalClearable" :disabled="disabled" :error-messages="errors" :hide-details="internalHideDetails" :label="label" :readonly="readonly" v-on="$listeners" @blur="onBlur" @change="onChange" @focus="onFocus" @input="onInput">
+  <app-text-style-label v-if="lazyRendering && isLazing" v-bind="{ ...$attrs, ...$props }" @focus="onFocusLabel" />
+  <validation-provider v-else ref="provider" v-slot="{ errors, failed, required }" v-bind="validationProviderProps">
+    <v-text-field ref="field" v-bind="props(errors)" :class="classes(required)" v-on="$listeners" @blur="onBlurInput" @update:error="onUpdateError(errors)">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
       <template v-if="failed && isEnabledTooltipMessage" #append-outer>
         <v-icon color="error" small>
-          {{ icons.mdiAlertCircleOutline }}
+          {{ validationErrorIcon }}
         </v-icon>
         <slot name="append-outer" />
       </template>
       <template v-if="isEnabledTooltipMessage" #message="scope">
-        <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="focused || hovered">
+        <v-tooltip v-if="focused" :activator="$refs.field" :open-on-hover="false" top>
+          {{ scope.message }}
+        </v-tooltip>
+        <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="hovered">
           {{ scope.message }}
         </v-tooltip>
         <slot v-bind="scope" name="message" />

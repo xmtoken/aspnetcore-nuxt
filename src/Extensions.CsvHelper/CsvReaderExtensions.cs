@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace AspNetCoreNuxt.Extensions.CsvHelper
 {
+    // TODO:check
+
     /// <summary>
     /// <see cref="CsvReader"/> クラスの拡張機能を提供します。
     /// </summary>

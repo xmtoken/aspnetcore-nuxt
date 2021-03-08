@@ -1,47 +1,58 @@
 <script lang="ts">
 import dayjs from 'dayjs';
-import Vue, { VueConstructor } from 'vue';
 import { VDatePicker } from 'vuetify/src/components';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { VueBuilder } from '~/core/vue';
+import { Slotable } from '~/mixins/slotable';
 
-const $refs = Vue as VueConstructor<
-  Vue & {
-    $refs: {
-      picker: InstanceType<typeof VDatePicker>;
-    };
-  }
->;
+type ComponentProps = Record<string, any> & {
+  dayFormat?: (val: string) => string;
+  locale?: string;
+};
 
-export default mixins($refs, slotable).extend({
+type ComponentRefs = {
+  picker: InstanceType<typeof VDatePicker>;
+};
+
+const Vue = VueBuilder.create() //
+  .$attrs<ComponentProps>()
+  .$refs<ComponentRefs>()
+  .mixin(Slotable)
+  .build();
+
+export default Vue.extend({
   inheritAttrs: false,
-  props: {
-    dayFormat: {
-      default(val: string): string {
-        return dayjs(val).date().toString();
-      },
-      type: Function,
-    },
-    locale: {
-      default: 'ja',
-      type: String,
-    },
-  },
   computed: {
     activePicker: {
-      get(): string {
+      get() {
         return this.$refs.picker.activePicker;
       },
-      set(val: string): void {
+      set(val: string) {
         this.$refs.picker.activePicker = val;
       },
+    },
+    props() {
+      const defaults: ComponentProps = {
+        dayFormat: val => dayjs(val).date().toString(),
+        locale: 'ja',
+      };
+      const attrs: ComponentProps = {
+        ...defaults,
+        ...this.attrs,
+      };
+      const overrides: ComponentProps = {
+        //
+      };
+      return {
+        ...attrs,
+        ...overrides,
+      };
     },
   },
 });
 </script>
 
 <template>
-  <v-date-picker ref="picker" v-bind="$attrs" :day-format="dayFormat" :locale="locale" v-on="$listeners">
+  <v-date-picker ref="picker" v-bind="props" v-on="$listeners">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />

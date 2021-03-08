@@ -14,6 +14,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         public PostalCodeValidator()
             : base("{PropertyName}はハイフン区切りの数字7文字で入力してください。")
         {
+            //PropertyValidator<string, string> a;
         }
 
         /// <summary>

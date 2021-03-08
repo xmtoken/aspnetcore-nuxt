@@ -1,82 +1,82 @@
 <script lang="ts">
 import '~/components/AppInput/AppInput.scss';
-import { mdiAlertCircleOutline } from '@mdi/js';
 import { ValidationProvider } from 'vee-validate';
-import mixins from '~/extensions/mixins';
-import iconTabIndexable from '~/mixins/icon-tab-indexable';
-import requiredMarkable from '~/mixins/required-markable';
-import slotable from '~/mixins/slotable';
-import validationProviderProps from '~/mixins/validation-provider-props';
+import { VueBuilder, VuePropHelper } from '~/core/vue';
+import { Clearable, ClearableProps } from '~/mixins/clearable';
+import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
+import { InputableProps } from '~/mixins/inputable';
+import { RequiredMarkable } from '~/mixins/required-markable';
+import { Slotable } from '~/mixins/slotable';
+import { UIElementState } from '~/mixins/ui-element-state';
+import { Validatable } from '~/mixins/validatable';
 
-export default mixins(iconTabIndexable, requiredMarkable, slotable, validationProviderProps).extend({
+type ComponentProps = Record<string, any> &
+  ClearableProps &
+  InputableProps & {
+    returnObject?: boolean;
+  };
+
+type ComponentRefs = {
+  field: Element;
+};
+
+const Vue = VueBuilder.create() //
+  .$attrs<ComponentProps>()
+  .$refs<ComponentRefs>()
+  .mixin(Clearable)
+  .mixin(IconTabIndexable)
+  .mixin(RequiredMarkable)
+  .mixin(Slotable)
+  .mixin(UIElementState)
+  .mixin(Validatable)
+  .build();
+
+export default Vue.extend({
   components: {
     ValidationProvider,
   },
   inheritAttrs: false,
-  props: {
-    clearable: {
-      default: false,
-      type: Boolean,
-    },
-    hideDetails: {
-      default: false,
-      type: [String, Boolean],
-    },
-  },
-  data() {
-    return {
-      focused: false,
-      hovered: false,
-      icons: {
-        mdiAlertCircleOutline,
-      },
-    };
-  },
   computed: {
-    classes(): object {
+    props() {
+      const defaults: ComponentProps = {
+        returnObject: false,
+      };
+      const attrs: ComponentProps = {
+        ...defaults,
+        ...this.attrs,
+      };
+      const overrides: ComponentProps = {
+        clearable: VuePropHelper.toBoolean(attrs.clearable) && !VuePropHelper.toBoolean(attrs.readonly),
+        hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
+      };
       return {
-        'v-input--tooltip-details': this.isEnabledTooltipMessage,
+        ...attrs,
+        ...overrides,
       };
     },
-    internalClearable(): boolean {
-      return this.clearable && !this.readonly;
-    },
-    internalHideDetails(): string | boolean {
-      return this.isEnabledTooltipMessage ? 'auto' : this.hideDetails;
-    },
-    isEnabledTooltipMessage(): boolean {
-      return this.hideDetails === 'tooltip';
-    },
-  },
-  mounted(): void {
-    this.$el.addEventListener('mouseenter', () => {
-      this.hovered = true;
-    });
-    this.$el.addEventListener('mouseleave', () => {
-      this.hovered = false;
-    });
   },
   methods: {
-    onBlur(): void {
-      this.focused = false;
-    },
-    onFocus(): void {
-      this.focused = true;
+    classes(required: boolean) {
+      return {
+        required,
+        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
+        'v-input--tooltip-details': this.isEnabledTooltipMessage,
+      };
     },
   },
 });
 </script>
 
 <template>
-  <validation-provider v-slot="{ errors, failed, required }" v-bind="veeProviderProps">
-    <v-combobox ref="field" v-bind="$attrs" :class="{ ...classes, required, 'required-marker': required && !disabledRequiredMarker }" :clearable="internalClearable" :disabled="disabled" :error-messages="errors" :hide-details="internalHideDetails" :label="label" :readonly="readonly" v-on="$listeners" @blur="onBlur" @focus="onFocus">
+  <validation-provider v-slot="{ errors, failed, required }" v-bind="validationProviderProps">
+    <v-combobox ref="field" v-bind="props" :class="classes(required)" :error-messages="errors" v-on="$listeners">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
       <template v-if="failed && isEnabledTooltipMessage" #append-outer>
         <v-icon color="error" small>
-          {{ icons.mdiAlertCircleOutline }}
+          {{ validationErrorIcon }}
         </v-icon>
         <slot name="append-outer" />
       </template>

@@ -1,11 +1,15 @@
-import Vue from 'vue';
+import { VueBuilder } from '~/core/vue';
 
-export default Vue.extend({
+const Vue = VueBuilder.create() //
+  .build();
+
+export const Slotable = Vue.extend({
   computed: {
-    scopedSlotKeys(): string[] {
-      return Object.keys(this.$scopedSlots).filter(key => !this.slotKeys.includes(key));
+    scopedSlotKeys() {
+      const slotKeys: string[] = this.slotKeys;
+      return Object.keys(this.$scopedSlots).filter(key => !slotKeys.includes(key));
     },
-    slotKeys(): string[] {
+    slotKeys() {
       return Object.keys(this.$slots);
     },
   },

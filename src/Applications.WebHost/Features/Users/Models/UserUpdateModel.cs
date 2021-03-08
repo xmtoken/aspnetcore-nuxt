@@ -10,23 +10,23 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Models
     public class UserUpdateModel
     {
         /// <summary>
-        /// メールアドレスを取得または設定します。
+        /// メールアドレスを取得します。
         /// </summary>
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; private set; }
 
         /// <summary>
-        /// 生年月日を取得または設定します。
+        /// 生年月日を取得します。
         /// </summary>
-        public DateTime? Birthday { get; set; }
+        public DateTime? Birthday { get; private set; }
 
         /// <summary>
-        /// 性別を取得または設定します。
+        /// 性別を取得します。
         /// </summary>
-        public Gender? Gender { get; set; }
+        public Gender? Gender { get; private set; }
 
         /// <summary>
-        /// ロールのコレクションを取得または設定します。
+        /// ロールのコレクションを取得します。
         /// </summary>
-        public IEnumerable<int> Roles { get; set; }
+        public IEnumerable<int> Roles { get; private set; }
     }
 }

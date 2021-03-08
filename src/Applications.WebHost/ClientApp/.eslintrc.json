@@ -1,17 +1,9 @@
 {
   "root": true,
   "ignorePatterns": [
-    //
-    "/**/node_modules/**",
-    ".eslintrc.*",
-    ".prettierrc.*",
-    ".stylelintrc.*"
+    "/node_modules/"
   ],
-  "parserOptions": {
-    // "parser": "babel-eslint",
-  },
   "extends": [
-    //
     "@nuxtjs/eslint-config-typescript",
     "eslint:recommended",
     "plugin:import/warnings",
@@ -20,9 +12,28 @@
     "plugin:vue/recommended",
     "plugin:prettier/recommended"
   ],
+  "globals": {
+    "nameof": "readonly"
+  },
   "plugins": ["vue"],
   "rules": {
+    // "@typescript-eslint/array-type": ["error"],
     // "@typescript-eslint/explicit-function-return-type": ["error"],
+    // "@typescript-eslint/naming-convention": [
+    //   "error",
+    //   {
+    //     "format": ["camelCase"],
+    //     "selector": "memberLike"
+    //   },
+    //   {
+    //     "format": ["PascalCase"],
+    //     "selector": "typeLike"
+    //   },
+    //   {
+    //     "format": ["camelCase", "UPPER_CASE"],
+    //     "selector": "variableLike"
+    //   }
+    // ],
     "import/newline-after-import": ["error", { "count": 1 }],
     "import/no-unresolved": "off",
     "import/order": [
@@ -42,10 +53,19 @@
       }
     ],
     "no-var": ["error"],
+    "sort-imports": ["error", {
+      "ignoreDeclarationSort": true
+    }],
     "vue/attributes-order": ["error", { "alphabetical": true }],
     "vue/component-tags-order": ["error"],
     "vue/html-self-closing": ["error", { "html": { "void": "always" } }],
-    "vue/max-attributes-per-line": ["off"], // for prettier : https://github.com/prettier/prettier/pull/6644
+    "vue/max-attributes-per-line": ["off", {
+      "singleline": 1,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": true
+      }
+    }], // for prettier : https://github.com/prettier/prettier/pull/6644
     "vue/order-in-components": [
       "error",
       {
@@ -67,6 +87,7 @@
           "mixins",
           "inheritAttrs",
           "model",
+          "inject",
           "props",
           "propsData",
           "validate", // for nuxt

@@ -24,7 +24,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         protected override bool IsValid(PropertyValidatorContext context)
         {
             var value = context.PropertyValue as DateTime?;
-            return value == null || value.Value < DateTime.Today;
+            return value.HasValue && value.Value < DateTime.Today;
         }
     }
 }

@@ -42,13 +42,12 @@ namespace AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel
         /// <param name="disposing">マネージドリソースを開放する場合は true。それ以外の場合は false。</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (Disposed)
+            if (!Disposed)
             {
-                return;
-            }
-            if (disposing)
-            {
-                WorkbookInstance.Dispose();
+                if (disposing)
+                {
+                    WorkbookInstance.Dispose();
+                }
             }
             Disposed = true;
         }

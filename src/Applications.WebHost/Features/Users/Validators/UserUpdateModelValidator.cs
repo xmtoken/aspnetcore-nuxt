@@ -23,10 +23,11 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Users.Validators
         /// </summary>
         /// <param name="context"><see cref="AppDbContext"/> オブジェクト。</param>
         /// <param name="httpContextAccessor"><see cref="IHttpContextAccessor"/> オブジェクト。</param>
-        /// <param name="metadata"><see cref="IEntityMetadataProvider"/> オブジェクト。</param>
-        public UserUpdateModelValidator(AppDbContext context, IHttpContextAccessor httpContextAccessor, IEntityMetadataProvider metadata)
+        /// <param name="metadata"><see cref="IEntityMetadataProvider{TContext}"/> オブジェクト。</param>
+        public UserUpdateModelValidator(AppDbContext context, IHttpContextAccessor httpContextAccessor, IEntityMetadataProvider<AppDbContext> metadata)
         {
-            var id = httpContextAccessor.HttpContext.Request.RouteValues.GetValue<int>("id");
+            var id = 0;
+            //var id = httpContextAccessor.HttpContext.Request.RouteValues.GetValue<int>("id");
 
             RuleFor(x => x)
                 .ChildRules(validator =>

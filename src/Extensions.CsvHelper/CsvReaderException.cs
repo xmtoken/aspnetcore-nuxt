@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace AspNetCoreNuxt.Extensions.CsvHelper
 {
+    // TODO:check
+
     /// <summary>
     /// CSV ファイル読み込み時のエラー情報を表します。
     /// </summary>

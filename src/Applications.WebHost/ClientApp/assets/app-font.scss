@@ -34,6 +34,14 @@
           top: 4px;
         }
       }
+
+      &.v-input--dense {
+        &.v-text-field {
+          label.v-label {
+            top: 2px;
+          }
+        }
+      }
     }
 
     .v-list-item {

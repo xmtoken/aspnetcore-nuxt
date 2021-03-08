@@ -1,9 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
-    "build": "nuxt-ts build",
-    "start": "nuxt-ts start",
+    "dev": "cross-env ENVIRONMENT=development nuxt-ts",
+    "build": "cross-env ENVIRONMENT=development nuxt-ts build",
+    "build-staging": "cross-env ENVIRONMENT=staging nuxt-ts build",
+    "start-staging": "cross-env ENVIRONMENT=staging nuxt-ts start",
+    "build-production": "cross-env ENVIRONMENT=production nuxt-ts build",
+    "start-production": "cross-env ENVIRONMENT=production nuxt-ts start",
     "lint": "npm-run-all -c lint:*",
     "lint:es": "eslint --ignore-path ../../../.gitignore **/*.{ts,vue}",
     "lint:style": "stylelint --ignore-path ../../../.gitignore **/*.{scss,vue}",

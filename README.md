@@ -1,60 +1,35 @@
-# aspnetcore-nuxt
+# README
 
-## 開発環境
-
-ランタイムとして、`.NET Core 3.1.7+` と `Node.js 12.16.2+` のインストールが必要です。
-IDE は `Visual Studio Code 1.45.1+` を利用します。
-高度な IDE サポートを望む場合は、C# の開発に `Visual Studio 16.5.5+` を利用できます。
-
-## アプリケーションの実行
-
-1. データベースへの接続情報を以下のファイルへ設定します。
-   ```
-   ~/src/Applications.WebHost/appsettings.Development.json
-   ~/src/Domains.Data.Design/appsettings.json
-   ```
-2. dotnet tool をインストールします。
-   ```
-   dotnet tool restore
-   ```
-3. ASP.NET Core HTTPS 開発証明書をインストールします。
-   ```
-   dotnet dev-certs https --trust
-   ```
-4. npm module をインストールします。
-   ```
-   npm ci --prefix src/Applications.WebHost/ClientApp
-   ```
-5. データベースを構成していない、もしくは構成が古い場合はマイグレーションします。
-   ```
-   dotnet ef database update -p src/Domains.Data.Design
-   ```
-6. Nuxt.js を <http://localhost:3000> でホスティングします。
-   ```
-   npm run dev --prefix src/Applications.WebHost/ClientApp
-   ```
-7. ASP.NET Core を <https://localhost:5001> でホスティングします。
-   ```
-   dotnet run -p src/Applications.WebHost
-   ```
-
-## アプリケーションの修正
-
-### VSCode
-
-VSCode でフォルダーを開くと開発に必要な拡張機能が reccomend されます。
-インテリセンスや Linter のサポートを受けるために、すべての拡張機能をインストールする必要があります。
-reccomend の一覧は `~/.vscode/extensions.json` で確認できます。
-
-### Nuxt.js
-
-Nuxt.js はインテリセンスや Linter のサポートを受けるために VisualStudio ではなく VSCode で開発してください。
-また、VSCode で開くフォルダーはプロジェクト直下ではなく、`~/src/Applications.WebHost/ClientApp` フォルダーを開いてください。
-違う階層を基準に開いた場合は、vetur によるインテリセンスのサポートを受けれません。
-
-## その他
-
-+ [Architecture](docs/Architecture.md)
-+ [Coding Guideline](docs/CodingGuideline.md)
-+ [OSS License](docs/OssLicense.md)
-+ [Versioning](docs/Versioning.md)
+1. アーキテクチャ概要
+   1. [技術スタック](docs/Architecture/TechnologyStack.md)
+2. バックエンドの実装
+   1. [プロジェクトの構成](docs/Backend/ProjectStructure.md)
+   2. [コーディング規約](docs/Backend/CodingRule.md)
+   3. ドメイン層の実装
+      1. [エンティティの実装](docs/Backend/Domain/ImplementEntity.md)
+      2. [データモデルのマイグレーション](docs/Backend/Domain/Migration.md)
+   4. インフラストラクチャ層の実装
+   5. アプリケーション層の実装
+      1. [API の実装](docs/Backend/Application/ImplementApi.md)
+         1. [GET API の実装](docs/Backend/Application/ImplementGetApi.md)
+         2. [POST API の実装](docs/Backend/Application/ImplementPostApi.md)
+         3. [PATCH API の実装](docs/Backend/Application/ImplementPatchApi.md)
+         4. [DELETE API の実装](docs/Backend/Application/ImplementDeleteApi.md)
+      2. [Source Generator による API の自動実装](docs/Backend/Application/ImplementSourceGenerator.md)
+      3. [排他制御](docs/Backend/Application/ConcurrencyToken.md)
+      4. [検証ロジック](docs/Backend/Application/Validation.md)
+      5. [メッセージ管理]
+   6. オーケストレーション層の実装
+   7. ロギング
+   8. Swagger UI
+   9. NSwag.MSBuild による API I/F の自動実装
+3. フロントエンドの実装
+   1. [プロジェクトの構成](docs/Frontend/ProjectStructure.md)
+   2. コーディング規約
+   3. レイアウト
+   4. API 要求
+      1. GET API 要求
+      2. POST API 要求
+      3. PATCH API 要求
+      4. DELETE API 要求
+   5. 検証ロジック

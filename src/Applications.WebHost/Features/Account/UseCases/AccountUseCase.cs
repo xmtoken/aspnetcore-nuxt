@@ -6,7 +6,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Account.UseCases
     /// <summary>
     /// アカウントに関するユースケースを表します。
     /// </summary>
-    public partial class AccountUseCase : IApplicationService
+    public partial class AccountUseCase : IDependencyInjectionService
     {
         /// <summary>
         /// <see cref="AppDbContext"/> オブジェクトを表します。

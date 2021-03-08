@@ -1,4 +1,9 @@
 table {
+  thead tr th,
+  tbody tr td {
+    transition: left 0.2s, min-width 0.2s, padding 0.2s, right 0.2s !important;
+  }
+
   thead tr th.invisible,
   tbody tr td.invisible {
     border: none !important;

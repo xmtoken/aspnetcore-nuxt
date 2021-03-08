@@ -9,11 +9,12 @@
     <ProjectPrefixName>AspNetCoreNuxt</ProjectPrefixName>
   </PropertyGroup>
   <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyName>$(ProjectPrefixName).$(MSBuildProjectName)</AssemblyName>
-    <CodeAnalysisRuleSet>..\Directory.Analyzers.ruleset</CodeAnalysisRuleSet>
     <Deterministic>true</Deterministic>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
+    <NoWarn>$(NoWarn);CA1014</NoWarn>
     <RootNamespace>$(ProjectPrefixName).$(MSBuildProjectName)</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>

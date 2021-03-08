@@ -2,6 +2,7 @@
 import Vue from 'vue';
 
 export default Vue.extend({});
+//
 </script>
 
 <template>
@@ -12,8 +13,8 @@ export default Vue.extend({});
       </v-toolbar-title>
     </v-app-bar>
     <app-navigation-drawer />
-    <v-main>
-      <v-container id="container" fluid>
+    <v-main style="max-height: 100vh;">
+      <v-container id="container" class="align-start fill-height" fluid>
         <nuxt />
       </v-container>
     </v-main>

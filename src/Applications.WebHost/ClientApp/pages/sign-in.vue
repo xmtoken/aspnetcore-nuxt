@@ -92,8 +92,8 @@ export default mixins($refs).extend({
           <v-form autocomplete="off" @submit.prevent="signin">
             <v-card outlined width="360">
               <v-card-text>
-                <app-username-field v-model="credentials.userName" autocomplete="username" :disabled="loadings.signin" disabled-required-marker label="ユーザー名" :prepend-inner-icon="icons.userName" vee-rules="required" vee-vid="userName" />
-                <app-password-field v-model="credentials.password" autocomplete="current-password" :disabled="loadings.signin" disabled-required-marker label="パスワード" :prepend-inner-icon="icons.password" vee-rules="required" vee-vid="password" />
+                <app-text-username-field v-model="credentials.userName" autocomplete="username" :disabled="loadings.signin" disabled-required-marker label="ユーザー名" :prepend-inner-icon="icons.userName" vee-rules="required" vee-vid="userName" />
+                <app-text-password-field v-model="credentials.password" autocomplete="current-password" :disabled="loadings.signin" disabled-required-marker label="パスワード" :prepend-inner-icon="icons.password" vee-rules="required" vee-vid="password" />
               </v-card-text>
               <v-card-actions class="pb-4 pt-0 px-4">
                 <v-btn block color="primary" depressed :disabled="loadings.signin" :loading="loadings.signin" type="submit">

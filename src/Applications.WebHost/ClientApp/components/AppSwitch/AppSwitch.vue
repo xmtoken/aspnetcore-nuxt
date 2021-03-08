@@ -1,12 +1,31 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
-import { PropType } from 'vue';
-import mixins from '~/extensions/mixins';
-import requiredMarkable from '~/mixins/required-markable';
-import slotable from '~/mixins/slotable';
-import validationProviderProps from '~/mixins/validation-provider-props';
+import { PropValidator } from 'vue/types/options';
+import { deepEqual } from 'vuetify/src/util/helpers';
+import { VueBuilder, VuePropHelper } from '~/core/vue';
+import { InputableProps } from '~/mixins/inputable';
+import { RequiredMarkable } from '~/mixins/required-markable';
+import { Slotable } from '~/mixins/slotable';
+import { UIElementState } from '~/mixins/ui-element-state';
+import { Validatable } from '~/mixins/validatable';
 
-export default mixins(requiredMarkable, slotable, validationProviderProps).extend({
+type ComponentProps = Record<string, any> &
+  InputableProps & {
+    falseValue?: any;
+    inputValue?: any;
+    trueValue?: any;
+    valueComparator?: typeof deepEqual;
+  };
+
+const Vue = VueBuilder.create() //
+  .$attrs<ComponentProps>()
+  .mixin(RequiredMarkable)
+  .mixin(Slotable)
+  .mixin(UIElementState)
+  .mixin(Validatable)
+  .build();
+
+export default Vue.extend({
   components: {
     ValidationProvider,
   },
@@ -16,44 +35,73 @@ export default mixins(requiredMarkable, slotable, validationProviderProps).exten
     prop: 'inputValue',
   },
   props: {
-    falseValue: {
-      default: false,
-      type: (null as any) as PropType<any>,
-    },
-    inputValue: {
-      default: undefined,
-      type: (null as any) as PropType<any>,
-    },
     mandatory: {
       default: true,
       type: Boolean,
     },
-    trueValue: {
-      default: true,
-      type: (null as any) as PropType<any>,
+    valueConverter: {
+      default: undefined,
+      type: Function,
+    } as PropValidator<(val: any) => any>,
+  },
+  data() {
+    return {
+      value: null as any,
+    };
+  },
+  computed: {
+    props() {
+      const defaults: ComponentProps = {
+        falseValue: false,
+        trueValue: true,
+        valueComparator: deepEqual,
+      };
+      const attrs: ComponentProps = {
+        ...defaults,
+        ...this.attrs,
+      };
+      const overrides: ComponentProps = {
+        hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
+      };
+      delete attrs[this.$options.model!.prop!];
+      return {
+        ...attrs,
+        ...overrides,
+      };
     },
   },
   watch: {
-    inputValue: {
-      handler(): void {
-        this.updateMandatory();
+    'props.inputValue': {
+      handler(val: any, _oldVal: any) {
+        const value = this.valueConverter ? this.valueConverter(val) : val;
+        if (VuePropHelper.toBoolean(this.mandatory)) {
+          const isValid = this.props.valueComparator!(value, this.props.falseValue) || this.props.valueComparator!(value, this.props.trueValue);
+          this.value = isValid ? value : this.props.falseValue;
+        } else {
+          this.value = value;
+        }
+        if (val !== this.value) {
+          this.$emit(this.$options.model!.event!, this.value);
+        }
       },
       immediate: true,
     },
   },
   methods: {
-    updateMandatory(): void {
-      if (this.mandatory && this.inputValue !== this.falseValue && this.inputValue !== this.trueValue) {
-        this.$emit('change', this.falseValue);
-      }
+    classes(required: boolean) {
+      return {
+        required,
+        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
+        'v-input--tooltip-details': this.isEnabledTooltipMessage,
+      };
     },
   },
 });
 </script>
 
 <template>
-  <validation-provider v-slot="{ errors, required }" v-bind="veeProviderProps">
-    <v-switch v-bind="$attrs" :class="{ required, 'required-marker': required && !disabledRequiredMarker }" :disabled="disabled" :error-messages="errors" :false-value="falseValue" :input-value="inputValue" :label="label" :readonly="readonly" :true-value="trueValue" v-on="$listeners">
+  <validation-provider v-slot="{ errors, required }" v-bind="validationProviderProps">
+    <v-switch v-bind="props" :class="classes(required)" :error-messages="errors" :input-value="value" v-on="$listeners">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />

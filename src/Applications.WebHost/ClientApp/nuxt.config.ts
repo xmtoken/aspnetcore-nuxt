@@ -1,4 +1,7 @@
 import { NuxtConfig } from '@nuxt/types';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: `.env.${process.env.ENVIRONMENT}` });
 
 const config: NuxtConfig = {
   // typescript: {
@@ -32,7 +35,7 @@ const config: NuxtConfig = {
     ],
     meta: [
       { charset: 'utf-8' },
-      { 'http-equiv': 'x-ua-compatible', content: 'ie=edge' },
+      { httpEquiv: 'x-ua-compatible', content: 'ie=edge' },
       { name: 'description', content: '' },
       { name: 'format-detection', content: 'address=no,email=no,telephone=no' },
       { name: 'referrer', content: 'no-referrer' },
@@ -40,7 +43,7 @@ const config: NuxtConfig = {
       { name: 'viewport', content: 'width=device-width' },
     ],
     titleTemplate(title) {
-      return title ? `${title} - AspNetCoreNuxt` : 'AspNetCoreNuxt';
+      return title ? `${title} - AspNetCoreNuxt` : process.env.ROUTER_BASE + 'AspNetCoreNuxt';
     },
   },
   modules: [
@@ -49,10 +52,12 @@ const config: NuxtConfig = {
   ],
   plugins: [
     '~/plugins/axios',
+    '~/plugins/error-handler',
     '~/plugins/string-format',
     '~/plugins/vee-validate',
   ],
   router: {
+    base: process.env.ROUTER_BASE,
     middleware: [
       'versioning',
       'auth',
@@ -82,7 +87,7 @@ const config: NuxtConfig = {
     },
   },
   axios: {
-    baseURL: '/api',
+    baseURL: `${process.env.ROUTER_BASE}/api`,
   },
   vuetify: {
     breakpoint: {

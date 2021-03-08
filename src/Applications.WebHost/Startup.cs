@@ -1,12 +1,15 @@
 using AspNetCoreNuxt.Applications.WebHost.Core.Mvc;
+using AspNetCoreNuxt.Applications.WebHost.Core.Profiles;
 using AspNetCoreNuxt.Domains.Data;
+using AspNetCoreNuxt.Extensions.AspNetCore.Mvc;
+using AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ApplicationModels;
+using AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ModelBinding;
 using AspNetCoreNuxt.Extensions.AspNetCore.Mvc.Versioning.Conventions;
 using AspNetCoreNuxt.Extensions.AspNetCore.Routing;
-using AspNetCoreNuxt.Extensions.CsvHelper.DependencyInjection;
 using AspNetCoreNuxt.Extensions.DependencyInjection;
 using AspNetCoreNuxt.Extensions.EntityFrameworkCore.Metadata;
+using AspNetCoreNuxt.Extensions.FluentValidation;
 using AspNetCoreNuxt.Extensions.FluentValidation.Resources;
-using AspNetCoreNuxt.Extensions.Identity;
 using AspNetCoreNuxt.Extensions.Newtonsoft.Json.Converters;
 using AspNetCoreNuxt.Extensions.NSwag.Generation.Processors;
 using AspNetCoreNuxt.Extensions.OpenXml.Abstractions.Excel;
@@ -14,6 +17,7 @@ using AspNetCoreNuxt.Infrastructures.OpenXml.ClosedXml.Excel;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using FluentValidation.Internal;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,17 +34,21 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using NJsonSchema.Annotations;
 using NSwag;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using static AspNetCoreNuxt.Applications.WebHost.Core.Profiles.EntityProfile;
 
 namespace AspNetCoreNuxt.Applications.WebHost
 {
@@ -63,21 +71,39 @@ namespace AspNetCoreNuxt.Applications.WebHost
             Configuration = configuration;
         }
 
+        public class NodaLocalDateTimeTypeConverter : TypeConverter
+        {
+            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            {
+                return sourceType == typeof(IEnumerable<string>) || sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+            }
+        }
+
         /// <summary>
         /// サービスを構成します。
         /// </summary>
         /// <param name="services"><see cref="IServiceCollection"/> オブジェクト。</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationServices<Startup>()
-                    .AddAutoMapper(typeof(Startup))
-                    .AddCsvHelper<Startup>()
-                    .AddEntityMetadataProvider<AppDbContext>()
-                    .AddEnumLabelProviders<Startup>();
+            services.AddScoped<IExpandoObjectFactory, ExpandoObjectFactory>();
+
+            services.AddDependencyInjectionServices<Startup>()
+                    .AddAutoMapper(
+                    (services, config) =>
+                    {
+                        //config.AddCollectionMappers();
+                        //config.UseEntityFrameworkCoreModel<AppDbContext>(context.Model);
+
+                        GenericEnumerableExpressionBinder.InsertTo(config.Advanced.QueryableBinders);
+                        using var scope = services.CreateScope();
+                        var context = scope.ServiceProvider.GetService<AppDbContext>();
+                        config.AddProfile(new EntityProfile(context));
+                    }, Array.Empty<Type>())
+                    .AddEntityMetadataProvider<AppDbContext>();
 
             services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
                     .AddSingleton<ILookupNormalizer, UpperInvariantLookupNormalizer>()
-                    .AddSingleton<IStringHasher, StringHasher>()
+                    //.AddSingleton<IStringHasher, StringHasher>()
                     .AddSingleton<IWorkbookFactory, WorkbookFactory>();
 
             services.AddHttpClient()
@@ -85,54 +111,104 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     .AddMemoryCache();
 
             services.AddDbContextPool<AppDbContext>(options =>
-            {
-                options.ConfigureWarnings(x =>
-                {
-                    x.Ignore(CoreEventId.SensitiveDataLoggingEnabledWarning);
-                });
-                options.EnableSensitiveDataLogging();
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.EnableRetryOnFailure());
-            });
+                    {
+                        options.ConfigureWarnings(x =>
+                        {
+                            x.Ignore(CoreEventId.SensitiveDataLoggingEnabledWarning);
+                        });
+                        options.EnableSensitiveDataLogging();
+                        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x => x.EnableRetryOnFailure());
+                    });
 
             services.AddHsts(options =>
-            {
-                options.IncludeSubDomains = true;
-                options.MaxAge = TimeSpan.FromDays(365);
-                options.Preload = true;
-            });
+                    {
+                        options.IncludeSubDomains = true;
+                        options.MaxAge = TimeSpan.FromDays(365);
+                        options.Preload = true;
+                    });
 
             services.AddOpenApiDocument(settings =>
-            {
-                settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
-                settings.DocumentProcessors.Add(new OpenApiSchemaProcessor<Startup>());
-                settings.Title = typeof(Startup).Namespace;
-                settings.AddOperationFilter(context =>
-                {
-                    if (context.MethodInfo.GetCustomAttribute<ApiVersionNeutralAttribute>() == null)
                     {
-                        context.OperationDescription.Operation.Parameters.Add(new OpenApiParameter()
+                        // https://github.com/RicoSuter/NSwag/issues/2632
+                        settings.DefaultEnumHandling = NJsonSchema.Generation.EnumHandling.String;
+
+                        // https://github.com/RicoSuter/NSwag/issues/2404#issuecomment-767649517
+                        var supportedTypes = new[]
                         {
-                            Kind = OpenApiParameterKind.Header,
-                            Name = "x-api-version",
-                            Default = AppApiVersion.Latest.ToVersion(),
+                            typeof(bool),
+                            typeof(byte),
+                            typeof(char),
+                            typeof(decimal),
+                            typeof(double),
+                            typeof(float),
+                            typeof(int),
+                            typeof(long),
+                            typeof(sbyte),
+                            typeof(short),
+                            typeof(string),
+                            typeof(uint),
+                            typeof(ulong),
+                            typeof(ushort),
+                            typeof(DateTime),
+                            typeof(Guid),
+                            typeof(TimeSpan),
+                        };
+                        foreach (var supportedType in supportedTypes)
+                        {
+                            var type = typeof(SearchConditions<>).MakeGenericType(supportedType);
+                            var attribute = new JsonSchemaTypeAttribute(typeof(IEnumerable<string>));
+                            //TypeDescriptor.AddAttributes(type, attribute);
+
+                            //TypeDescriptor.AddAttributes(type, new System.ComponentModel.ProvidePropertyAttribute("", typeof(string)));
+
+                        }
+
+                        settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
+                        settings.DocumentProcessors.Add(new OpenApiSchemaProcessor<Startup>());
+                        settings.Title = typeof(Startup).Namespace;
+                        settings.AddOperationFilter(context =>
+                        {
+                            if (context.MethodInfo.GetCustomAttribute<ApiVersionNeutralAttribute>() == null)
+                            {
+                                context.OperationDescription.Operation.Parameters.Add(new OpenApiParameter()
+                                {
+                                    Kind = OpenApiParameterKind.Header,
+                                    Name = "x-api-version",
+                                    Default = AppApiVersion.Latest.ToVersion(),
+                                });
+                            }
+                            return true;
                         });
-                    }
-                    return true;
-                });
-            });
+                    });
 
             services.AddRouting(options =>
-            {
-                options.LowercaseUrls = true;
-            });
+                    {
+                        options.LowercaseUrls = true;
+                    });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
                         options.Cookie.Name = "token";
+                        options.Cookie.HttpOnly = true;
+                        options.Cookie.SameSite = SameSiteMode.Lax;
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                         options.Events = new CookieAuthenticationEvents()
                         {
+                            // TODO:cookie name with port
+                            //OnSigningIn = context =>
+                            //{
+                            //    var port = context.Request.Host.Port;
+                            //    context.Options.Cookie.Name = port.HasValue ? $"token-{context.Request.Host.Port}" : "token";
+                            //    return Task.CompletedTask;
+                            //},
+                            //OnValidatePrincipal = context =>
+                            //{
+                            //    var port = context.Request.Host.Port;
+                            //    context.Options.Cookie.Name = port.HasValue ? $"token-{context.Request.Host.Port}" : "token";
+                            //    return Task.CompletedTask;
+                            //},
                             OnRedirectToLogin = context =>
                             {
                                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -149,25 +225,47 @@ namespace AspNetCoreNuxt.Applications.WebHost
             services.AddAuthorization();
 
             services.AddApiVersioning(options =>
-            {
-                options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
-                options.Conventions.Add(new InterleavingControllerConvention(ApiVersion.Default, typeof(Startup).Assembly));
-                options.DefaultApiVersion = ApiVersion.Default;
-                options.ReportApiVersions = true;
-            });
+                    {
+                        options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+                        options.Conventions.Add(new InterleavingControllerConvention(ApiVersion.Default, typeof(Startup).Assembly));
+                        options.DefaultApiVersion = ApiVersion.Default;
+                        options.ReportApiVersions = true;
+                    });
 
             services.AddControllers(options =>
-            {
-                options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
-            })
+                    {
+                        options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+                        options.ModelBinderProviders.AddQueryModelBinderProviders();
+                    })
                     .AddFluentValidation(config =>
                     {
+                        // https://github.com/FluentValidation/FluentValidation/issues/863#issuecomment-412996694
+                        // onにすればIEnumerableでルートの要素がvalidator実行される
+                        // しかしrulesetがとばない
+                        //config.ImplicitlyValidateRootCollectionElements = true;
+
                         config.RegisterValidatorsFromAssemblyContaining<Startup>();
                         config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
 #pragma warning disable CS0618
                         ValidatorOptions.Global.CascadeMode = CascadeMode.StopOnFirstFailure;
 #pragma warning restore CS0618
                         ValidatorOptions.Global.LanguageManager.AddJapaneseTranslations();
+
+                        // camelにすると[CustomizeValidator(Properties = "name")]が面倒
+                        // camelにしたのはネストインデックスのためだったか？
+                        // ネストのプロパティをキャメルにするため
+                        // CustomizeValidator[Rulesetでいくなら有効でよき
+                        ValidatorOptions.Global.PropertyNameResolver = CamelCaseNaming.PropertyNameResolver;
+
+                        // https://github.com/FluentValidation/FluentValidation/issues/374#issuecomment-268112662
+                        // 子バリデーターにrulesetを伝播させる
+                        ValidatorOptions.Global.ValidatorSelectors.RulesetValidatorSelectorFactory = rulesets =>
+                        {
+                            var rulesetIncludingDefaultFallbackForChildProperties =
+                            rulesets.Union(new[] { "default" }).ToArray();
+                            var rulesetValidatorSelector = new RulesetValidatorSelector(rulesetIncludingDefaultFallbackForChildProperties);
+                            return rulesetValidatorSelector;
+                        };
                     })
                     .AddNewtonsoftJson(options =>
                     {
@@ -182,7 +280,8 @@ namespace AspNetCoreNuxt.Applications.WebHost
                             },
                         };
                         options.SerializerSettings.Converters.Add(new EmptyStringToNullConverter());
-                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                        options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                        //options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     })
                     .ConfigureApiBehaviorOptions(options =>
                     {
@@ -190,9 +289,9 @@ namespace AspNetCoreNuxt.Applications.WebHost
                     });
 
             services.AddSpaStaticFiles(options =>
-            {
-                options.RootPath = "ClientApp/dist";
-            });
+                    {
+                        options.RootPath = "ClientApp/dist";
+                    });
         }
 
         /// <summary>
@@ -224,21 +323,6 @@ namespace AspNetCoreNuxt.Applications.WebHost
                 options.SupportedUICultures = new[] { new CultureInfo("ja") };
             });
 
-            app.Use(async (context, next) =>
-            {
-                var scheme = context.Request.Scheme.ToUpperInvariant();
-                var address = context.Connection.RemoteIpAddress;
-                var username = context.User.Identity.Name;
-                var useragent = context.Request.Headers["User-Agent"].ToString();
-                Log.Logger.Information($"Connected {scheme} from {address} by {username} via {useragent}");
-
-                var headers = context.Request.Headers.Where(x => x.Key != "Cookie" && x.Key != "User-Agent" && x.Key != ":method" && x.Key != ":path");
-                var values = string.Join(',', headers.Select(x => $"{x.Key}:{x.Value}"));
-                Log.Logger.Information($"Requested {values}");
-
-                await next();
-            });
-
             app.UseSerilogRequestLogging(options =>
             {
                 options.GetLevel = (context, elapsed, ex) => LogEventLevel.Information;
@@ -248,6 +332,21 @@ namespace AspNetCoreNuxt.Applications.WebHost
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.Use(async (context, next) =>
+            {
+                var scheme = context.Request.Scheme.ToUpperInvariant();
+                var address = context.Connection.RemoteIpAddress;
+                var username = context.User.Identity.Name;
+                var useragent = context.Request.Headers["User-Agent"].ToString();
+                Log.Logger.Information($"Connected {scheme} from {address} by {username} via {useragent}");
+
+                var headers = context.Request.Headers.Where(x => x.Key != "Cookie" && x.Key != "User-Agent" && x.Key != ":method" && x.Key != ":path");
+                var values = string.Join(',', headers.Select(x => $"`{x.Key}:{x.Value}`"));
+                Log.Logger.Information($"Requested {values}");
+
+                await next();
+            });
 
             app.UseAuthorization();
 

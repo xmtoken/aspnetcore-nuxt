@@ -129,9 +129,10 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Validators
         private static IRuleBuilder<T, TProperty> SetScalePrecisionValidator<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IProperty property)
         {
             var precision = property.GetPrecision();
+            var scale = property.GetScale();
             if (precision.HasValue)
             {
-                return ruleBuilder.ScalePrecision(precision.Value.Scale, precision.Value.Precision);
+                //return ruleBuilder.ScalePrecision(scale ?? 0, precision.Value);
             }
             return ruleBuilder;
         }

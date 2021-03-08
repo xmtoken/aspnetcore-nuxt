@@ -1,12 +1,16 @@
 <script lang="ts">
 import numbro from 'numbro';
 import { PropType } from 'vue';
+import { VueBuilder } from '~/core/vue';
 import * as NumberFormatter from '~/extensions/formatters/number-formatter';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { Slotable } from '~/mixins/slotable';
 import { Listeners } from '~/types/vue';
 
-export default mixins(slotable).extend({
+const Vue = VueBuilder.create() //
+  .mixin(Slotable)
+  .build();
+
+export default Vue.extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',

@@ -7,7 +7,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Roles.UseCases
     /// <summary>
     /// ロールに関するユースケースを表します。
     /// </summary>
-    public partial class RolesUseCase : IApplicationService
+    public partial class RolesUseCase : IDependencyInjectionService
     {
         /// <summary>
         /// <see cref="AppDbContext"/> オブジェクトを表します。

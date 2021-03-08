@@ -1,6 +1,10 @@
-using AspNetCoreNuxt.Applications.WebHost.Core.Entities;
+using AspNetCoreNuxt.Domains.Data;
 using AutoMapper;
+using AutoMapper.Internal;
+using AutoMapper.QueryableExtensions;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace AspNetCoreNuxt.Applications.WebHost.Core.Profiles
 {
@@ -12,40 +16,62 @@ namespace AspNetCoreNuxt.Applications.WebHost.Core.Profiles
         /// <summary>
         /// <see cref="EntityProfile"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public EntityProfile()
+        public EntityProfile(AppDbContext context)
         {
-            foreach (var entityType in typeof(Startup).Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract))
+            foreach (var entityType in context.Model.GetEntityTypes())
             {
-                var entityInterfaces = entityType.GetInterfaces();
-                var entityInterface = entityInterfaces.SingleOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntity<>));
-                if (entityInterface == null)
-                {
-                    continue;
-                }
-
-                // データモデルのエンティティから API で公開するモデルへのマッピングを構成します。
-                CreateMap(entityInterface.GenericTypeArguments[0], entityType)
-                    .ForAllMembers(x =>
-                    {
-                        // ネストされたオブジェクトのプロパティをキーとしてクエリのソートを行う場合に、
-                        // 生成される式ツリーへ null チェック処理が挟まることによるクエリ変換の失敗を防ぎます。
-                        // https://stackoverflow.com/questions/39950128/automapper-projection-with-linq-orderby-child-property-error/39965284
-                        // AutoMapper 9.0 までは AllowNull()、10.0 以降は DoNotAllowNull() を設定します。
-                        x.DoNotAllowNull();
-
-                        // API の要求元から取得項目を指定できるように項目の展開を明示的にします。
-                        x.ExplicitExpansion();
-                    });
-
-                // API で公開するモデルから同一のモデルへのマッピングを構成します。
-                // 展開しない項目をキーとしてクエリのソートを行う場合に、一度ソートキーを含めて API で公開するモデルへマッピングし、
-                // ソート後にキーを省いて同一モデル間のマッピングを行うために構成します。
-                CreateMap(entityType, entityType)
+                CreateMap(entityType.ClrType, entityType.ClrType)
                     .ForAllMembers(x => x.ExplicitExpansion());
-
-                // API で公開するモデルからデータモデルへのマッピングを構成します。
-                CreateMap(entityType, entityInterface.GenericTypeArguments[0]);
             }
+
+            //Expression<Func<ExpandoObject, ManyEntity, bool>> xxxx
+            //    = (source, destination) => true;
+
+            //CreateMap<ExpandoObject, ManyEntity>()
+            //    .EqualityComparison(xxxx);
+        }
+
+        // https://entityframeworkcore.com/knowledge-base/52218340/automapper-projectto-adds-tolist-into-child-properties
+        public class GenericEnumerableExpressionBinder : IExpressionBinder
+        {
+            public bool IsMatch(PropertyMap propertyMap, TypeMap propertyTypeMap, ExpressionResolutionResult result) =>
+                propertyMap.DestinationType.IsGenericType &&
+                propertyMap.DestinationType.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+
+            public MemberAssignment Build(IConfigurationProvider configuration, PropertyMap propertyMap, TypeMap propertyTypeMap, ExpressionRequest request, ExpressionResolutionResult result, IDictionary<ExpressionRequest, int> typePairCount, LetPropertyMaps letPropertyMaps)
+                => BindEnumerableExpression(configuration, propertyMap, request, result, typePairCount, letPropertyMaps);
+
+            private static MemberAssignment BindEnumerableExpression(IConfigurationProvider configuration, PropertyMap propertyMap, ExpressionRequest request, ExpressionResolutionResult result, IDictionary<ExpressionRequest, int> typePairCount, LetPropertyMaps letPropertyMaps)
+            {
+                var expression = result.ResolutionExpression;
+
+                //if (propertyMap.DestinationType != expression.Type)
+                //{
+                //    var destinationListType = ElementTypeHelper.GetElementType(propertyMap.DestinationType);
+                //    var sourceListType = ElementTypeHelper.GetElementType(propertyMap.SourceType);
+                //    var listTypePair = new ExpressionRequest(sourceListType, destinationListType, request.MembersToExpand, request);
+                //    var transformedExpressions = configuration.ExpressionBuilder.CreateMapExpression(listTypePair, typePairCount, letPropertyMaps.New());
+                //    if (transformedExpressions == null) return null;
+                //    expression = transformedExpressions.Aggregate(expression, (source, lambda) => Select(source, lambda));
+                //}
+
+                var destinationListType = ElementTypeHelper.GetElementType(propertyMap.DestinationType);
+                var sourceListType = ElementTypeHelper.GetElementType(propertyMap.SourceType);
+                var listTypePair = new ExpressionRequest(sourceListType, destinationListType, request.MembersToExpand, request);
+                var transformedExpressions = configuration.ExpressionBuilder.CreateMapExpression(listTypePair, typePairCount, letPropertyMaps.New());
+                if (transformedExpressions == null) return null;
+                expression = transformedExpressions.Aggregate(expression, (source, lambda) => Select(source, lambda));
+
+                return Expression.Bind(propertyMap.DestinationMember, expression);
+            }
+
+            private static Expression Select(Expression source, LambdaExpression lambda)
+            {
+                return Expression.Call(typeof(Enumerable), "Select", new[] { lambda.Parameters[0].Type, lambda.ReturnType }, source, lambda);
+            }
+
+            public static void InsertTo(List<IExpressionBinder> binders) =>
+                binders.Insert(0, new GenericEnumerableExpressionBinder());
         }
     }
 }

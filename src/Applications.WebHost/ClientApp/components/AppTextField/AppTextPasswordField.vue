@@ -1,9 +1,13 @@
 <script lang="ts">
 import { mdiEye, mdiEyeOff } from '@mdi/js';
-import mixins from '~/extensions/mixins';
-import slotable from '~/mixins/slotable';
+import { VueBuilder } from '~/core/vue';
+import { Slotable } from '~/mixins/slotable';
 
-export default mixins(slotable).extend({
+const Vue = VueBuilder.create() //
+  .mixin(Slotable)
+  .build();
+
+export default Vue.extend({
   inheritAttrs: false,
   model: {
     event: 'input:value',
