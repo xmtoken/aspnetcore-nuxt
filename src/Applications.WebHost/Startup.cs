@@ -244,6 +244,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
                         // しかしrulesetがとばない
                         //config.ImplicitlyValidateRootCollectionElements = true;
 
+                        //config.AutomaticValidationEnabled = false;
                         config.RegisterValidatorsFromAssemblyContaining<Startup>();
                         config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
 #pragma warning disable CS0618

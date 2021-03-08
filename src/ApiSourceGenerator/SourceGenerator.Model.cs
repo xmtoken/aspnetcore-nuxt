@@ -29,7 +29,6 @@ namespace AspNetCoreNuxt.ApiSourceGenerator
 
             var namespaces = Enumerable
                 .Empty<string>()
-                .Append($"System.Collections.Generic")
                 .Append($"{entityType.ContainingNamespace.ToDisplayString()}")
                 .Append($"{nameof(AspNetCoreNuxt)}.Applications.WebHost.Core.Models")
                 .Select(x => $"using {x};")
@@ -59,8 +58,6 @@ namespace {buildSourceNamespace}
                 else if (propertyNamedTypeSymbol.TypeArguments.Length == 1 &&
                          propertyNamedTypeSymbol.TypeArguments[0].ContainingNamespace.ToDisplayString() == entityType.ContainingNamespace.ToDisplayString())
                 {
-        //            builder.Append($@"
-        //public new IEnumerable<Api{propertyNamedTypeSymbol.TypeArguments[0].Name}> {property.Name} {{ get; set; }}");
                     builder.Append($@"
         public new Api{propertyNamedTypeSymbol.TypeArguments[0].Name}[] {property.Name} {{ get; set; }}");
                 }
