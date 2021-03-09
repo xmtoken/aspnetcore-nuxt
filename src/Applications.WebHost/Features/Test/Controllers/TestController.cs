@@ -4,7 +4,6 @@ using AspNetCoreNuxt.Extensions.FluentValidation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,10 +25,17 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
                         .NotNull();
                 });
             }
+
+            protected override bool PreValidate(ValidationContext<ApiManyEntity> context, ValidationResult result)
+            {
+                return base.PreValidate(context, result);
+            }
         }
 
         public class OneEntityValidator : AbstractValidator<ApiOneEntity>
         {
+            private ApiCustomerEntity Parent;
+
             public OneEntityValidator()
             {
                 RuleSet(ruleSetName: RuleSetName.Add, () =>
@@ -45,6 +51,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
 
             protected override bool PreValidate(ValidationContext<ApiOneEntity> context, ValidationResult result)
             {
+                Parent = context.GetParentContext<ApiCustomerEntity>().InstanceToValidate;
                 return base.PreValidate(context, result);
             }
         }
@@ -57,7 +64,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
                 //    .NotNull();
                 RuleFor(x => x.Text)
                     .NotNull()
-                    .SetValidator(model =>
+                    .SetValidatorWithParentContext(model =>
                     {
                         // Textがnullのときはcallされない
                         var validator = new InlineValidator<string>();
@@ -69,7 +76,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
 
                 RuleFor(x => x.One)
                     .NotNull()
-                    .SetValidator(model => factory.GetValidator<ApiOneEntity>());
+                    .SetValidatorWithParentContext(model => factory.GetValidator<ApiOneEntity>());
                 // or
                 //RuleFor(x => x.One)
                 //    .NotNull()
@@ -88,7 +95,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
                 RuleForEach(x => x.Many)
                     .ConfigureIdentifiedIndexBuilder()
                     .NotNull()
-                    .SetValidator(model => factory.GetValidator<ApiManyEntity>());
+                    .SetValidatorWithParentContext(model => factory.GetValidator<ApiManyEntity>());
                 // or
                 //RuleFor(x => x.Many)
                 //    .NotNull()
@@ -115,6 +122,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
 
             protected override bool PreValidate(ValidationContext<ApiCustomerEntity> context, ValidationResult result)
             {
+                context.GetParentContext();
                 return base.PreValidate(context, result);
             }
         }
@@ -126,14 +134,14 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
                 RuleForEach(x => x)
                     .RemoveForEachPropertyName()
                     .ConfigureIdentifiedIndexBuilder()
-                    .SetValidator((models, model) =>
+                    .SetValidatorWithParentContext((models, model) =>
                     {
                         var ruleSets = model.Id.HasValue ? RuleSetName.Update : RuleSetName.Add;
 
                         var validator = new InlineValidator<ApiCustomerEntity>();
                         validator
                             .RuleFor(x => x)
-                            .SetValidator(factory.GetValidator<ApiCustomerEntity>(), ruleSets, "default");
+                            .SetValidatorWithParentContext(factory.GetValidator<ApiCustomerEntity>(), ruleSets, "default");
 
                         validator
                             .RuleFor(x => x.Id)
