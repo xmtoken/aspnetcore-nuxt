@@ -45,8 +45,6 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
 
             protected override bool PreValidate(ValidationContext<ApiOneEntity> context, ValidationResult result)
             {
-                var xx = (context as ICommonContext).ParentContext;
-                context.RootContextData["v"] = context.InstanceToValidate;
                 return base.PreValidate(context, result);
             }
         }
@@ -117,7 +115,6 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
 
             protected override bool PreValidate(ValidationContext<ApiCustomerEntity> context, ValidationResult result)
             {
-                context.RootContextData["v"] = context.InstanceToValidate;
                 return base.PreValidate(context, result);
             }
         }
