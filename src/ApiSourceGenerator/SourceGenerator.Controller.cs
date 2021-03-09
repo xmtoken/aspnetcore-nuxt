@@ -60,6 +60,7 @@ namespace AspNetCoreNuxt.ApiSourceGenerator
                 .Append($"FluentValidation.AspNetCore")
                 .Append($"Microsoft.AspNetCore.Http")
                 .Append($"Microsoft.AspNetCore.Mvc")
+                .Append($"System")
                 .Append($"System.Collections.Generic")
                 .Append($"System.Linq")
                 .Append($"System.Threading")
@@ -170,8 +171,24 @@ namespace {buildSourceNamespace}
         }}
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof({entityType.Name}))]
-        public virtual async Task<IActionResult> Post([CustomizeValidator(RuleSet = {entityNameWithoutSufix}ValidatorRuleSet.Add)][FromBody] Api{entityType.Name} model)
+        public virtual async Task<IActionResult> Post([FromBody] Api{entityType.Name} model)
         {{
+            var validator = ValidatorFactory.GetValidator<Api{entityType.Name}>();
+            async Task ValidateAsync()
+            {{
+                if (validator is not null)
+                {{
+                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.Add));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }}
+            }};
+
+            await ValidateAsync();
+            if (ModelState.ErrorCount > 0)
+            {{
+                return ValidationProblem();
+            }}
+
             var result = await {entityNameWithoutSufix}UseCase.AddAsync(model);
             if (result.Succeeded)
             {{
@@ -190,11 +207,10 @@ namespace {buildSourceNamespace}
             }}
             else
             {{
-                var validator = ValidatorFactory.GetValidator<Api{entityType.Name}>();
-                if (validator is not null)
+                await ValidateAsync();
+                if (ModelState.IsValid)
                 {{
-                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.Add));
-                    validationResult.AddToModelState(ModelState, prefix: null);
+                    throw new InvalidOperationException();
                 }}
                 return ValidationProblem();
             }}
@@ -202,8 +218,24 @@ namespace {buildSourceNamespace}
         [HttpPatch]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({entityType.Name}))]
         [Route(""{primaryKeyRouteTemplate}"")]
-        public virtual async Task<IActionResult> Patch({primaryKeyRouteParameter}, [CustomizeValidator(RuleSet = {entityNameWithoutSufix}ValidatorRuleSet.Update)][FromBody] Api{entityType.Name} model)
+        public virtual async Task<IActionResult> Patch({primaryKeyRouteParameter}, [FromBody] Api{entityType.Name} model)
         {{
+            var validator = ValidatorFactory.GetValidator<Api{entityType.Name}>();
+            async Task ValidateAsync()
+            {{
+                if (validator is not null)
+                {{
+                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.Update));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }}
+            }};
+
+            await ValidateAsync();
+            if (ModelState.ErrorCount > 0)
+            {{
+                return ValidationProblem();
+            }}
+
             var keyValues = new object[] {{ {string.Join(", ", primaryKeyProperties.Select(x => x.Name.ToCamelCase()))} }};
             var result = await {entityNameWithoutSufix}UseCase.UpdateAsync(keyValues, model);
             if (result.Succeeded)
@@ -212,11 +244,10 @@ namespace {buildSourceNamespace}
             }}
             else
             {{
-                var validator = ValidatorFactory.GetValidator<Api{entityType.Name}>();
-                if (validator is not null)
+                await ValidateAsync();
+                if (ModelState.IsValid)
                 {{
-                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.Update));
-                    validationResult.AddToModelState(ModelState, prefix: null);
+                    throw new InvalidOperationException();
                 }}
                 return ValidationProblem();
             }}
@@ -224,8 +255,24 @@ namespace {buildSourceNamespace}
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({entityType.Name}))]
         [Route(""{primaryKeyRouteTemplate}"")]
-        public virtual async Task<IActionResult> Put({primaryKeyRouteParameter}, [CustomizeValidator(RuleSet = {entityNameWithoutSufix}ValidatorRuleSet.AddOrUpdate)][FromBody] Api{entityType.Name} model)
+        public virtual async Task<IActionResult> Put({primaryKeyRouteParameter}, [FromBody] Api{entityType.Name} model)
         {{
+            var validator = ValidatorFactory.GetValidator<Api{entityType.Name}>();
+            async Task ValidateAsync()
+            {{
+                if (validator is not null)
+                {{
+                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.AddOrUpdate));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }}
+            }};
+
+            await ValidateAsync();
+            if (ModelState.ErrorCount > 0)
+            {{
+                return ValidationProblem();
+            }}
+
             var keyValues = new object[] {{ {string.Join(", ", primaryKeyProperties.Select(x => x.Name.ToCamelCase()))} }};
             var result = await {entityNameWithoutSufix}UseCase.AddOrUpdateAsync(keyValues, model);
             if (result.Succeeded)
@@ -234,19 +281,34 @@ namespace {buildSourceNamespace}
             }}
             else
             {{
-                var validator = ValidatorFactory.GetValidator<Api{entityType.Name}>();
-                if (validator is not null)
+                await ValidateAsync();
+                if (ModelState.IsValid)
                 {{
-                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.AddOrUpdate));
-                    validationResult.AddToModelState(ModelState, prefix: null);
+                    throw new InvalidOperationException();
                 }}
                 return ValidationProblem();
             }}
         }}
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<{entityType.Name}>))]
-        public virtual async Task<IActionResult> Put([CustomizeValidator(RuleSet = {entityNameWithoutSufix}ValidatorRuleSet.AddOrUpdateOnBulk)][FromBody] Api{entityType.Name}[] models)
+        public virtual async Task<IActionResult> Put([FromBody] Api{entityType.Name}[] models)
         {{
+            var validator = ValidatorFactory.GetValidator<Api{entityType.Name}[]>();
+            async Task ValidateAsync()
+            {{
+                if (validator is not null)
+                {{
+                    var validationResult = await validator.ValidateAsync(models, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.AddOrUpdateOnBulk));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }}
+            }};
+
+            await ValidateAsync();
+            if (ModelState.ErrorCount > 0)
+            {{
+                return ValidationProblem();
+            }}
+
             var values = models.Select(model => (
                 KeyValues: new object[] {{ {string.Join(", ", primaryKeyProperties.Select(x => "model." + x.Name))} }},
                 Model: ({entityType.Name})model)).ToArray();
@@ -257,11 +319,10 @@ namespace {buildSourceNamespace}
             }}
             else
             {{
-                var validator = ValidatorFactory.GetValidator<Api{entityType.Name}[]>();
-                if (validator is not null)
+                await ValidateAsync();
+                if (ModelState.IsValid)
                 {{
-                    var validationResult = await validator.ValidateAsync(models, options => options.IncludeRuleSets({entityNameWithoutSufix}ValidatorRuleSet.AddOrUpdateOnBulk));
-                    validationResult.AddToModelState(ModelState, prefix: null);
+                    throw new InvalidOperationException();
                 }}
                 return ValidationProblem();
             }}

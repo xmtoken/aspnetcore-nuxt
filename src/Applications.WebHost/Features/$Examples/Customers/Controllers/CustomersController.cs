@@ -9,6 +9,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using NJsonSchema.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -65,6 +66,10 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features._Examples.Customers.Contr
             else
             {
                 await ValidateAsync();
+                if (ModelState.IsValid)
+                {
+                    throw new InvalidOperationException();
+                }
                 return ValidationProblem();
             }
         }

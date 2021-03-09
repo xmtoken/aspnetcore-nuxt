@@ -244,7 +244,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
                         // しかしrulesetがとばない
                         //config.ImplicitlyValidateRootCollectionElements = true;
 
-                        //config.AutomaticValidationEnabled = false;
+                        config.AutomaticValidationEnabled = false;
                         config.RegisterValidatorsFromAssemblyContaining<Startup>();
                         config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
 #pragma warning disable CS0618
@@ -262,8 +262,7 @@ namespace AspNetCoreNuxt.Applications.WebHost
                         // 子バリデーターにrulesetを伝播させる
                         ValidatorOptions.Global.ValidatorSelectors.RulesetValidatorSelectorFactory = rulesets =>
                         {
-                            var rulesetIncludingDefaultFallbackForChildProperties =
-                            rulesets.Union(new[] { "default" }).ToArray();
+                            var rulesetIncludingDefaultFallbackForChildProperties = rulesets.Union(new[] { "default" }).ToArray();
                             var rulesetValidatorSelector = new RulesetValidatorSelector(rulesetIncludingDefaultFallbackForChildProperties);
                             return rulesetValidatorSelector;
                         };

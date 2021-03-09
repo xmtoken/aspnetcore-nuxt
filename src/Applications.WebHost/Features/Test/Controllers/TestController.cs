@@ -20,7 +20,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
         {
             public ManyEntityValidator()
             {
-                RuleSet(ruleSetName: "Add", () =>
+                RuleSet(ruleSetName: RuleSetName.Add, () =>
                 {
                     RuleFor(x => x.Text)
                         .NotNull();
@@ -32,11 +32,22 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
         {
             public OneEntityValidator()
             {
-                RuleSet(ruleSetName: "Add", () =>
+                RuleSet(ruleSetName: RuleSetName.Add, () =>
                 {
                     RuleFor(x => x.Text)
-                        .NotNull();
+                        .NotNull()
+                        .Custom((model, validationContext) =>
+                        {
+                            var context = validationContext;
+                        });
                 });
+            }
+
+            protected override bool PreValidate(ValidationContext<ApiOneEntity> context, ValidationResult result)
+            {
+                var xx = (context as ICommonContext).ParentContext;
+                context.RootContextData["v"] = context.InstanceToValidate;
+                return base.PreValidate(context, result);
             }
         }
 
@@ -67,7 +78,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
                 //    .SetValidator((root, model) =>
                 //    {
                 //        var validator = new InlineValidator<ApiOneEntity>();
-                //        validator.RuleSet(ruleSetName: "Add", () =>
+                //        validator.RuleSet(ruleSetName: RuleSetName.Add, () =>
                 //        {
                 //            validator
                 //                .RuleFor(x => x.Text)
@@ -92,7 +103,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
                 //            .SetValidator((models, model) =>
                 //            {
                 //                var validator = new InlineValidator<ApiManyEntity>();
-                //                validator.RuleSet(ruleSetName: "Add", () =>
+                //                validator.RuleSet(ruleSetName: RuleSetName.Add, () =>
                 //                {
                 //                    validator
                 //                        .RuleFor(x => x.Text)
@@ -106,6 +117,7 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
 
             protected override bool PreValidate(ValidationContext<ApiCustomerEntity> context, ValidationResult result)
             {
+                context.RootContextData["v"] = context.InstanceToValidate;
                 return base.PreValidate(context, result);
             }
         }
@@ -114,25 +126,21 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
         {
             public CustomerEntityCollectionValidator(IValidatorFactory factory)
             {
-                factory.GetValidator<ApiCustomerEntity>().ValidateAsync(instance: null, options: strategy =>
-                 {
-                     strategy.IncludeRuleSets("");
-                 });
-                //IHttpContextAccessor httpContextAccessor;
-
                 RuleForEach(x => x)
                     .RemoveForEachPropertyName()
                     .ConfigureIdentifiedIndexBuilder()
                     .SetValidator((models, model) =>
                     {
+                        var ruleSets = model.Id.HasValue ? RuleSetName.Update : RuleSetName.Add;
+
                         var validator = new InlineValidator<ApiCustomerEntity>();
                         validator
                             .RuleFor(x => x)
-                            .SetValidator(factory.GetValidator<ApiCustomerEntity>());
+                            .SetValidator(factory.GetValidator<ApiCustomerEntity>(), ruleSets, "default");
 
                         validator
                             .RuleFor(x => x.Id)
-                            .Must(_ => models.All(x => x.Id != model.Id)).WithMessage("Duplicate");
+                            .Must(_ => models.Count(x => x.Id == model.Id) == 1).WithMessage("Duplicate");
                         return validator;
                     });
 
@@ -149,18 +157,61 @@ namespace AspNetCoreNuxt.Applications.WebHost.Features.Test.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<object> Post([CustomizeValidator(RuleSet = RuleSetName.Add)][FromBody] ApiCustomerEntity model)
+        private readonly IValidatorFactory ValidatorFactory;
+        public TestController(IValidatorFactory validatorFactory)
         {
-            await Task.CompletedTask;
-            return model;
+            ValidatorFactory = validatorFactory;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] ApiCustomerEntity model)
+        {
+            var validator = ValidatorFactory.GetValidator<ApiCustomerEntity>();
+            async Task ValidateAsync()
+            {
+                if (validator is not null)
+                {
+                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets(RuleSetName.Add));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }
+            };
+
+            await ValidateAsync();
+            return ValidationProblem();
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] ApiCustomerEntity model)
+        {
+            var validator = ValidatorFactory.GetValidator<ApiCustomerEntity>();
+            async Task ValidateAsync()
+            {
+                if (validator is not null)
+                {
+                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets(RuleSetName.Update));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }
+            };
+
+            await ValidateAsync();
+            return ValidationProblem();
         }
 
         [HttpPut]
-        public async Task<object> Put([CustomizeValidator(RuleSet = RuleSetName.AddOrUpdateOnBulk)][FromBody] ApiCustomerEntity[] model)
+        public async Task<IActionResult> Put([FromBody] ApiCustomerEntity[] model)
         {
-            await Task.CompletedTask;
-            return model;
+            var validator = ValidatorFactory.GetValidator<ApiCustomerEntity[]>();
+            async Task ValidateAsync()
+            {
+                if (validator is not null)
+                {
+                    var validationResult = await validator.ValidateAsync(model, options => options.IncludeRuleSets(RuleSetName.AddOrUpdateOnBulk));
+                    validationResult.AddToModelState(ModelState, prefix: null);
+                }
+            };
+
+            await ValidateAsync();
+            return ValidationProblem();
         }
     }
 }
