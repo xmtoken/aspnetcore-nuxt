@@ -1,6 +1,6 @@
 import { VueBuilder } from '~/core/vue';
 
-export type InputableProps = {
+export type InputableProxyProps = {
   dense?: boolean;
   disabled?: boolean;
   hideDetails?: boolean | 'auto' | 'tooltip';
@@ -9,7 +9,7 @@ export type InputableProps = {
 };
 
 const Vue = VueBuilder.create() //
-  .$attrs<InputableProps>()
+  .$attrs<InputableProxyProps>()
   .build();
 
 export const Inputable = Vue.extend({

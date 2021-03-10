@@ -1,17 +1,18 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
-import { Clearable, ClearableProps } from '~/mixins/clearable';
+import { Clearable, ClearableProxyProps } from '~/mixins/clearable';
 import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
-import { Inputable, InputableProps } from '~/mixins/inputable';
+import { Inputable, InputableProxyProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
-import { Validatable } from '~/mixins/validatable';
+import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
 
-type ComponentProps = Record<string, any> &
-  ClearableProps &
-  InputableProps & {
+type ComponentProxyProps = Record<string, any> & //
+  ClearableProxyProps &
+  InputableProxyProps &
+  ValidatableProxyProps & {
     menuProps?: string | object;
   };
 
@@ -20,7 +21,7 @@ type ComponentRefs = {
 };
 
 const Vue = VueBuilder.create() //
-  .$attrs<ComponentProps>()
+  .$attrs<ComponentProxyProps>()
   .$refs<ComponentRefs>()
   .mixin(Clearable)
   .mixin(IconTabIndexable)
@@ -38,16 +39,16 @@ export default Vue.extend({
   inheritAttrs: false,
   computed: {
     props() {
-      const defaults: ComponentProps = {
+      const defaults: ComponentProxyProps = {
         menuProps: {
           offsetY: true,
         },
       };
-      const attrs: ComponentProps = {
+      const attrs: ComponentProxyProps = {
         ...defaults,
         ...this.attrs,
       };
-      const overrides: ComponentProps = {
+      const overrides: ComponentProxyProps = {
         clearable: VuePropHelper.toBoolean(attrs.clearable) && !VuePropHelper.toBoolean(attrs.readonly),
         dense: VuePropHelper.toBoolean(attrs.dense) || this.denseX,
         hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
@@ -78,14 +79,14 @@ export default Vue.extend({
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
       </template>
-      <template v-if="failed && isEnabledTooltipMessage" #append-outer>
-        <v-icon color="error" small>
+      <!-- <template #append-outer>
+        <v-icon v-if="failed && isEnabledTooltipMessage" color="error" small>
           {{ validationErrorIcon }}
         </v-icon>
         <slot name="append-outer" />
-      </template>
-      <template v-if="isEnabledTooltipMessage" #message="scope">
-        <v-tooltip :activator="$refs.field" :open-on-hover="false" top :value="focused || hovered">
+      </template> -->
+      <template #message="scope">
+        <v-tooltip v-if="isEnabledTooltipMessage" :activator="$refs.field" color="error" :open-on-hover="false" top :value="focused || hovered">
           {{ scope.message }}
         </v-tooltip>
         <slot v-bind="scope" name="message" />

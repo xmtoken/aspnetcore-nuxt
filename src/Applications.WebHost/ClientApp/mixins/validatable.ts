@@ -3,12 +3,12 @@ import { PropType } from 'vue';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Inputable } from '~/mixins/inputable';
 
-export type ValidatableProps = {
+export type ValidatableProxyProps = {
   errorMessages?: string | string[];
 };
 
 const Vue = VueBuilder.create() //
-  .$attrs<ValidatableProps>()
+  .$attrs<ValidatableProxyProps>()
   .mixin(Inputable)
   .build();
 

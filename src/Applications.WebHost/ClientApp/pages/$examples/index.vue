@@ -24,6 +24,9 @@ export default Vue.extend({
         { text: 'text1', value: 1 },
         { text: 'text2', value: 2 },
       ],
+      autocomplete: null,
+      combobox: null,
+      textarea: null,
       textbox: null,
       checkbox: null,
       switch_: null,
@@ -42,18 +45,27 @@ export default Vue.extend({
     <v-form autocomplete="off" @submit.prevent>
       <v-row>
         <v-col>
-          <app-text-field v-model="textbox" label="VTextField" vee-rules="required" />
+          <app-autocomplete v-model="autocomplete" dense-x hide-details="tooltip" :items="selections" label="VAutocomplete" vee-rules="required" />
+        </v-col>
+        <v-col>
+          <app-combobox v-model="combobox" dense-x hide-details="tooltip" :items="selections" label="VCombobox" vee-rules="required" />
+        </v-col>
+        <v-col>
+          <app-textarea v-model="textarea" dense-x hide-details="tooltip" label="VTextarea" vee-rules="required" />
+        </v-col>
+        <v-col>
+          <app-text-field v-model="textbox" dense-x hide-details="tooltip" label="VTextField" vee-rules="required" />
         </v-col>
         <v-col>
           <!-- TODO:Checkbox:required -->
-          <app-checkbox v-model="checkbox" label="Checkbox" vee-rules="required" />
+          <app-checkbox v-model="checkbox" dense-x hide-details="tooltip" label="Checkbox" :vee-rules="{ required: { allowFalse: false } }" />
         </v-col>
         <v-col>
           <!-- TODO:Switch:required -->
-          <app-switch v-model="switch_" label="Switch" vee-rules="required:true" />
+          <app-switch v-model="switch_" dense-x hide-details="tooltip" label="Switch" :vee-rules="{ required: { allowFalse: false } }" />
         </v-col>
         <v-col>
-          <app-radio-group v-model="radio" row>
+          <app-radio-group v-model="radio" dense-x hide-details="tooltip" row vee-rules="between:-1,0">
             <v-radio label="label1" :value="-1" />
             <v-radio label="label2" :value="2" />
           </app-radio-group>
@@ -130,10 +142,15 @@ export default Vue.extend({
             </template>
             <template v-slot:item.textarea>
               <v-row dense style="height: 100%;">
+                <v-col>
+                  <app-textarea dense-x hide-details="tooltip" no-resize rows="2" />
+                </v-col>
+              </v-row>
+              <!-- <v-row dense style="height: 100%;">
                 <v-col align-self="end" style="height: 100%;">
                   <v-textarea class="mt-0 textarea100" dense hide-details no-resize rows="2" />
                 </v-col>
-              </v-row>
+              </v-row> -->
             </template>
           </v-data-table>
         </v-col>

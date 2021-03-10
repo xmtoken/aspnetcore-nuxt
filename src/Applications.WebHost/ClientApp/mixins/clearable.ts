@@ -1,11 +1,11 @@
 import { VueBuilder } from '~/core/vue';
 
-export type ClearableProps = {
+export type ClearableProxyProps = {
   clearable?: boolean;
 };
 
 const Vue = VueBuilder.create() //
-  .$attrs<ClearableProps>()
+  .$attrs<ClearableProxyProps>()
   .build();
 
 export const Clearable = Vue.extend({
