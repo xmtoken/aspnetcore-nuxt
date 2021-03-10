@@ -12,21 +12,6 @@ export default Vue.extend({
         { text: 'Checkbox', value: 'checkbox' },
         { text: 'Switch', value: 'switch' },
         { text: 'RadioButton', value: 'radiobutton' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
-        { text: 'Xxx', value: 'x' },
       ],
       items: [
         { label: 'Label', text: null, select: null, checkbox: false, switch: false, radio: 0, textarea: null },
@@ -105,7 +90,7 @@ export default Vue.extend({
               </v-row>
             </template>
             <template v-slot:item.checkbox>
-              <v-checkbox class="mt-0 fit" dense hide-details style="padding: 1px 0;" />
+              <app-checkbox class="mt-0 fit" dense hide-details style="padding: 1px 0;" />
             </template>
             <template v-slot:item.switch>
               <v-switch class="mt-0 fit" dense hide-details style="padding: 1px 0;" />
@@ -118,15 +103,15 @@ export default Vue.extend({
             </template>
             <template v-slot:item.textarea>
               <v-row dense style="height: 100%;">
-                <v-col>
-                  <v-textarea class="mt-0" dense hide-details rows="2" />
+                <v-col align-self="end" style="height: 100%;">
+                  <v-textarea class="mt-0 textarea100" dense hide-details no-resize rows="2" />
                 </v-col>
               </v-row>
             </template>
           </v-data-table>
         </v-col>
       </v-row>
-      <v-row>
+      <!-- <v-row>
         <v-col>
           <v-data-table disable-pagination :headers="headers" hide-default-footer :items="items">
             <template v-slot:item.label="{ value }">
@@ -154,7 +139,7 @@ export default Vue.extend({
             </template>
           </v-data-table>
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-form>
   </div>
 </template>
@@ -167,6 +152,18 @@ export default Vue.extend({
 
 .v-input--radio-group .v-input--radio-group__input {
   flex-wrap: nowrap;
+}
+
+.textarea100 {
+  height: 100%;
+
+  .v-input__control {
+    height: 100%;
+
+    .v-input__slot {
+      height: 100%;
+    }
+  }
 }
 </style>
 
