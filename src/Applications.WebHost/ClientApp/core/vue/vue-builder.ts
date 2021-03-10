@@ -18,27 +18,26 @@ export class VueBuilder<T extends Vue> {
   }
 
   public $attrs<TAttrs>() {
-    const keyConverter = val => {
+    const resolve: (val: any) => any = val => {
       if (Array.isArray(val)) {
-        return val.map(value => keyConverter(value));
+        return val.map(value => resolve(value));
       } else if (!!val && typeof val === 'object') {
-        const value = {} as any;
+        const value: any = {};
         Object.keys(val).forEach(key => {
-          value[camelCase(key)] = keyConverter(val[key]);
+          value[camelCase(key)] = resolve(val[key]);
         });
         return value;
       } else {
         return val;
       }
     };
-
     const mixin = Vue.extend({
       computed: {
         attrs(): TAttrs {
-          return keyConverter(this.$attrs);
+          return resolve(this.$attrs);
         },
       },
-    }) as VueConstructor;
+    });
     return this.mixin(mixin).assign<{ attrs: TAttrs }>();
   }
 

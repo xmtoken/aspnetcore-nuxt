@@ -1,10 +1,9 @@
 <script lang="ts">
-import '~/components/AppInput/AppInput.scss';
 import { ValidationProvider } from 'vee-validate';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Clearable, ClearableProps } from '~/mixins/clearable';
 import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
-import { InputableProps } from '~/mixins/inputable';
+import { Inputable, InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
@@ -25,6 +24,7 @@ const Vue = VueBuilder.create() //
   .$refs<ComponentRefs>()
   .mixin(Clearable)
   .mixin(IconTabIndexable)
+  .mixin(Inputable)
   .mixin(RequiredMarkable)
   .mixin(Slotable)
   .mixin(UIElementState)
@@ -49,6 +49,7 @@ export default Vue.extend({
       };
       const overrides: ComponentProps = {
         clearable: VuePropHelper.toBoolean(attrs.clearable) && !VuePropHelper.toBoolean(attrs.readonly),
+        dense: VuePropHelper.toBoolean(attrs.dense) || this.denseX,
         hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
       };
       return {
@@ -61,7 +62,8 @@ export default Vue.extend({
     classes(required: boolean) {
       return {
         required,
-        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
+        'required-marker': required && !this.disabledRequiredMarker,
+        'v-input--dense-x': this.denseX,
         'v-input--tooltip-details': this.isEnabledTooltipMessage,
       };
     },
@@ -91,3 +93,13 @@ export default Vue.extend({
     </v-select>
   </validation-provider>
 </template>
+
+<style lang="scss" scoped>
+@import '~/components/AppInput/AppInput.scss';
+
+.v-input--dense.v-text-field.v-select ::v-deep {
+  .v-input__append-inner .v-input__icon--append .v-icon {
+    margin-top: 0;
+  }
+}
+</style>

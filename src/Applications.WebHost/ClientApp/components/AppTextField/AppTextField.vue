@@ -1,10 +1,9 @@
 <script lang="ts">
-import '~/components/AppInput/AppInput.scss';
 import { ValidationProvider } from 'vee-validate';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Clearable, ClearableProps } from '~/mixins/clearable';
 import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
-import { InputableProps } from '~/mixins/inputable';
+import { Inputable, InputableProps } from '~/mixins/inputable';
 import { LazyRenderable } from '~/mixins/lazy-renderable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
@@ -23,6 +22,7 @@ const Vue = VueBuilder.create() //
   .$refs<ComponentRefs>()
   .mixin(Clearable)
   .mixin(IconTabIndexable)
+  .mixin(Inputable)
   .mixin(LazyRenderable)
   .mixin(RequiredMarkable)
   .mixin(Slotable)
@@ -35,12 +35,6 @@ export default Vue.extend({
     ValidationProvider,
   },
   inheritAttrs: false,
-  props: {
-    denseX: {
-      default: false,
-      type: Boolean,
-    },
-  },
   data() {
     return {
       $_: null as any,
@@ -64,8 +58,8 @@ export default Vue.extend({
     classes(required: boolean) {
       return {
         required,
-        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
-        'v-input--dense-x': VuePropHelper.toBoolean(this.denseX),
+        'required-marker': required && !this.disabledRequiredMarker,
+        'v-input--dense-x': this.denseX,
         'v-input--tooltip-details': this.isEnabledTooltipMessage,
       };
     },
@@ -79,7 +73,7 @@ export default Vue.extend({
       };
       const overrides: ComponentProps = {
         clearable: VuePropHelper.toBoolean(attrs.clearable) && !VuePropHelper.toBoolean(attrs.readonly),
-        dense: VuePropHelper.toBoolean(attrs.dense) || VuePropHelper.toBoolean(this.denseX),
+        dense: VuePropHelper.toBoolean(attrs.dense) || this.denseX,
         errorMessages: this.mergeErrorMessages(errors),
         hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
       };
@@ -132,3 +126,7 @@ export default Vue.extend({
     </v-text-field>
   </validation-provider>
 </template>
+
+<style lang="scss" scoped>
+@import '~/components/AppInput/AppInput.scss';
+</style>

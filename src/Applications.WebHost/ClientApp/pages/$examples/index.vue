@@ -1,7 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
+import AppRadioGroup from '~/components/AppRadioGroup/AppRadioGroup.vue';
 
 export default Vue.extend({
+  components: { AppRadioGroup },
   data() {
     return {
       headers: [
@@ -14,15 +16,23 @@ export default Vue.extend({
         { text: 'RadioButton', value: 'radiobutton' },
       ],
       items: [
-        { label: 'Label', text: null, select: null, checkbox: false, switch: false, radio: 0, textarea: null },
-        { label: 'Label', text: null, select: null, checkbox: false, switch: false, radio: 0, textarea: null },
+        { label: 'Label', text: null, select: null, checkbox: 'true', switch: 'true', radio: 0, textarea: null },
+        // { label: 'Label', text: null, select: null, checkbox: null, switch: false, radio: 0, textarea: null },
       ],
       selections: [
         { text: 'text0', value: 0 },
         { text: 'text1', value: 1 },
         { text: 'text2', value: 2 },
       ],
+      textbox: null,
+      checkbox: null,
+      switch_: null,
+      radio: null,
+      select: null,
     };
+  },
+  created() {
+    console.log('this.data', this.$data);
   },
 });
 </script>
@@ -32,7 +42,24 @@ export default Vue.extend({
     <v-form autocomplete="off" @submit.prevent>
       <v-row>
         <v-col>
-          <app-text-field label="VTextField" vee-rules="required" />
+          <app-text-field v-model="textbox" label="VTextField" vee-rules="required" />
+        </v-col>
+        <v-col>
+          <!-- TODO:Checkbox:required -->
+          <app-checkbox v-model="checkbox" label="Checkbox" vee-rules="required" />
+        </v-col>
+        <v-col>
+          <!-- TODO:Switch:required -->
+          <app-switch v-model="switch_" label="Switch" vee-rules="required:true" />
+        </v-col>
+        <v-col>
+          <app-radio-group v-model="radio" row>
+            <v-radio label="label1" :value="-1" />
+            <v-radio label="label2" :value="2" />
+          </app-radio-group>
+        </v-col>
+        <v-col>
+          <app-select v-model="select" dense-x hide-details="tooltip" :items="selections" vee-rules="required" />
         </v-col>
         <v-col>
           <v-btn class="mt-3">
@@ -65,22 +92,22 @@ export default Vue.extend({
                 </v-col>
               </v-row>
             </template>
-            <template v-slot:item.text>
+            <template v-slot:item.text="{ item }">
               <v-row dense>
                 <v-col>
-                  <v-text-field class="mt-0" dense hide-details />
+                  <app-text-field v-model="item.text" dense-x hide-details="tooltip" vee-rules="required" />
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col>
-                  <v-text-field class="mt-0" dense hide-details />
+                  <app-text-field v-model="item.text" dense-x hide-details="tooltip" vee-rules="required" />
                 </v-col>
               </v-row>
             </template>
-            <template v-slot:item.select>
+            <template v-slot:item.select="{ item }">
               <v-row dense>
                 <v-col>
-                  <v-select class="mt-0" clearable dense hide-details :items="selections" />
+                  <app-select v-model="item.select" clearable dense-x hide-details="tooltip" :items="selections" vee-rules="required" />
                 </v-col>
               </v-row>
               <v-row dense>
@@ -89,17 +116,17 @@ export default Vue.extend({
                 </v-col>
               </v-row>
             </template>
-            <template v-slot:item.checkbox>
-              <app-checkbox class="mt-0 fit" dense hide-details style="padding: 1px 0;" />
+            <template v-slot:item.checkbox="{ item }">
+              <app-checkbox v-model="item.checkbox" dense-x hide-details />
             </template>
-            <template v-slot:item.switch>
-              <v-switch class="mt-0 fit" dense hide-details style="padding: 1px 0;" />
+            <template v-slot:item.switch="{ item }">
+              <app-switch v-model="item.switch" dense-x hide-details />
             </template>
             <template v-slot:item.radiobutton>
-              <v-radio-group class="mt-0" dense hide-details row style="padding: 1px 0;">
+              <app-radio-group class="mt-0" dense-x hide-details row>
                 <v-radio label="Val1" />
                 <v-radio label="Val2" />
-              </v-radio-group>
+              </app-radio-group>
             </template>
             <template v-slot:item.textarea>
               <v-row dense style="height: 100%;">
@@ -111,35 +138,6 @@ export default Vue.extend({
           </v-data-table>
         </v-col>
       </v-row>
-      <!-- <v-row>
-        <v-col>
-          <v-data-table disable-pagination :headers="headers" hide-default-footer :items="items">
-            <template v-slot:item.label="{ value }">
-              <div style="font-size: 16px; padding-top: 2px; text-align: right;">
-                {{ value }}
-              </div>
-            </template>
-            <template v-slot:item.text>
-              <v-text-field class="mt-0" dense hide-details />
-            </template>
-            <template v-slot:item.select>
-              <v-select class="mt-0" clearable dense hide-details :items="selections" />
-            </template>
-            <template v-slot:item.checkbox>
-              <v-checkbox class="mt-0" dense hide-details />
-            </template>
-            <template v-slot:item.switch>
-              <v-switch class="mt-0" dense hide-details />
-            </template>
-            <template v-slot:item.radiobutton>
-              <v-radio-group class="mt-0" dense hide-details row>
-                <v-radio label="Val1" />
-                <v-radio label="Val2" />
-              </v-radio-group>
-            </template>
-          </v-data-table>
-        </v-col>
-      </v-row> -->
     </v-form>
   </div>
 </template>
@@ -163,16 +161,6 @@ export default Vue.extend({
     .v-input__slot {
       height: 100%;
     }
-  }
-}
-</style>
-
-<style lang="scss" scoped>
-.fit ::v-deep {
-  width: fit-content;
-
-  .v-input--selection-controls__input {
-    margin-right: 0;
   }
 }
 </style>

@@ -13,8 +13,14 @@ const Vue = VueBuilder.create() //
   .build();
 
 export const Inputable = Vue.extend({
+  props: {
+    denseX: {
+      default: false,
+      type: Boolean,
+    },
+  },
   computed: {
-    isEnabledTooltipMessage() {
+    isEnabledTooltipMessage(): boolean {
       return this.attrs.hideDetails === 'tooltip';
     },
   },

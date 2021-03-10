@@ -3,7 +3,7 @@ import { ValidationProvider } from 'vee-validate';
 import { PropValidator } from 'vue/types/options';
 import { deepEqual } from 'vuetify/src/util/helpers';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
-import { InputableProps } from '~/mixins/inputable';
+import { Inputable, InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
@@ -19,6 +19,7 @@ type ComponentProps = Record<string, any> &
 
 const Vue = VueBuilder.create() //
   .$attrs<ComponentProps>()
+  .mixin(Inputable)
   .mixin(RequiredMarkable)
   .mixin(Slotable)
   .mixin(UIElementState)
@@ -35,17 +36,24 @@ export default Vue.extend({
     prop: 'inputValue',
   },
   props: {
+    fitContent: {
+      default: true,
+      type: Boolean,
+    },
     mandatory: {
       default: true,
       type: Boolean,
     },
     valueConverter: {
-      default: undefined,
+      default: val => {
+        return String(val) === String(true);
+      },
       type: Function,
     } as PropValidator<(val: any) => any>,
   },
   data() {
     return {
+      created: false,
       value: null as any,
     };
   },
@@ -61,6 +69,7 @@ export default Vue.extend({
         ...this.attrs,
       };
       const overrides: ComponentProps = {
+        dense: VuePropHelper.toBoolean(attrs.dense) || this.denseX,
         hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
       };
       delete attrs[this.$options.model!.prop!];
@@ -71,27 +80,32 @@ export default Vue.extend({
     },
   },
   watch: {
-    'props.inputValue': {
+    'attrs.inputValue': {
       handler(val: any, _oldVal: any) {
         const value = this.valueConverter ? this.valueConverter(val) : val;
-        if (VuePropHelper.toBoolean(this.mandatory)) {
+        if (this.mandatory) {
           const isValid = this.props.valueComparator!(value, this.props.falseValue) || this.props.valueComparator!(value, this.props.trueValue);
           this.value = isValid ? value : this.props.falseValue;
         } else {
           this.value = value;
         }
-        if (val !== this.value) {
+        if (!this.created && this.value !== val) {
           this.$emit(this.$options.model!.event!, this.value);
         }
       },
       immediate: true,
     },
   },
+  created() {
+    this.created = true;
+  },
   methods: {
     classes(required: boolean) {
       return {
+        'fit-content': this.fitContent,
         required,
-        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
+        'required-marker': required && !this.disabledRequiredMarker,
+        'v-input--dense-x': this.denseX,
         'v-input--tooltip-details': this.isEnabledTooltipMessage,
       };
     },
@@ -109,3 +123,26 @@ export default Vue.extend({
     </v-checkbox>
   </validation-provider>
 </template>
+
+<style lang="scss" scoped>
+@import '~/components/AppInput/AppInput.scss';
+
+.fit-content {
+  width: fit-content;
+}
+
+.v-input ::v-deep {
+  .v-input--selection-controls__input {
+    margin-right: 0;
+
+    & + label {
+      margin-left: 8px;
+    }
+  }
+}
+
+.v-input--dense-x {
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+</style>

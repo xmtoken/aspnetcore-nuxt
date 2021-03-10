@@ -1,9 +1,8 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
 import { PropValidator } from 'vue/types/options';
-import { VRadioGroup } from 'vuetify/src/components';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
-import { InputableProps } from '~/mixins/inputable';
+import { Inputable, InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
@@ -15,13 +14,9 @@ type ComponentProps = Record<string, any> &
     value?: any;
   };
 
-type ComponentRefs = {
-  field: InstanceType<typeof VRadioGroup>;
-};
-
 const Vue = VueBuilder.create() //
   .$attrs<ComponentProps>()
-  .$refs<ComponentRefs>()
+  .mixin(Inputable)
   .mixin(RequiredMarkable)
   .mixin(Slotable)
   .mixin(UIElementState)
@@ -45,6 +40,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      created: false,
       value: null as any,
     };
   },
@@ -58,6 +54,7 @@ export default Vue.extend({
         ...this.attrs,
       };
       const overrides: ComponentProps = {
+        dense: VuePropHelper.toBoolean(attrs.dense) || this.denseX,
         hideDetails: attrs.hideDetails === 'auto' || attrs.hideDetails === 'tooltip' ? 'auto' : VuePropHelper.toBoolean(attrs.hideDetails),
       };
       delete attrs[this.$options.model!.prop!];
@@ -68,33 +65,25 @@ export default Vue.extend({
     },
   },
   watch: {
-    'props.value': {
+    'attrs.value': {
       handler(val: any, _oldVal: any) {
         this.value = this.valueConverter ? this.valueConverter(val) : val;
-        if (val !== this.value) {
+        if (!this.created && this.value !== val) {
           this.$emit(this.$options.model!.event!, this.value);
         }
       },
       immediate: true,
     },
   },
-  mounted() {
-    const el = this.$el as HTMLElement;
-    el.addEventListener('focusin', () => {
-      this.$refs.field.isFocused = true;
-    });
-    el.addEventListener('focusout', ev => {
-      if (this.$el.contains(ev.relatedTarget as Node)) {
-        return;
-      }
-      this.$refs.field.isFocused = false;
-    });
+  created() {
+    this.created = true;
   },
   methods: {
     classes(required: boolean) {
       return {
         required,
-        'required-marker': required && !VuePropHelper.toBoolean(this.disabledRequiredMarker),
+        'required-marker': required && !this.disabledRequiredMarker,
+        'v-input--dense-x': this.denseX,
         'v-input--tooltip-details': this.isEnabledTooltipMessage,
       };
     },
@@ -104,7 +93,7 @@ export default Vue.extend({
 
 <template>
   <validation-provider v-slot="{ errors, required }" v-bind="validationProviderProps">
-    <v-radio-group ref="field" v-bind="props" :class="classes(required)" :error-messages="errors" :value="value" v-on="$listeners">
+    <v-radio-group v-bind="props" :class="classes(required)" :error-messages="errors" :value="value" v-on="$listeners">
       <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
       <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
         <slot v-bind="scope" :name="scopedSlotKey" />
@@ -114,12 +103,10 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-.v-input--radio-group.v-input--is-focused ::v-deep {
-  .v-radio:not(.v-radio--is-focused) {
-    .v-input--selection-controls__ripple::before {
-      background: initial !important;
-      transform: initial !important;
-    }
-  }
+@import '~/components/AppInput/AppInput.scss';
+
+.v-input--dense-x {
+  padding-bottom: 1px;
+  padding-top: 1px;
 }
 </style>
