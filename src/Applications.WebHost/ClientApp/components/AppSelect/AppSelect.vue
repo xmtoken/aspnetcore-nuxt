@@ -1,20 +1,25 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
-import { Clearable, ClearableProxyProps } from '~/mixins/clearable';
-import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
-import { Inputable, InputableProxyProps } from '~/mixins/inputable';
+import { Clearable, ClearableProps } from '~/mixins/clearable';
+import { Iconable, IconableProps } from '~/mixins/iconable';
+import { Inputable, InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
 
 type ComponentProxyProps = Record<string, any> & //
-  ClearableProxyProps &
-  InputableProxyProps &
+  ClearableProps &
+  IconableProps &
+  InputableProps &
   ValidatableProxyProps & {
     menuProps?: string | object;
   };
+
+export type AppSelectProps = ComponentProxyProps & {
+  //
+};
 
 type ComponentRefs = {
   field: Element;
@@ -24,7 +29,7 @@ const Vue = VueBuilder.create() //
   .$attrs<ComponentProxyProps>()
   .$refs<ComponentRefs>()
   .mixin(Clearable)
-  .mixin(IconTabIndexable)
+  .mixin(Iconable)
   .mixin(Inputable)
   .mixin(RequiredMarkable)
   .mixin(Slotable)

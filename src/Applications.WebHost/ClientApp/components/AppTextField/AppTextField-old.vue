@@ -4,7 +4,7 @@ import { ValidationProvider } from 'vee-validate';
 import { PropType } from 'vue';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Clearable, ClearableProps } from '~/mixins/clearable';
-import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
+import { IconTabIndexable } from '~/mixins/iconable';
 import { InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';

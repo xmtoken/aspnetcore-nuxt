@@ -3,20 +3,26 @@ import { ValidationProvider } from 'vee-validate';
 import { PropValidator } from 'vue/types/options';
 import { deepEqual } from 'vuetify/src/util/helpers';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
-import { Inputable, InputableProxyProps } from '~/mixins/inputable';
+import { Inputable, InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
 
 type ComponentProxyProps = Record<string, any> & //
-  InputableProxyProps &
+  InputableProps &
   ValidatableProxyProps & {
     falseValue?: any;
     inputValue?: any;
     trueValue?: any;
     valueComparator?: typeof deepEqual;
   };
+
+export type AppSwitchProps = ComponentProxyProps & {
+  fitContent?: boolean;
+  mandatory?: boolean;
+  valueConverter?: (val: any) => any;
+};
 
 type ComponentRefs = {
   field: Element;

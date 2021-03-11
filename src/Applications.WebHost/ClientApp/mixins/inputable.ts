@@ -1,11 +1,15 @@
 import { VueBuilder } from '~/core/vue';
 
-export type InputableProxyProps = {
+type InputableProxyProps = {
   dense?: boolean;
   disabled?: boolean;
   hideDetails?: boolean | 'auto' | 'tooltip';
   label?: string;
   readonly?: boolean;
+};
+
+export type InputableProps = InputableProxyProps & {
+  denseX?: boolean;
 };
 
 const Vue = VueBuilder.create() //

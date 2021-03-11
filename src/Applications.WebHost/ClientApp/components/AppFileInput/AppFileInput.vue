@@ -3,7 +3,7 @@ import '~/components/AppInput/AppInput.scss';
 import { ValidationProvider } from 'vee-validate';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Clearable, ClearableProps } from '~/mixins/clearable';
-import { IconTabIndexable } from '~/mixins/icon-tab-indexable';
+import { Iconable } from '~/mixins/iconable';
 import { InputableProps } from '~/mixins/inputable';
 import { RequiredMarkable } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
@@ -20,7 +20,7 @@ const Vue = VueBuilder.create() //
   .$attrs<ComponentProps>()
   .$refs<ComponentRefs>()
   .mixin(Clearable)
-  .mixin(IconTabIndexable)
+  .mixin(Iconable)
   .mixin(RequiredMarkable)
   .mixin(Slotable)
   .mixin(UIElementState)

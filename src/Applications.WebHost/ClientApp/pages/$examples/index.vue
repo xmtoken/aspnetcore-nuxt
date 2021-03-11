@@ -28,6 +28,7 @@ export default Vue.extend({
       combobox: null,
       textarea: null,
       textbox: null,
+      textdatefield: null,
       checkbox: null,
       switch_: null,
       radio: null,
@@ -35,7 +36,7 @@ export default Vue.extend({
     };
   },
   created() {
-    console.log('this.data', this.$data);
+    console.log(this.$vuetify);
   },
 });
 </script>
@@ -45,17 +46,22 @@ export default Vue.extend({
     <v-form autocomplete="off" @submit.prevent>
       <v-row>
         <v-col>
-          <app-autocomplete v-model="autocomplete" dense-x hide-details="tooltip" :items="selections" label="VAutocomplete" vee-rules="required" />
+          <app-autocomplete v-model="autocomplete" dense-x hide-details="tooltip" :items="selections" label="Autocomplete" vee-rules="required" />
         </v-col>
         <v-col>
-          <app-combobox v-model="combobox" dense-x hide-details="tooltip" :items="selections" label="VCombobox" vee-rules="required" />
+          <app-combobox v-model="combobox" dense-x hide-details="tooltip" :items="selections" label="Combobox" vee-rules="required" />
         </v-col>
         <v-col>
-          <app-textarea v-model="textarea" dense-x hide-details="tooltip" label="VTextarea" vee-rules="required" />
+          <app-textarea v-model="textarea" dense-x hide-details="tooltip" label="Textarea" vee-rules="required" />
         </v-col>
         <v-col>
-          <app-text-field v-model="textbox" dense-x hide-details="tooltip" label="VTextField" vee-rules="required" />
+          <app-text-date-field v-model="textdatefield" dense-x hide-details="tooltip" label="TextDateField" vee-rules="required" />
         </v-col>
+        <v-col>
+          <app-text-field v-model="textbox" dense-x hide-details="tooltip" label="TextField" vee-rules="required" />
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col>
           <!-- TODO:Checkbox:required -->
           <app-checkbox v-model="checkbox" dense-x hide-details="tooltip" label="Checkbox" :vee-rules="{ required: { allowFalse: false } }" />

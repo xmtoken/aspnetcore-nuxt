@@ -4,9 +4,13 @@ import { VDatePicker } from 'vuetify/src/components';
 import { VueBuilder } from '~/core/vue';
 import { Slotable } from '~/mixins/slotable';
 
-type ComponentProps = Record<string, any> & {
+type ComponentProxyProps = Record<string, any> & {
   dayFormat?: (val: string) => string;
-  locale?: string;
+  type?: 'date' | 'month';
+};
+
+export type AppDatePickerProps = ComponentProxyProps & {
+  //
 };
 
 type ComponentRefs = {
@@ -14,7 +18,7 @@ type ComponentRefs = {
 };
 
 const Vue = VueBuilder.create() //
-  .$attrs<ComponentProps>()
+  .$attrs<ComponentProxyProps>()
   .$refs<ComponentRefs>()
   .mixin(Slotable)
   .build();
@@ -31,15 +35,14 @@ export default Vue.extend({
       },
     },
     props() {
-      const defaults: ComponentProps = {
+      const defaults: ComponentProxyProps = {
         dayFormat: val => dayjs(val).date().toString(),
-        locale: 'ja',
       };
-      const attrs: ComponentProps = {
+      const attrs: ComponentProxyProps = {
         ...defaults,
         ...this.attrs,
       };
-      const overrides: ComponentProps = {
+      const overrides: ComponentProxyProps = {
         //
       };
       return {

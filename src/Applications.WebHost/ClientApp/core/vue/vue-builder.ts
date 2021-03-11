@@ -24,7 +24,8 @@ export class VueBuilder<T extends Vue> {
       } else if (!!val && typeof val === 'object') {
         const value: any = {};
         Object.keys(val).forEach(key => {
-          value[camelCase(key)] = resolve(val[key]);
+          // value[camelCase(key)] = resolve(val[key]);
+          value[camelCase(key)] = val[key];
         });
         return value;
       } else {

@@ -11,6 +11,18 @@
   //   }
   // }
 
+  &.v-input--dense {
+    .v-input__control {
+      .v-input__append-inner {
+        .v-input__icon.v-input__icon--append {
+          .v-icon {
+            margin-top: 4px;
+          }
+        }
+      }
+    }
+  }
+
   &.v-input--dense-x {
     margin-top: 0;
   }

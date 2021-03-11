@@ -101,10 +101,29 @@ const config: NuxtConfig = {
       iconfont: 'mdiSvg',
     },
     lang: {
+      current: 'ja',
       locales: {
-        en: {
+        ja: {
           dataIterator: {
             loadingText: '',
+          },
+          datePicker: {
+            itemsSelected: '',
+            nextMonthAriaLabel: '',
+            nextYearAriaLabel: '',
+            prevMonthAriaLabel: '',
+            prevYearAriaLabel: '',
+          },
+          dataTable: {
+            ariaLabel: {
+              activateAscending: '',
+              activateDescending: '',
+              activateNone: '',
+              sortAscending: '',
+              sortDescending: '',
+              sortNone: '',
+            },
+            sortBy: '',
           },
           noDataText: '',
         },

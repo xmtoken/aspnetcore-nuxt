@@ -1,9 +1,26 @@
 import { VueBuilder } from '~/core/vue';
 
+type IconableProxyProps = Record<string, any> & {
+  appendIcon?: string;
+  appendOuterIcon?: string;
+  clearIcon?: string;
+  prependIcon?: string;
+  prependInnerIcon?: string;
+};
+
+export type IconableProps = IconableProxyProps & {
+  appendIconTabindex?: number;
+  appendOuterIconTabindex?: number;
+  clearIconTabindex?: number;
+  prependIconTabindex?: number;
+  prependInnerIconTabindex?: number;
+};
+
 const Vue = VueBuilder.create() //
+  .$attrs<IconableProxyProps>()
   .build();
 
-export const IconTabIndexable = Vue.extend({
+export const Iconable = Vue.extend({
   props: {
     appendIconTabindex: {
       default: 0,
