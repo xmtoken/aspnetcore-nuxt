@@ -23,12 +23,12 @@ const Vue = VueBuilder.create() //
 export default Vue.extend({
   inheritAttrs: false,
   model: {
-    event: 'change',
+    event: 'input',
     prop: 'value',
   },
   data() {
     return {
-      value: null as any,
+      opend: null as any,
     };
   },
   computed: {
@@ -53,31 +53,31 @@ export default Vue.extend({
   watch: {
     'attrs.value': {
       handler(val: any, _oldVal: any) {
-        this.value = val;
+        this.opend = val;
       },
       immediate: true,
     },
   },
   methods: {
     close(): void {
-      this.value = false;
-      this.$emit(this.$options.model!.event!, this.value);
+      this.opend = false;
+      this.$emit(this.$options.model!.event!, this.opend);
     },
     open(): void {
-      this.value = true;
-      this.$emit(this.$options.model!.event!, this.value);
+      this.opend = true;
+      this.$emit(this.$options.model!.event!, this.opend);
     },
   },
 });
 </script>
 
 <template>
-  <v-menu v-bind="props" :value="value" v-on="$listeners">
+  <v-menu v-bind="props" :value="opend" v-on="$listeners">
     <template v-slot>
-      <slot v-bind="{ close, opend: !!value }" />
+      <slot v-bind="{ close, opend }" />
     </template>
     <template v-slot:activator="scope">
-      <slot v-bind="{ ...scope, open, opend: !!value }" name="activator" />
+      <slot v-bind="{ ...scope, open, opend }" name="activator" />
     </template>
   </v-menu>
 </template>

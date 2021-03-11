@@ -1,5 +1,9 @@
 import { VueBuilder } from '~/core/vue';
 
+export type RequiredMarkableProps = {
+  disabledRequiredMarker?: boolean;
+};
+
 const Vue = VueBuilder.create() //
   .build();
 

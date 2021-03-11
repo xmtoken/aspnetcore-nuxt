@@ -38,6 +38,17 @@ export default Vue.extend({
   created() {
     console.log(this.$vuetify);
   },
+  methods: {
+    onInput(val) {
+      console.log('onInput', val);
+    },
+    onChange(val) {
+      console.log('onChange', val);
+    },
+    onClickButton() {
+      this.checkbox = true;
+    },
+  },
 });
 </script>
 
@@ -46,41 +57,43 @@ export default Vue.extend({
     <v-form autocomplete="off" @submit.prevent>
       <v-row>
         <v-col>
-          <app-autocomplete v-model="autocomplete" dense-x hide-details="tooltip" :items="selections" label="Autocomplete" vee-rules="required" />
+          <app-autocomplete v-model="autocomplete" clearable dense-x hide-details="tooltip" :items="selections" label="Autocomplete" vee-rules="required" @change="onChange" @input="onInput" />
         </v-col>
         <v-col>
-          <app-combobox v-model="combobox" dense-x hide-details="tooltip" :items="selections" label="Combobox" vee-rules="required" />
+          <app-combobox v-model="combobox" clearable dense-x hide-details="tooltip" :items="selections" label="Combobox" vee-rules="required" @change="onChange" @input="onInput" />
         </v-col>
         <v-col>
           <app-textarea v-model="textarea" dense-x hide-details="tooltip" label="Textarea" vee-rules="required" />
         </v-col>
         <v-col>
-          <app-text-date-field v-model="textdatefield" dense-x hide-details="tooltip" label="TextDateField" vee-rules="required" />
+          <app-text-field v-model="textbox" clearable dense-x hide-details="tooltip" label="TextField" vee-rules="required" />
         </v-col>
+      </v-row>
+      <v-row>
         <v-col>
-          <app-text-field v-model="textbox" dense-x hide-details="tooltip" label="TextField" vee-rules="required" />
+          <app-text-date-field v-model="textdatefield" clearable dense-x hide-details="tooltip" :label="`${textdatefield}`" :picker-props="{ multiple: true, range: false, type: 'date' }" vee-rules="required" @change="onChange" @input="onInput" />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
           <!-- TODO:Checkbox:required -->
-          <app-checkbox v-model="checkbox" dense-x hide-details="tooltip" label="Checkbox" :vee-rules="{ required: { allowFalse: false } }" />
+          <app-checkbox v-model="checkbox" dense-x hide-details="tooltip" label="Checkbox" :vee-rules="{ required: { allowFalse: false } }" @change="onChange" @input="onInput" />
         </v-col>
         <v-col>
           <!-- TODO:Switch:required -->
-          <app-switch v-model="switch_" dense-x hide-details="tooltip" label="Switch" :vee-rules="{ required: { allowFalse: false } }" />
+          <app-switch v-model="switch_" dense-x hide-details="tooltip" label="Switch" :vee-rules="{ required: { allowFalse: false } }" @change="onChange" @input="onInput" />
         </v-col>
         <v-col>
-          <app-radio-group v-model="radio" dense-x hide-details="tooltip" row vee-rules="between:-1,0">
+          <app-radio-group v-model="radio" dense-x hide-details="tooltip" row vee-rules="between:-1,0" @change="onChange" @input="onInput">
             <v-radio label="label1" :value="-1" />
             <v-radio label="label2" :value="2" />
           </app-radio-group>
         </v-col>
         <v-col>
-          <app-select v-model="select" dense-x hide-details="tooltip" :items="selections" vee-rules="required" />
+          <app-select v-model="select" clearable dense-x hide-details="tooltip" :items="selections" vee-rules="required" @change="onChange" @input="onInput" />
         </v-col>
         <v-col>
-          <v-btn class="mt-3">
+          <v-btn class="mt-3" @click="onClickButton">
             Button
           </v-btn>
         </v-col>

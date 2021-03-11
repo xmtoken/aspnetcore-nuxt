@@ -1,6 +1,6 @@
 import { VueBuilder } from '~/core/vue';
 
-type IconableProxyProps = Record<string, any> & {
+type IconableProxyProps = {
   appendIcon?: string;
   appendOuterIcon?: string;
   clearIcon?: string;
@@ -44,38 +44,43 @@ export const Iconable = Vue.extend({
     },
   },
   watch: {
-    appendIconTabindex(val: number) {
+    appendIcon(_val: string, _oldVal: string) {
+      setIconTabindex(this.$el, 'append', this.appendIconTabindex);
+    },
+    appendIconTabindex(val: number, _oldVal: number) {
       setIconTabindex(this.$el, 'append', val);
     },
-    appendOuterIconTabindex(val: number) {
+    appendOuterIcon(_val: string, _oldVal: string) {
+      setIconTabindex(this.$el, 'append-outer', this.appendOuterIconTabindex);
+    },
+    appendOuterIconTabindex(val: number, _oldVal: number) {
       setIconTabindex(this.$el, 'append-outer', val);
     },
-    clearIconTabindex(val: number) {
+    clearIcon(_val: string, _oldVal: string) {
+      setIconTabindex(this.$el, 'clear', this.clearIconTabindex);
+    },
+    clearIconTabindex(val: number, _oldVal: number) {
       setIconTabindex(this.$el, 'clear', val);
     },
-    prependIconTabindex(val: number) {
+    prependIcon(_val: string, _oldVal: string) {
+      setIconTabindex(this.$el, 'prepend', this.prependIconTabindex);
+    },
+    prependIconTabindex(val: number, _oldVal: number) {
       setIconTabindex(this.$el, 'prepend', val);
     },
-    prependInnerIconTabindex(val: number) {
+    prependInnerIcon(_val: string, _oldVal: string) {
+      setIconTabindex(this.$el, 'prepend-inner', this.prependInnerIconTabindex);
+    },
+    prependInnerIconTabindex(val: number, _oldVal: number) {
       setIconTabindex(this.$el, 'prepend-inner', val);
     },
   },
   mounted() {
-    if (this.appendIconTabindex) {
-      setIconTabindex(this.$el, 'append', this.appendIconTabindex);
-    }
-    if (this.appendOuterIconTabindex) {
-      setIconTabindex(this.$el, 'append-outer', this.appendOuterIconTabindex);
-    }
-    if (this.clearIconTabindex) {
-      setIconTabindex(this.$el, 'clear', this.clearIconTabindex);
-    }
-    if (this.prependIconTabindex) {
-      setIconTabindex(this.$el, 'prepend', this.prependIconTabindex);
-    }
-    if (this.prependInnerIconTabindex) {
-      setIconTabindex(this.$el, 'prepend-inner', this.prependInnerIconTabindex);
-    }
+    setIconTabindex(this.$el, 'append', this.appendIconTabindex);
+    setIconTabindex(this.$el, 'append-outer', this.appendOuterIconTabindex);
+    setIconTabindex(this.$el, 'clear', this.clearIconTabindex);
+    setIconTabindex(this.$el, 'prepend', this.prependIconTabindex);
+    setIconTabindex(this.$el, 'prepend-inner', this.prependInnerIconTabindex);
   },
 });
 

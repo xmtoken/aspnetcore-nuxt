@@ -6,6 +6,8 @@ import { Slotable } from '~/mixins/slotable';
 
 type ComponentProxyProps = Record<string, any> & {
   dayFormat?: (val: string) => string;
+  multiple?: boolean;
+  range?: boolean;
   type?: 'date' | 'month';
 };
 

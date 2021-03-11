@@ -4,7 +4,7 @@ import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Clearable, ClearableProps } from '~/mixins/clearable';
 import { Iconable, IconableProps } from '~/mixins/iconable';
 import { Inputable, InputableProps } from '~/mixins/inputable';
-import { RequiredMarkable } from '~/mixins/required-markable';
+import { RequiredMarkable, RequiredMarkableProps } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
@@ -13,6 +13,7 @@ type ComponentProxyProps = Record<string, any> & //
   ClearableProps &
   IconableProps &
   InputableProps &
+  RequiredMarkableProps &
   ValidatableProxyProps;
 
 export type AppTextFieldProps = ComponentProxyProps & {

@@ -4,13 +4,14 @@ import { PropValidator } from 'vue/types/options';
 import { deepEqual } from 'vuetify/src/util/helpers';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Inputable, InputableProps } from '~/mixins/inputable';
-import { RequiredMarkable } from '~/mixins/required-markable';
+import { RequiredMarkable, RequiredMarkableProps } from '~/mixins/required-markable';
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
 
 type ComponentProxyProps = Record<string, any> & //
   InputableProps &
+  RequiredMarkableProps &
   ValidatableProxyProps & {
     falseValue?: any;
     inputValue?: any;
@@ -65,7 +66,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      created: false,
       value: null as any,
     };
   },
@@ -101,15 +101,12 @@ export default Vue.extend({
         } else {
           this.value = value;
         }
-        if (!this.created && this.value !== val) {
+        if (this.value !== val) {
           this.$emit(this.$options.model!.event!, this.value);
         }
       },
       immediate: true,
     },
-  },
-  created() {
-    this.created = true;
   },
   methods: {
     classes(required: boolean) {

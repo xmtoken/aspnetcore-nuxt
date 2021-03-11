@@ -1,5 +1,6 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
+import dayjs from 'dayjs';
 import { PropType } from 'vue';
 import { AppDatePickerProps } from '~/components/AppDatePicker/AppDatePicker.vue';
 import { AppMenuProps } from '~/components/AppMenu/AppMenu.vue';
@@ -7,7 +8,6 @@ import { AppTextFieldProps } from '~/components/AppTextField/AppTextField.vue';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import * as DateFormatter from '~/extensions/formatters/date-formatter';
 import { Slotable } from '~/mixins/slotable';
-import { Listeners } from '~/types/vue';
 
 type ComponentProxyProps = Record<string, any> & //
   AppTextFieldProps;
@@ -18,15 +18,21 @@ export type AppTextDateFieldProps = ComponentProxyProps & {
   pickerProps?: AppDatePickerProps;
 };
 
+type ComponentRefs = {
+  field: Element;
+};
+
 const Vue = VueBuilder.create() //
   .$attrs<ComponentProxyProps>()
+  .$refs<ComponentRefs>()
   .mixin(Slotable)
   .build();
 
 export default Vue.extend({
   inheritAttrs: false,
   model: {
-    event: 'input:value',
+    event: 'change',
+    prop: 'value',
   },
   props: {
     menuOffsetY: {
@@ -48,31 +54,21 @@ export default Vue.extend({
   },
   data() {
     return {
-      // internalValue: this.value,
       menu: false,
+      textValue: null as any,
+      pickerValue: null as any,
     };
   },
   computed: {
-    props() {
-      const defaults: ComponentProxyProps = {
-        appendIcon: mdiCalendar,
-        appendIconTabindex: -1,
-      };
-      const attrs: ComponentProxyProps = {
-        ...defaults,
-        ...this.attrs,
-      };
-      const overrides: ComponentProxyProps = {
-        //
-      };
-      return {
-        ...attrs,
-        ...overrides,
-      };
+    listeners(): any {
+      const listeners = { ...this.$listeners };
+      delete listeners.input;
+      delete listeners.change;
+      return listeners;
     },
     menuPropsInternal() {
       const defaults: AppMenuProps = {
-        minWidth: 'inherit',
+        minWidth: 'auto',
         openOnClick: false,
       };
       const attrs: AppMenuProps = {
@@ -88,72 +84,116 @@ export default Vue.extend({
         ...overrides,
       };
     },
-
-    // appendIconInternal(): string | null {
-    //   return this.disabled || this.readonly ? null : this.appendIcon;
-    // },
-    // listeners(): Listeners {
-    //   const listeners = { ...this.$listeners };
-    //   delete listeners['input:value'];
-    //   return listeners;
-    // },
-    // menuNudgeBottom(): number {
-    //   return this.pickerOffsetY ? (this.dense ? 29 : 45) : 0;
-    // },
-    // menuNudgeLeft(): number {
-    //   return this.pickerOffsetLeft ? 290 /* menu-width */ + 5 /* space */ : 0;
-    // },
-    // pickerValue: {
-    //   get(): string | null {
-    //     const format = this.pickerProps.type === 'month' ? 'YYYY-MM' : 'YYYY-MM-DD';
-    //     return DateFormatter.isValid(this.internalValue) ? DateFormatter.format(this.internalValue, format) : null;
-    //   },
-    //   set(val: string | null): void {
-    //     this.internalValue = val;
-    //   },
-    // },
+    props() {
+      const defaults: ComponentProxyProps = {
+        appendIcon: mdiCalendar,
+        appendIconTabindex: -1,
+      };
+      const attrs: ComponentProxyProps = {
+        ...defaults,
+        ...this.attrs,
+      };
+      const overrides: ComponentProxyProps = {
+        //
+      };
+      delete attrs[this.$options.model!.prop!];
+      return {
+        ...attrs,
+        ...overrides,
+      };
+    },
   },
-  // watch: {
-  //   internalValue(val: any): void {
-  //     this.$emit('input:value', val);
-  //   },
-  //   value(val: any): void {
-  //     this.internalValue = val;
-  //   },
-  // },
-  // methods: {
-  //   onBlur(): void {
-  //     if (this.pickerValue) {
-  //       this.internalValue = this.pickerValue;
-  //     }
-  //   },
-  //   onChange(): void {
-  //     if (this.pickerValue) {
-  //       this.internalValue = this.pickerValue;
-  //     }
-  //   },
-  //   openPickerMenu(): void {
-  //     this.menu = true;
-  //   },
-  // },
+  watch: {
+    'attrs.value': {
+      handler(val: any, _oldVal: any) {
+        // if (this.value === val) {
+        //   return;
+        // }
+        // const value = val?.toString();
+        // if (!!value && dayjs(value).isValid()) {
+        //   this.value = dayjs(value).format('YYYY-MM-DD');
+        // } else {
+        //   this.value = null;
+        // }
+        // if (this.value !== val) {
+        //   this.$emit('input', this.value);
+        //   this.$emit('change', this.value);
+        // }
+      },
+      immediate: true,
+    },
+  },
+  methods: {
+    onTextChange(val: any) {
+      const values = String(val)
+        .split(/[～,\s]/)
+        .map(x => dayjs(x))
+        .filter(x => x.isValid())
+        .map(x => x.format('YYYY-MM-DD'));
+      if (this.pickerProps.range) {
+        // const textValue = values.length === 2 ? values : null;
+        const pickerValue = values.length === 2 ? values : null;
+        // this.textValue = textValue;
+        this.pickerValue = pickerValue;
+        // this.$emit('input', pickerValue);
+        // this.$emit('change', pickerValue);
+      } else if (this.pickerProps.multiple) {
+        // const textValue = values;
+        const pickerValue = values;
+        // this.textValue = textValue;
+        this.pickerValue = pickerValue;
+        // this.$emit('input', pickerValue);
+        // this.$emit('change', pickerValue);
+      } else {
+        // const textValue = values.length === 1 ? values[0] : null;
+        const pickerValue = values.length === 1 ? values[0] : null;
+        // this.textValue = textValue;
+        this.pickerValue = pickerValue;
+        // this.$emit('input', pickerValue);
+        // this.$emit('change', pickerValue);
+      }
+    },
+    onClickClear() {
+      this.textValue = null;
+      this.pickerValue = null;
+      this.$emit('input', this.textValue);
+      this.$emit('change', this.textValue);
+    },
+    onPickerInput() {
+      if (this.pickerProps.multiple && !this.pickerProps.range && Array.isArray(this.pickerValue)) {
+        this.textValue = this.pickerValue.sort();
+        this.$emit('input', this.pickerValue);
+        this.$emit('change', this.pickerValue);
+      }
+    },
+    onPickerChange() {
+      this.menu = false;
+      if (this.pickerProps.range && Array.isArray(this.pickerValue)) {
+        this.textValue = this.pickerValue.sort().join('～');
+      } else {
+        this.textValue = this.pickerValue;
+      }
+      this.$emit('input', this.pickerValue);
+      this.$emit('change', this.pickerValue);
+    },
+  },
 });
 </script>
 
 <template>
-  <app-text-field ref="field" v-bind="props" v-on="$listeners" @click:append="menu = true">
+  <app-text-field ref="field" v-model="textValue" v-bind="props" v-on="listeners" @change="onTextChange" @click:append="menu = true" @click:clear="onClickClear">
     <slot v-for="slotKey in slotKeys" :slot="slotKey" :name="slotKey" />
     <template v-for="scopedSlotKey in scopedSlotKeys" :slot="scopedSlotKey" slot-scope="scope">
       <slot v-bind="scope" :name="scopedSlotKey" />
     </template>
     <template v-slot:label>
       <app-menu v-model="menu" v-bind="menuPropsInternal" :activator="$refs.field">
-        <template v-slot="{ close }">
-          <app-date-picker v-bind="pickerProps" @change="close" />
+        <template v-slot>
+          <app-date-picker v-model="pickerValue" v-bind="pickerProps" @change="onPickerChange" @input="onPickerInput" />
         </template>
       </app-menu>
       <slot name="label">
-        {{ menu }}
-        <!-- {{ label }} -->
+        {{ props.label }}
       </slot>
     </template>
   </app-text-field>
