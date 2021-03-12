@@ -39,7 +39,7 @@ export class VueBuilder<T extends Vue> {
         },
       },
     });
-    return this.mixin(mixin).assign<{ attrs: TAttrs }>();
+    return this.mixin(mixin);
   }
 
   public $auth<TUser>() {

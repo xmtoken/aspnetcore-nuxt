@@ -55,6 +55,21 @@ export default Vue.extend({
             },
           ],
         },
+        {
+          text: 'Examples',
+          icon: mdiAccountCircleOutline,
+          routes: [
+            {
+              text: 'Examples',
+              routes: [
+                {
+                  text: 'Examples',
+                  path: '/$examples',
+                },
+              ],
+            },
+          ],
+        },
       ] as NavigationRoute[],
     };
   },

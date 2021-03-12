@@ -1,25 +1,32 @@
 <script lang="ts">
 import { mdiCalendar } from '@mdi/js';
 import dayjs from 'dayjs';
+import deepEqual from 'deep-equal';
 import { PropType } from 'vue';
+import { VTextField } from 'vuetify/src/components/VTextField';
 import { AppDatePickerProps } from '~/components/AppDatePicker/AppDatePicker.vue';
 import { AppMenuProps } from '~/components/AppMenu/AppMenu.vue';
 import { AppTextFieldProps } from '~/components/AppTextField/AppTextField.vue';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
-import * as DateFormatter from '~/extensions/formatters/date-formatter';
 import { Slotable } from '~/mixins/slotable';
+import { PickProp, ProxyProps } from '~/types/global';
 
-type ComponentProxyProps = Record<string, any> & //
-  AppTextFieldProps;
+type ComponentProxyProps = ProxyProps &
+  AppTextFieldProps & {
+    //
+  };
 
 export type AppTextDateFieldProps = ComponentProxyProps & {
+  format?: string;
   menuOffsetY?: boolean;
   menuProps?: AppMenuProps;
+  multipleSeparator?: string;
   pickerProps?: AppDatePickerProps;
+  rangeSeparator?: string;
 };
 
 type ComponentRefs = {
-  field: Element;
+  field: InstanceType<typeof VTextField>;
 };
 
 const Vue = VueBuilder.create() //
@@ -35,6 +42,10 @@ export default Vue.extend({
     prop: 'value',
   },
   props: {
+    format: {
+      default: undefined,
+      type: String,
+    },
     menuOffsetY: {
       default: true,
       type: Boolean,
@@ -45,22 +56,31 @@ export default Vue.extend({
       },
       type: Object as PropType<AppMenuProps>,
     },
+    multipleSeparator: {
+      default: ', ',
+      type: String,
+    },
     pickerProps: {
       default(): AppDatePickerProps {
         return {};
       },
       type: Object as PropType<AppDatePickerProps>,
     },
+    rangeSeparator: {
+      default: ' ~ ',
+      type: String,
+    },
   },
   data() {
     return {
       menu: false,
-      textValue: null as any,
       pickerValue: null as any,
+      textLatestValue: null as any,
+      textValue: null as any,
     };
   },
   computed: {
-    listeners(): any {
+    listeners() {
       const listeners = { ...this.$listeners };
       delete listeners.input;
       delete listeners.change;
@@ -71,7 +91,7 @@ export default Vue.extend({
         minWidth: 'auto',
         openOnClick: false,
       };
-      const attrs: AppMenuProps = {
+      const attrs: AppMenuProps & Record<string, any> = {
         ...defaults,
         ...this.menuProps,
       };
@@ -89,7 +109,7 @@ export default Vue.extend({
         appendIcon: mdiCalendar,
         appendIconTabindex: -1,
       };
-      const attrs: ComponentProxyProps = {
+      const attrs: ComponentProxyProps & Record<string, any> = {
         ...defaults,
         ...this.attrs,
       };
@@ -102,79 +122,133 @@ export default Vue.extend({
         ...overrides,
       };
     },
+    raiseValue(): any {
+      return this.pickerProps.multiple || this.pickerProps.range //
+        ? this.pickerValues
+        : this.pickerValues[0] ?? null;
+    },
+    pickerValues(): any[] {
+      return this.pickerValue //
+        ? Array.isArray(this.pickerValue)
+          ? [...this.pickerValue].sort()
+          : [this.pickerValue]
+        : [];
+    },
+    formattedPickerValues(): string[] {
+      const format = this.format ?? (this.pickerProps.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM');
+      return this.pickerValues.map(x => dayjs(x).format(format));
+    },
+    formattedPickerValuesText(): string {
+      return this.pickerProps.range //
+        ? this.formattedPickerValues.join(this.rangeSeparator)
+        : this.pickerProps.multiple
+        ? this.formattedPickerValues.join(this.multipleSeparator)
+        : this.formattedPickerValues[0];
+    },
+    isValidPickerValuesCount(): boolean {
+      return this.pickerProps.range //
+        ? this.pickerValues.length === 2
+        : this.pickerProps.multiple
+        ? true
+        : this.pickerValues.length <= 1;
+    },
   },
   watch: {
     'attrs.value': {
       handler(val: any, _oldVal: any) {
-        // if (this.value === val) {
-        //   return;
-        // }
-        // const value = val?.toString();
-        // if (!!value && dayjs(value).isValid()) {
-        //   this.value = dayjs(value).format('YYYY-MM-DD');
-        // } else {
-        //   this.value = null;
-        // }
-        // if (this.value !== val) {
-        //   this.$emit('input', this.value);
-        //   this.$emit('change', this.value);
-        // }
+        const values = Array.isArray(val) ? val : [val];
+        if (deepEqual(this.pickerValues, values)) {
+          return;
+        }
+        this.parseText(val);
+        if (!deepEqual(this.raiseValue, val)) {
+          this.raise({ force: true });
+        }
       },
       immediate: true,
     },
+    'pickerProps.multiple'(_val: boolean, _oldVal: boolean) {
+      if (!this.validatePickerValuesCount(this.pickerValues)) {
+        this.reset();
+      }
+    },
+    'pickerProps.range'(_val: boolean, _oldVal: boolean) {
+      if (!this.validatePickerValuesCount(this.pickerValues)) {
+        this.reset();
+      }
+    },
+    'pickerProps.type'(_val: PickProp<AppDatePickerProps, 'type'>, _oldVal: PickProp<AppDatePickerProps, 'type'>) {
+      this.parseText(this.textValue);
+      this.raise({ force: true });
+    },
   },
   methods: {
-    onTextChange(val: any) {
+    raise(val: { force: boolean }) {
+      this.$emit('input', this.raiseValue);
+      if (val.force || !deepEqual(this.textValue, this.textLatestValue)) {
+        this.$emit('change', this.raiseValue);
+        this.textLatestValue = this.textValue;
+      }
+    },
+    reset() {
+      this.pickerValue = this.pickerProps.multiple || this.pickerProps.range ? [] : null;
+      this.textValue = null;
+      this.raise({ force: false });
+    },
+    validatePickerValuesCount(values: string[]): boolean {
+      return this.pickerProps.range //
+        ? values.length === 2
+        : this.pickerProps.multiple
+        ? true
+        : values.length <= 1;
+    },
+    parseText(val: any) {
+      const formatters = [
+        'YYYY-M-DD', //
+        'YY-M-D',
+        this.pickerProps.type === 'month' ? 'YY-M' : 'M-D',
+        this.pickerProps.type === 'month' ? 'M' : 'D',
+      ];
       const values = String(val)
-        .split(/[～,\s]/)
-        .map(x => dayjs(x))
+        .split(new RegExp(`[${this.multipleSeparator.trim()}${this.rangeSeparator.trim()},\\s]`))
+        .map(x => dayjs(x, formatters))
         .filter(x => x.isValid())
-        .map(x => x.format('YYYY-MM-DD'));
-      if (this.pickerProps.range) {
-        // const textValue = values.length === 2 ? values : null;
-        const pickerValue = values.length === 2 ? values : null;
-        // this.textValue = textValue;
-        this.pickerValue = pickerValue;
-        // this.$emit('input', pickerValue);
-        // this.$emit('change', pickerValue);
-      } else if (this.pickerProps.multiple) {
-        // const textValue = values;
-        const pickerValue = values;
-        // this.textValue = textValue;
-        this.pickerValue = pickerValue;
-        // this.$emit('input', pickerValue);
-        // this.$emit('change', pickerValue);
+        .map(x => (this.pickerProps.type === 'date' ? x.format('YYYY-MM-DD') : x.format('YYYY-MM')));
+      const isValid = this.validatePickerValuesCount(values);
+      if (isValid) {
+        this.pickerValue =
+          this.pickerProps.multiple || this.pickerProps.range //
+            ? values
+            : values[0];
+        this.textValue = this.formattedPickerValuesText;
+        return true;
       } else {
-        // const textValue = values.length === 1 ? values[0] : null;
-        const pickerValue = values.length === 1 ? values[0] : null;
-        // this.textValue = textValue;
-        this.pickerValue = pickerValue;
-        // this.$emit('input', pickerValue);
-        // this.$emit('change', pickerValue);
+        this.textValue = this.textLatestValue;
+        return false;
+      }
+    },
+    onTextChange(val: any, oldVal: any) {
+      if (deepEqual(val, oldVal)) {
+        return;
+      }
+      const succeeded = this.parseText(val);
+      if (succeeded) {
+        this.raise({ force: false });
       }
     },
     onClickClear() {
-      this.textValue = null;
-      this.pickerValue = null;
-      this.$emit('input', this.textValue);
-      this.$emit('change', this.textValue);
+      this.reset();
     },
     onPickerInput() {
-      if (this.pickerProps.multiple && !this.pickerProps.range && Array.isArray(this.pickerValue)) {
-        this.textValue = this.pickerValue.sort();
-        this.$emit('input', this.pickerValue);
-        this.$emit('change', this.pickerValue);
+      if (this.pickerProps.multiple && !this.pickerProps.range) {
+        this.textValue = this.formattedPickerValuesText;
+        this.raise({ force: false });
       }
     },
     onPickerChange() {
       this.menu = false;
-      if (this.pickerProps.range && Array.isArray(this.pickerValue)) {
-        this.textValue = this.pickerValue.sort().join('～');
-      } else {
-        this.textValue = this.pickerValue;
-      }
-      this.$emit('input', this.pickerValue);
-      this.$emit('change', this.pickerValue);
+      this.textValue = this.formattedPickerValuesText;
+      this.raise({ force: false });
     },
   },
 });

@@ -21,7 +21,11 @@
       "@types/node",
       "@types/nuxtjs__auth",
       "@types/string-format",
-      "@types/ts-nameof"
+      "@types/ts-nameof",
+      "dayjs/plugin/customParseFormat",
+      "dayjs/plugin/isBetween",
+      "dayjs/plugin/isSameOrAfter",
+      "dayjs/plugin/isSameOrBefore"
     ]
   }
 }

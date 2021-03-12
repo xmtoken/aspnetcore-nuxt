@@ -8,8 +8,9 @@ import { RequiredMarkable, RequiredMarkableProps } from '~/mixins/required-marka
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
+import { ProxyProps } from '~/types/global';
 
-type ComponentProxyProps = Record<string, any> & //
+type ComponentProxyProps = ProxyProps &
   ClearableProps &
   IconableProps &
   InputableProps &
@@ -50,7 +51,7 @@ export default Vue.extend({
           offsetY: true,
         },
       };
-      const attrs: ComponentProxyProps = {
+      const attrs: ComponentProxyProps & Record<string, any> = {
         ...defaults,
         ...this.attrs,
       };

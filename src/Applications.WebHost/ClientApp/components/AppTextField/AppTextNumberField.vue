@@ -1,12 +1,24 @@
 <script lang="ts">
 import numbro from 'numbro';
 import { PropType } from 'vue';
-import { VueBuilder } from '~/core/vue';
+import { AppTextFieldProps } from '~/components/AppTextField/AppTextField.vue';
+import { VueBuilder, VuePropHelper } from '~/core/vue';
 import * as NumberFormatter from '~/extensions/formatters/number-formatter';
 import { Slotable } from '~/mixins/slotable';
+import { ProxyProps } from '~/types/global';
 import { Listeners } from '~/types/vue';
 
+type ComponentProxyProps = ProxyProps &
+  AppTextFieldProps & {
+    //
+  };
+
+export type AppTextNumberFieldProps = ComponentProxyProps & {
+  //
+};
+
 const Vue = VueBuilder.create() //
+  .$attrs<ComponentProxyProps>()
   .mixin(Slotable)
   .build();
 

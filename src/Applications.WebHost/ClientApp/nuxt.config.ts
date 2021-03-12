@@ -52,6 +52,7 @@ const config: NuxtConfig = {
   ],
   plugins: [
     '~/plugins/axios',
+    '~/plugins/dayjs',
     '~/plugins/error-handler',
     '~/plugins/string-format',
     '~/plugins/vee-validate',

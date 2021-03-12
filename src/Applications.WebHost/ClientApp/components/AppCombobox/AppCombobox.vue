@@ -1,5 +1,4 @@
 <script lang="ts">
-import '~/components/AppInput/AppInput.scss';
 import { ValidationProvider } from 'vee-validate';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Clearable, ClearableProps } from '~/mixins/clearable';
@@ -9,8 +8,9 @@ import { RequiredMarkable, RequiredMarkableProps } from '~/mixins/required-marka
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
+import { ProxyProps } from '~/types/global';
 
-type ComponentProxyProps = Record<string, any> &
+type ComponentProxyProps = ProxyProps &
   ClearableProps &
   IconableProps &
   InputableProps &
@@ -49,7 +49,7 @@ export default Vue.extend({
       const defaults: ComponentProxyProps = {
         returnObject: false,
       };
-      const attrs: ComponentProxyProps = {
+      const attrs: ComponentProxyProps & Record<string, any> = {
         ...defaults,
         ...this.attrs,
       };

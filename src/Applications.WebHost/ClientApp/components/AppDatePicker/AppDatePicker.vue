@@ -3,8 +3,9 @@ import dayjs from 'dayjs';
 import { VDatePicker } from 'vuetify/src/components';
 import { VueBuilder } from '~/core/vue';
 import { Slotable } from '~/mixins/slotable';
+import { ProxyProps } from '~/types/global';
 
-type ComponentProxyProps = Record<string, any> & {
+type ComponentProxyProps = ProxyProps & {
   dayFormat?: (val: string) => string;
   multiple?: boolean;
   range?: boolean;
@@ -40,7 +41,7 @@ export default Vue.extend({
       const defaults: ComponentProxyProps = {
         dayFormat: val => dayjs(val).date().toString(),
       };
-      const attrs: ComponentProxyProps = {
+      const attrs: ComponentProxyProps & Record<string, any> = {
         ...defaults,
         ...this.attrs,
       };

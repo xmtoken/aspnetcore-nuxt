@@ -1,8 +1,9 @@
 <script lang="ts">
 import { VueBuilder } from '~/core/vue';
 import { Slotable } from '~/mixins/slotable';
+import { ProxyProps } from '~/types/global';
 
-type ComponentProxyProps = Record<string, any> & {
+type ComponentProxyProps = ProxyProps & {
   closeOnContentClick?: boolean;
   disabled?: boolean;
   minWidth?: string | number;
@@ -36,7 +37,7 @@ export default Vue.extend({
       const defaults: ComponentProxyProps = {
         closeOnContentClick: false,
       };
-      const attrs: ComponentProxyProps = {
+      const attrs: ComponentProxyProps & Record<string, any> = {
         ...defaults,
         ...this.attrs,
       };
@@ -59,11 +60,11 @@ export default Vue.extend({
     },
   },
   methods: {
-    close(): void {
+    close() {
       this.opend = false;
       this.$emit(this.$options.model!.event!, this.opend);
     },
-    open(): void {
+    open() {
       this.opend = true;
       this.$emit(this.$options.model!.event!, this.opend);
     },
