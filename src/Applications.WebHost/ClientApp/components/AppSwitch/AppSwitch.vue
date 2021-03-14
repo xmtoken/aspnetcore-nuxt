@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
+import { PropType } from 'vue';
 import { PropValidator } from 'vue/types/options';
 import { deepEqual } from 'vuetify/src/util/helpers';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
@@ -8,7 +9,7 @@ import { RequiredMarkable, RequiredMarkableProps } from '~/mixins/required-marka
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
-import { ProxyProps } from '~/types/global';
+import { PickProp, ProxyProps } from '~/types/global';
 
 type ComponentProxyProps = ProxyProps &
   InputableProps &
@@ -17,14 +18,16 @@ type ComponentProxyProps = ProxyProps &
     falseValue?: any;
     inputValue?: any;
     trueValue?: any;
-    valueComparator?: typeof deepEqual;
+    valueComparator?: typeof deepEqual | null;
   };
 
-export type AppSwitchProps = ComponentProxyProps & {
-  fitContent?: boolean;
-  mandatory?: boolean;
-  valueConverter?: (val: any) => any;
+type ComponentProps = ComponentProxyProps & {
+  fitContent?: boolean | null;
+  mandatory?: boolean | null;
+  valueConverter?: ((val: any) => any) | null;
 };
+
+export type AppSwitchProps = ComponentProps;
 
 type ComponentRefs = {
   field: Element;
@@ -52,22 +55,22 @@ export default Vue.extend({
   props: {
     fitContent: {
       default: true,
-      type: Boolean,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'fitContent'>>,
     },
     mandatory: {
       default: true,
-      type: Boolean,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'mandatory'>>,
     },
     valueConverter: {
       default: val => {
         return String(val) === String(true);
       },
       type: Function,
-    } as PropValidator<(val: any) => any>,
+    } as PropValidator<PickProp<ComponentProps, 'valueConverter'>>,
   },
   data() {
     return {
-      value: null as any,
+      value: null as PickProp<ComponentProps, 'inputValue'>,
     };
   },
   computed: {
@@ -94,7 +97,7 @@ export default Vue.extend({
   },
   watch: {
     'attrs.inputValue': {
-      handler(val: any, _oldVal: any) {
+      handler(val: PickProp<ComponentProps, 'inputValue'>, _oldVal: PickProp<ComponentProps, 'inputValue'>) {
         const value = this.valueConverter ? this.valueConverter(val) : val;
         if (this.mandatory) {
           const isValid = this.props.valueComparator!(value, this.props.falseValue) || this.props.valueComparator!(value, this.props.trueValue);

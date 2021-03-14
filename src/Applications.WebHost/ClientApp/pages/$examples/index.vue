@@ -34,6 +34,7 @@ export default Vue.extend({
       textdatefield4: undefined,
       textdatefield5: undefined,
       textdatefield6: undefined,
+      numberfield: undefined,
       checkbox: null,
       switch_: null,
       radio: null,
@@ -75,7 +76,7 @@ export default Vue.extend({
           <app-text-field v-model="textbox" clearable dense-x hide-details="tooltip" label="TextField" vee-rules="required" />
         </v-col>
       </v-row>
-      <v-row>
+      <!-- <v-row>
         <v-col>
           <app-text-date-field v-model="textdatefield1" clearable :label="`date:single:${textdatefield1}`" :picker-props="{ multiple: false, range: false, type: 'date' }" vee-rules="required" @change="onChange" @input="onInput" />
           <app-text-date-field v-model="textdatefield2" clearable :label="`date:multiple:${textdatefield2}`" :picker-props="{ multiple: true, range: false, type: 'date' }" vee-rules="required" @change="onChange" @input="onInput" />
@@ -83,6 +84,11 @@ export default Vue.extend({
           <app-text-date-field v-model="textdatefield4" clearable :label="`month:single:${textdatefield4}`" :picker-props="{ multiple: false, range: false, type: 'month' }" vee-rules="required" @change="onChange" @input="onInput" />
           <app-text-date-field v-model="textdatefield5" clearable :label="`month:multiple:${textdatefield5}`" :picker-props="{ multiple: true, range: false, type: 'month' }" vee-rules="required" @change="onChange" @input="onInput" />
           <app-text-date-field v-model="textdatefield6" clearable :label="`month:range:${textdatefield6}`" :picker-props="{ multiple: false, range: true, type: 'month' }" vee-rules="required" @change="onChange" @input="onInput" />
+        </v-col>
+      </v-row> -->
+      <v-row>
+        <v-col>
+          <app-text-number-field v-model="numberfield" clearable :label="`val:${numberfield}`" @change="onChange" @input="onInput" />
         </v-col>
       </v-row>
       <v-row>

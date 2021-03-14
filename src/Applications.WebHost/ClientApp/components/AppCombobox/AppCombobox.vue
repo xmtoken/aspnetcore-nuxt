@@ -16,12 +16,14 @@ type ComponentProxyProps = ProxyProps &
   InputableProps &
   RequiredMarkableProps &
   ValidatableProxyProps & {
-    returnObject?: boolean;
+    returnObject?: boolean | null;
   };
 
-export type AppComboboxProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppComboboxProps = ComponentProps;
 
 type ComponentRefs = {
   field: Element;

@@ -16,12 +16,14 @@ type ComponentProxyProps = ProxyProps &
   InputableProps &
   RequiredMarkableProps &
   ValidatableProxyProps & {
-    rows?: string | number;
+    rows?: string | number | null;
   };
 
-export type AppTextareaProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppTextareaProps = ComponentProps;
 
 type ComponentRefs = {
   field: Element;

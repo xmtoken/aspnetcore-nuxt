@@ -13,17 +13,19 @@ import { PickProp, ProxyProps } from '~/types/global';
 
 type ComponentProxyProps = ProxyProps &
   AppTextFieldProps & {
-    //
+    value?: PickProp<AppDatePickerProps, 'value'>;
   };
 
-export type AppTextDateFieldProps = ComponentProxyProps & {
-  format?: string;
-  menuOffsetY?: boolean;
-  menuProps?: AppMenuProps;
-  multipleSeparator?: string;
-  pickerProps?: AppDatePickerProps;
-  rangeSeparator?: string;
+type ComponentProps = ComponentProxyProps & {
+  format?: string | null;
+  menuOffsetY?: boolean | null;
+  menuProps?: AppMenuProps | null;
+  multipleSeparator?: string | null;
+  pickerProps?: AppDatePickerProps | null;
+  rangeSeparator?: string | null;
 };
+
+export type AppTextDateFieldProps = ComponentProps;
 
 type ComponentRefs = {
   field: InstanceType<typeof VTextField>;
@@ -44,39 +46,39 @@ export default Vue.extend({
   props: {
     format: {
       default: undefined,
-      type: String,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'format'>>,
     },
     menuOffsetY: {
       default: true,
-      type: Boolean,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'menuOffsetY'>>,
     },
     menuProps: {
-      default(): AppMenuProps {
+      default() {
         return {};
       },
-      type: Object as PropType<AppMenuProps>,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'menuProps'>>,
     },
     multipleSeparator: {
       default: ', ',
-      type: String,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'multipleSeparator'>>,
     },
     pickerProps: {
-      default(): AppDatePickerProps {
+      default() {
         return {};
       },
-      type: Object as PropType<AppDatePickerProps>,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'pickerProps'>>,
     },
     rangeSeparator: {
       default: ' ~ ',
-      type: String,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'rangeSeparator'>>,
     },
   },
   data() {
     return {
       menu: false,
-      pickerValue: null as any,
-      textLatestValue: null as any,
-      textValue: null as any,
+      pickerValue: null as PickProp<ComponentProps, 'value'>,
+      textLatestValue: null as PickProp<ComponentProps, 'value'>,
+      textValue: null as PickProp<ComponentProps, 'value'>,
     };
   },
   computed: {
@@ -123,7 +125,7 @@ export default Vue.extend({
       };
     },
     raiseValue(): any {
-      return this.pickerProps.multiple || this.pickerProps.range //
+      return this.pickerProps?.multiple || this.pickerProps?.range //
         ? this.pickerValues
         : this.pickerValues[0] ?? null;
     },
@@ -135,27 +137,27 @@ export default Vue.extend({
         : [];
     },
     formattedPickerValues(): string[] {
-      const format = this.format ?? (this.pickerProps.type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM');
+      const format = this.format ?? (this.pickerProps?.type === 'month' ? 'YYYY-MM' : 'YYYY-MM-DD');
       return this.pickerValues.map(x => dayjs(x).format(format));
     },
     formattedPickerValuesText(): string {
-      return this.pickerProps.range //
-        ? this.formattedPickerValues.join(this.rangeSeparator)
-        : this.pickerProps.multiple
-        ? this.formattedPickerValues.join(this.multipleSeparator)
+      return this.pickerProps?.range //
+        ? this.formattedPickerValues.join(this.rangeSeparator ?? undefined)
+        : this.pickerProps?.multiple
+        ? this.formattedPickerValues.join(this.multipleSeparator ?? undefined)
         : this.formattedPickerValues[0];
     },
     isValidPickerValuesCount(): boolean {
-      return this.pickerProps.range //
+      return this.pickerProps?.range //
         ? this.pickerValues.length === 2
-        : this.pickerProps.multiple
+        : this.pickerProps?.multiple
         ? true
         : this.pickerValues.length <= 1;
     },
   },
   watch: {
     'attrs.value': {
-      handler(val: any, _oldVal: any) {
+      handler(val: PickProp<ComponentProps, 'value'>, _oldVal: PickProp<ComponentProps, 'value'>) {
         const values = Array.isArray(val) ? val : [val];
         if (deepEqual(this.pickerValues, values)) {
           return;
@@ -167,12 +169,12 @@ export default Vue.extend({
       },
       immediate: true,
     },
-    'pickerProps.multiple'(_val: boolean, _oldVal: boolean) {
+    'pickerProps.multiple'(_val: PickProp<AppDatePickerProps, 'multiple'>, _oldVal: PickProp<AppDatePickerProps, 'multiple'>) {
       if (!this.validatePickerValuesCount(this.pickerValues)) {
         this.reset();
       }
     },
-    'pickerProps.range'(_val: boolean, _oldVal: boolean) {
+    'pickerProps.range'(_val: PickProp<AppDatePickerProps, 'range'>, _oldVal: PickProp<AppDatePickerProps, 'range'>) {
       if (!this.validatePickerValuesCount(this.pickerValues)) {
         this.reset();
       }
@@ -191,14 +193,14 @@ export default Vue.extend({
       }
     },
     reset() {
-      this.pickerValue = this.pickerProps.multiple || this.pickerProps.range ? [] : null;
+      this.pickerValue = this.pickerProps?.multiple || this.pickerProps?.range ? [] : null;
       this.textValue = null;
       this.raise({ force: false });
     },
     validatePickerValuesCount(values: string[]): boolean {
-      return this.pickerProps.range //
+      return this.pickerProps?.range //
         ? values.length === 2
-        : this.pickerProps.multiple
+        : this.pickerProps?.multiple
         ? true
         : values.length <= 1;
     },
@@ -206,18 +208,18 @@ export default Vue.extend({
       const formatters = [
         'YYYY-M-DD', //
         'YY-M-D',
-        this.pickerProps.type === 'month' ? 'YY-M' : 'M-D',
-        this.pickerProps.type === 'month' ? 'M' : 'D',
+        this.pickerProps?.type === 'month' ? 'YY-M' : 'M-D',
+        this.pickerProps?.type === 'month' ? 'M' : 'D',
       ];
       const values = String(val)
-        .split(new RegExp(`[${this.multipleSeparator.trim()}${this.rangeSeparator.trim()},\\s]`))
+        .split(new RegExp(`[${this.multipleSeparator?.trim()}${this.rangeSeparator?.trim()},\\s]`))
         .map(x => dayjs(x, formatters))
         .filter(x => x.isValid())
-        .map(x => (this.pickerProps.type === 'date' ? x.format('YYYY-MM-DD') : x.format('YYYY-MM')));
+        .map(x => (this.pickerProps?.type === 'month' ? x.format('YYYY-MM') : x.format('YYYY-MM-DD')));
       const isValid = this.validatePickerValuesCount(values);
       if (isValid) {
         this.pickerValue =
-          this.pickerProps.multiple || this.pickerProps.range //
+          this.pickerProps?.multiple || this.pickerProps?.range //
             ? values
             : values[0];
         this.textValue = this.formattedPickerValuesText;
@@ -240,7 +242,7 @@ export default Vue.extend({
       this.reset();
     },
     onPickerInput() {
-      if (this.pickerProps.multiple && !this.pickerProps.range) {
+      if (this.pickerProps?.multiple && !this.pickerProps?.range) {
         this.textValue = this.formattedPickerValuesText;
         this.raise({ force: false });
       }

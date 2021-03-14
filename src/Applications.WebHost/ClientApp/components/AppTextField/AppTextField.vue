@@ -19,9 +19,11 @@ type ComponentProxyProps = ProxyProps &
     //
   };
 
-export type AppTextFieldProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppTextFieldProps = ComponentProps;
 
 type ComponentRefs = {
   field: HTMLElement;

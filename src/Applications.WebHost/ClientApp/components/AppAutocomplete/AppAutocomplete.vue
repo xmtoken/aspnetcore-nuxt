@@ -19,9 +19,11 @@ type ComponentProxyProps = ProxyProps &
     //
   };
 
-export type AppAutocompleteProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppAutocompleteProps = ComponentProps;
 
 type ComponentRefs = {
   field: Element;

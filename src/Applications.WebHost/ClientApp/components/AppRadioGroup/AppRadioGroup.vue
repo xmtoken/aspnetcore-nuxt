@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ValidationProvider } from 'vee-validate';
+import { PropType } from 'vue';
 import { PropValidator } from 'vue/types/options';
 import { VueBuilder, VuePropHelper } from '~/core/vue';
 import { Inputable, InputableProps } from '~/mixins/inputable';
@@ -7,20 +8,22 @@ import { RequiredMarkable, RequiredMarkableProps } from '~/mixins/required-marka
 import { Slotable } from '~/mixins/slotable';
 import { UIElementState } from '~/mixins/ui-element-state';
 import { Validatable, ValidatableProxyProps } from '~/mixins/validatable';
-import { ProxyProps } from '~/types/global';
+import { PickProp, ProxyProps } from '~/types/global';
 
 type ComponentProxyProps = ProxyProps &
   InputableProps &
   RequiredMarkableProps &
   ValidatableProxyProps & {
-    mandatory?: boolean;
+    mandatory?: boolean | null;
     value?: any;
   };
 
-export type AppRadioGroupProps = ComponentProxyProps & {
-  fitContent?: boolean;
-  valueConverter?: (val: any) => any;
+type ComponentProps = ComponentProxyProps & {
+  fitContent?: boolean | null;
+  valueConverter?: ((val: any) => any) | null;
 };
+
+export type AppRadioGroupProps = ComponentProps;
 
 type ComponentRefs = {
   field: Element;
@@ -48,16 +51,16 @@ export default Vue.extend({
   props: {
     fitContent: {
       default: true,
-      type: Boolean,
+      type: (null as any) as PropType<PickProp<ComponentProps, 'fitContent'>>,
     },
     valueConverter: {
       default: undefined,
       type: Function,
-    } as PropValidator<(val: any) => any>,
+    } as PropValidator<PickProp<ComponentProps, 'valueConverter'>>,
   },
   data() {
     return {
-      value: null as any,
+      value: null as PickProp<ComponentProps, 'value'>,
     };
   },
   computed: {
@@ -82,7 +85,7 @@ export default Vue.extend({
   },
   watch: {
     'attrs.value': {
-      handler(val: any, _oldVal: any) {
+      handler(val: PickProp<ComponentProps, 'value'>, _oldVal: PickProp<ComponentProps, 'value'>) {
         this.value = this.valueConverter ? this.valueConverter(val) : val;
       },
       immediate: true,

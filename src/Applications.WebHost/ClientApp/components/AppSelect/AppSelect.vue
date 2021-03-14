@@ -16,12 +16,14 @@ type ComponentProxyProps = ProxyProps &
   InputableProps &
   RequiredMarkableProps &
   ValidatableProxyProps & {
-    menuProps?: string | object;
+    menuProps?: string | object | null;
   };
 
-export type AppSelectProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppSelectProps = ComponentProps;
 
 type ComponentRefs = {
   field: Element;

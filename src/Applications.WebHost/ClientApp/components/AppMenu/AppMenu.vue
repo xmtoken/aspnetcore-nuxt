@@ -1,20 +1,22 @@
 <script lang="ts">
 import { VueBuilder } from '~/core/vue';
 import { Slotable } from '~/mixins/slotable';
-import { ProxyProps } from '~/types/global';
+import { PickProp, ProxyProps } from '~/types/global';
 
 type ComponentProxyProps = ProxyProps & {
-  closeOnContentClick?: boolean;
-  disabled?: boolean;
-  minWidth?: string | number;
-  nudgeBottom?: string | number;
-  openOnClick?: boolean;
+  closeOnContentClick?: boolean | null;
+  disabled?: boolean | null;
+  minWidth?: string | number | null;
+  nudgeBottom?: string | number | null;
+  openOnClick?: boolean | null;
   value?: any;
 };
 
-export type AppMenuProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppMenuProps = ComponentProps;
 
 const Vue = VueBuilder.create() //
   .$attrs<ComponentProxyProps>()
@@ -29,7 +31,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      opend: null as any,
+      value: null as PickProp<ComponentProps, 'value'>,
     };
   },
   computed: {
@@ -53,32 +55,32 @@ export default Vue.extend({
   },
   watch: {
     'attrs.value': {
-      handler(val: any, _oldVal: any) {
-        this.opend = val;
+      handler(val: PickProp<ComponentProps, 'value'>, _oldVal: PickProp<ComponentProps, 'value'>) {
+        this.value = val;
       },
       immediate: true,
     },
   },
   methods: {
     close() {
-      this.opend = false;
-      this.$emit(this.$options.model!.event!, this.opend);
+      this.value = false;
+      this.$emit(this.$options.model!.event!, this.value);
     },
     open() {
-      this.opend = true;
-      this.$emit(this.$options.model!.event!, this.opend);
+      this.value = true;
+      this.$emit(this.$options.model!.event!, this.value);
     },
   },
 });
 </script>
 
 <template>
-  <v-menu v-bind="props" :value="opend" v-on="$listeners">
+  <v-menu v-bind="props" :value="value" v-on="$listeners">
     <template v-slot>
-      <slot v-bind="{ close, opend }" />
+      <slot v-bind="{ close, opend: value }" />
     </template>
     <template v-slot:activator="scope">
-      <slot v-bind="{ ...scope, open, opend }" name="activator" />
+      <slot v-bind="{ ...scope, open, opend: value }" name="activator" />
     </template>
   </v-menu>
 </template>

@@ -6,15 +6,18 @@ import { Slotable } from '~/mixins/slotable';
 import { ProxyProps } from '~/types/global';
 
 type ComponentProxyProps = ProxyProps & {
-  dayFormat?: (val: string) => string;
-  multiple?: boolean;
-  range?: boolean;
-  type?: 'date' | 'month';
+  dayFormat?: ((val: string) => string) | null;
+  multiple?: boolean | null;
+  range?: boolean | null;
+  type?: 'date' | 'month' | null;
+  value?: string | string[] | null;
 };
 
-export type AppDatePickerProps = ComponentProxyProps & {
+type ComponentProps = ComponentProxyProps & {
   //
 };
+
+export type AppDatePickerProps = ComponentProps;
 
 type ComponentRefs = {
   picker: InstanceType<typeof VDatePicker>;
