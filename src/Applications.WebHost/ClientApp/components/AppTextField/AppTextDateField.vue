@@ -206,7 +206,8 @@ export default Vue.extend({
     },
     parseText(val: any) {
       const formatters = [
-        'YYYY-M-DD', //
+        this.format, //
+        'YYYY-M-DD',
         'YY-M-D',
         this.pickerProps?.type === 'month' ? 'YY-M' : 'M-D',
         this.pickerProps?.type === 'month' ? 'M' : 'D',
