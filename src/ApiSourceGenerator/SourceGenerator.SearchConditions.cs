@@ -22,6 +22,7 @@ namespace AspNetCoreNuxt.ApiSourceGenerator
                 .Append($"NJsonSchema.Annotations")
                 .Append($"System.Collections.Generic")
                 .Append($"{nameof(AspNetCoreNuxt)}.Extensions.AspNetCore.Mvc.ApplicationModels")
+                .Append($"{nameof(AspNetCoreNuxt)}.Extensions.NSwag.Generation.Processors")
                 .Select(x => $"using {x};")
                 .OrderBy(x => x)
                 .Distinct();
@@ -31,7 +32,7 @@ namespace AspNetCoreNuxt.ApiSourceGenerator
             builder.Append($@"
 namespace {buildSourceNamespace}
 {{
-    public partial class {buildSourceClassName}
+    public partial class {buildSourceClassName} : IOpenApiSchema
     {{");
             foreach (var property in entityType.GetMembers().OfType<IPropertySymbol>())
             {

@@ -1,27 +1,25 @@
-type Entity = Record<string, any>;
+export class SortQueryBuilder<T, TResult> {
+  private readonly fields: string[];
 
-type Xxx<T, TKey extends keyof any, TValue> = T extends Record<string, any>
-  ? {
-      [P in keyof T]: Xxx<T[P], TKey, TValue>;
-    }
-  : {
-      [P in TKey]: TValue;
-    };
-
-export class FieldBuilder<T, TResult> {
   private constructor() {
-    //
+    this.fields = [];
   }
 
   public static create<T>() {
-    return new FieldBuilder<T, unknown>();
+    return new SortQueryBuilder<T, unknown>();
   }
 
-  public add<TKey>(selector: (selector: FieldSelector<T, unknown>) => FieldSelector<any, TKey>) {
-    // const field = selector(new FieldSelector<NonNullable<T>, unknown>()).getField();
-    // this.fields.push(field);
+  public add<TKey>(predicate: (selector: FieldSelector<T, unknown>) => FieldSelector<any, TKey>) {
+    const fields = predicate(new FieldSelector<NonNullable<T>, unknown>()).getFields();
+    this.fields.push(fields);
     type ResultType = TResult & TKey;
-    return (this as any) as FieldBuilder<T, { [P in keyof ResultType]: ResultType[P] }>;
+    return (this as any) as SortQueryBuilder<T, { [P in keyof ResultType]: ResultType[P] }>;
+  }
+
+  public getQuery() {
+    return {
+      $fields: this.fields.join(','),
+    };
   }
 
   public getType(): TResult {
@@ -36,7 +34,7 @@ class FieldSelector<T, TResult> {
     this.fields = [];
   }
 
-  public prop<TKey extends keyof T>(key: TKey) {
+  public prop<TKey extends keyof OmitFunction<T>>(key: TKey | '*') {
     type ComponentType = NonNullable<T[TKey]> extends Array<infer TArray> ? TArray : NonNullable<T[TKey]>;
     type ValueType = NonNullable<T[TKey]> extends any[] //
       ? unknown[]
@@ -45,5 +43,9 @@ class FieldSelector<T, TResult> {
       : T[TKey];
     this.fields.push(`${key}`);
     return (this as any) as FieldSelector<ComponentType, Xxx<TResult, TKey, ValueType>>;
+  }
+
+  public getFields() {
+    return this.fields.join('.');
   }
 }

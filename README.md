@@ -27,6 +27,8 @@
    1. [プロジェクトの構成](docs/Frontend/ProjectStructure.md)
    2. コーディング規約
    3. レイアウト
+      1. [Rendering パフォーマンス](docs/Frontend/Layout/RenderingPerformance.md)
+      2. [Form](docs/Frontend/Layout/Form.md)
    4. API 要求
       1. GET API 要求
       2. POST API 要求
