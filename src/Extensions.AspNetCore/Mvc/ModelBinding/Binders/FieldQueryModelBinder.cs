@@ -4,7 +4,9 @@ using AspNetCoreNuxt.Extensions.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ModelBinding.Binders
@@ -49,6 +51,45 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ModelBinding.Binders
                 .ToArray();
 
             var validValues = splitValues
+                .SelectMany(value =>
+                {
+                    if (value == "*")
+                    {
+                        return typeof(T)
+                            .GetProperties()
+                            .Where(x => x.PropertyType.IsValueType || x.PropertyType == typeof(string))
+                            .Select(property => property.Name);
+                    }
+                    if (value.EndsWith(".*", StringComparison.Ordinal))
+                    {
+                        var chainPropertyName = value[..^2];
+                        if (ExpressionHelper.Validate<T>(chainPropertyName))
+                        {
+                            var componentType = typeof(T);
+                            foreach (var propertyName in chainPropertyName.Split('.'))
+                            {
+                                var property = componentType.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public);
+                                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string))
+                                {
+                                    return new[] { value };
+                                }
+                                else if (property.PropertyType.GetInterface(typeof(IEnumerable<>).Name) is Type interfaceType)
+                                {
+                                    componentType = interfaceType.GenericTypeArguments[0];
+                                }
+                                else
+                                {
+                                    componentType = property.PropertyType;
+                                }
+                            }
+                            return componentType
+                                .GetProperties()
+                                .Where(x => x.PropertyType.IsValueType || x.PropertyType == typeof(string))
+                                .Select(property => $"{chainPropertyName}.{property.Name}");
+                        }
+                    }
+                    return new[] { value };
+                })
                 .Where(x => ExpressionHelper.Validate<T>(x))
                 .Select(x => ExpressionHelper.Normalize<T>(x))
                 .ToArray();

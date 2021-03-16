@@ -23,6 +23,7 @@ const config: NuxtConfig = {
     '@nuxt/typescript-build',
     '@nuxtjs/dotenv',
     '@nuxtjs/vuetify',
+    'nuxt-typed-vuex',
   ],
   components: true,
   css: ['@/assets/main.scss'],

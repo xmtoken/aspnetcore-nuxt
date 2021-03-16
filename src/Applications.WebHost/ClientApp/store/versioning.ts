@@ -7,7 +7,7 @@ export const state = () => ({
 export type VersioningState = ReturnType<typeof state>;
 
 export const mutations: MutationTree<VersioningState> = {
-  updatable(state, val: boolean): void {
+  updatablex(state, val: boolean): void {
     state.updatable = val;
   },
 };

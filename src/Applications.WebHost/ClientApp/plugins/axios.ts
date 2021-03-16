@@ -44,7 +44,7 @@ const plugin: Plugin = ctx => {
     if (response.status === StatusCodes.BAD_REQUEST) {
       const code = response.data?.error?.code;
       if (code === 'AmbiguousApiVersion' || code === 'ApiVersionUnspecified' || code === 'InvalidApiVersion' || code === 'UnsupportedApiVersion') {
-        ctx.store.commit('versioning/updatable', true);
+        ctx.store.commit('versioning/updatablex', true);
       }
     }
     return Promise.resolve(response);
