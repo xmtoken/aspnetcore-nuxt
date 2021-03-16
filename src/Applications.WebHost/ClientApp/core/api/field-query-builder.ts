@@ -1,4 +1,4 @@
-import { Expand, OmitFunction, OmitObject } from '~/core/types';
+import { ExpandArray, PickArray, PickPrimitive, PickRecord } from '~/core/types';
 
 const QUERY_KEY = '$fields';
 
@@ -8,14 +8,8 @@ type Xxx2<T, TValue> = T extends Record<string, any> //
   ? {
       [P in keyof T]: Xxx2<T[P], TValue>;
     }
-  : { [P in keyof TValue]: TValue[P] };
-
-type Xxx<T, TKey extends keyof any, TValue> = T extends Record<string, any>
-  ? {
-      [P in keyof T]: Xxx<T[P], TKey, TValue>;
-    }
   : {
-      [P in TKey]: TValue;
+      [P in keyof TValue]: TValue[P];
     };
 
 export class FieldQueryBuilder<T, TResult> {
@@ -58,14 +52,13 @@ class FieldSelector<T, TResult> {
     return this.fields.join('.');
   }
 
-  public prop(key: typeof WILDCARD): FieldSelector<never, Xxx2<TResult, OmitObject<T>>>;
-  public prop<TKey extends keyof OmitFunction<T>>(
-    key: TKey
-  ): FieldSelector<
-    //
-    NonNullable<T[TKey]> extends Array<infer TArray> ? TArray : NonNullable<T[TKey]>,
-    Xxx<TResult, TKey, NonNullable<T[TKey]> extends any[] ? unknown[] : NonNullable<T[TKey]> extends Record<string, any> ? unknown : T[TKey]>
-  >;
+  public prop(key: typeof WILDCARD): FieldSelector<never, Xxx2<TResult, PickPrimitive<T>>>;
+
+  public prop<TKey extends keyof PickArray<T>>(key: TKey): FieldSelector<ExpandArray<T[TKey]>, Xxx2<TResult, { [P in TKey]: unknown[] }>>;
+
+  public prop<TKey extends keyof PickPrimitive<T>>(key: TKey): FieldSelector<never, Xxx2<TResult, Pick<T, TKey>>>;
+
+  public prop<TKey extends keyof PickRecord<T>>(key: TKey): FieldSelector<NonNullable<T[TKey]>, Xxx2<TResult, { [P in TKey]: unknown }>>;
 
   public prop(key: string) {
     this.fields.push(key);

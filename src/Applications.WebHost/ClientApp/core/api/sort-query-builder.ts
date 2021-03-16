@@ -1,3 +1,15 @@
+import { ExpandArray, PickArray, PickPrimitive, PickRecord } from '~/core/types';
+
+const QUERY_KEY = '$sort';
+
+type Xxx2<T, TValue> = T extends Record<string, any> //
+  ? {
+      [P in keyof T]: Xxx2<T[P], TValue>;
+    }
+  : {
+      [P in keyof TValue]: TValue[P];
+    };
+
 export class SortQueryBuilder<T, TResult> {
   private readonly fields: string[];
 
@@ -10,20 +22,20 @@ export class SortQueryBuilder<T, TResult> {
   }
 
   public add<TKey>(predicate: (selector: FieldSelector<T, unknown>) => FieldSelector<any, TKey>) {
-    const fields = predicate(new FieldSelector<NonNullable<T>, unknown>()).getFields();
-    this.fields.push(fields);
+    const field = predicate(new FieldSelector<T, unknown>()).field;
+    this.fields.push(field);
     type ResultType = TResult & TKey;
     return (this as any) as SortQueryBuilder<T, { [P in keyof ResultType]: ResultType[P] }>;
   }
 
   public getQuery() {
     return {
-      $fields: this.fields.join(','),
-    };
+      [QUERY_KEY]: this.fields.join(','),
+    } as const;
   }
 
   public getType(): TResult {
-    return this as any;
+    return null as any;
   }
 }
 
@@ -34,18 +46,16 @@ class FieldSelector<T, TResult> {
     this.fields = [];
   }
 
-  public prop<TKey extends keyof OmitFunction<T>>(key: TKey | '*') {
-    type ComponentType = NonNullable<T[TKey]> extends Array<infer TArray> ? TArray : NonNullable<T[TKey]>;
-    type ValueType = NonNullable<T[TKey]> extends any[] //
-      ? unknown[]
-      : NonNullable<T[TKey]> extends Record<string, any>
-      ? unknown
-      : T[TKey];
-    this.fields.push(`${key}`);
-    return (this as any) as FieldSelector<ComponentType, Xxx<TResult, TKey, ValueType>>;
+  get field() {
+    return this.fields.join('.');
   }
 
-  public getFields() {
-    return this.fields.join('.');
+  public prop<TKey extends keyof PickPrimitive<T>>(key: TKey): FieldSelector<never, Xxx2<TResult, Pick<T, TKey>>>;
+
+  public prop<TKey extends keyof PickRecord<T>>(key: TKey): FieldSelector<NonNullable<T[TKey]>, Xxx2<TResult, { [P in TKey]: unknown }>>;
+
+  public prop(key: string) {
+    this.fields.push(key);
+    return this;
   }
 }

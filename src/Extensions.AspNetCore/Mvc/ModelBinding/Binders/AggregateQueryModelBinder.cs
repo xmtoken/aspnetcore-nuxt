@@ -48,7 +48,6 @@ namespace AspNetCoreNuxt.Extensions.AspNetCore.Mvc.ModelBinding.Binders
                 .Distinct()
                 .ToArray();
 
-            // TODO:Distinct same prop
             var validValues = splitValues
                 .Where(x => x.Contains(".", StringComparison.Ordinal) == false)
                 .Where(x => x.StartsWith($"{AggregateOperator.Avg}:", StringComparison.OrdinalIgnoreCase)

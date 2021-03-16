@@ -1,4 +1,4 @@
-import { OmitObject } from '~/core/types';
+import { PickPrimitive } from '~/core/types';
 
 const QUERY_KEY = '$aggregate';
 
@@ -18,7 +18,7 @@ export class AggregateQueryBuilder<T, TResult> {
     return new AggregateQueryBuilder<T, unknown>();
   }
 
-  public add<TKey extends keyof OmitObject<T>>(predicate: Predicate<TKey>) {
+  public add<TKey extends keyof PickPrimitive<T>>(predicate: Predicate<TKey>) {
     const field = `${predicate.operator.toLowerCase()}:${predicate.field}`;
     this.fields.push(field);
     type ResultType = TResult & Pick<T, TKey>;

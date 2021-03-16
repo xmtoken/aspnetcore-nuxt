@@ -1,8 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
-import { AggregateQueryBuilder, FieldQueryBuilder, GroupQueryBuilder, PagingQueryBuilder, SortQueryBuilder } from '~/core/api';
-import { OmitArray, OmitFunction, OmitObject, OmitString } from '~/core/types';
-import { CustomerEntity, CustomerSearchConditions, OneEntity } from '~/types/api';
+import { AggregateQueryBuilder, FieldQueryBuilder, GroupQueryBuilder, PagingQueryBuilder, QueryBuilder, SortQueryBuilder } from '~/core/api';
+import { OmitArray, OmitFunction, OmitObject, OmitPrimitive, OmitString, PickProp } from '~/core/types';
+import { ApiCustomerSearchConditions, CustomerEntity, OneEntity } from '~/types/api';
 
 export default Vue.extend({
   created() {
@@ -10,6 +10,7 @@ export default Vue.extend({
     type omitFunction = OmitFunction<CustomerEntity>;
     type omitObject = OmitObject<CustomerEntity>;
     type omitString = OmitString<CustomerEntity>;
+    type pickRecord = OmitArray<OmitFunction<OmitPrimitive<CustomerEntity>>>;
 
     const aggregateQueryBuilder0 = AggregateQueryBuilder.create<OneEntity>() //
       .add({ operator: 'Avg', field: 'id' })
@@ -25,25 +26,17 @@ export default Vue.extend({
 
     const fieldQueryBuilder0 = FieldQueryBuilder.create<CustomerEntity>() //
       .add(x => x.prop('id'))
-      .add(x => x.prop('id'));
-
+      .add(x => x.prop('text'));
     const fieldQueryBuilder1 = FieldQueryBuilder.create<CustomerEntity>() //
       .add(x => x.prop('*'));
-
     const fieldQueryBuilder2 = FieldQueryBuilder.create<CustomerEntity>() //
-      .add(x => x.prop('one').prop('*'));
-
+      .add(x => x.prop('one').prop('customerId'));
+    const fieldQueryBuilder3 = FieldQueryBuilder.create<CustomerEntity>() //
+      .add(x => x.prop('many').prop('customerId'));
     const fieldQueryBuilder = FieldQueryBuilder.create<CustomerEntity>() //
       .add(x => x.prop('*'))
       .add(x => x.prop('one').prop('*'))
       .add(x => x.prop('many').prop('*'));
-
-    // const fieldQueryBuilder = FieldQueryBuilder.create<CustomerEntity>() //
-    //   .add(x => x.prop('text'))
-    //   .add(x => x.prop('*'))
-    //   .add(x => x.prop('id'))
-    //   .add(x => x.prop('one').prop('id'))
-    //   .add(x => x.prop('many').prop('text'));
     console.log(fieldQueryBuilder.getQuery());
     type fieldResponseType = ReturnType<typeof fieldQueryBuilder.getType>;
 
@@ -56,12 +49,42 @@ export default Vue.extend({
     const pagingQueryBuilder = PagingQueryBuilder.create({ offset: 1, limit: 100 });
     console.log(pagingQueryBuilder.getQuery());
 
-    const sortQueryBuilder = SortQueryBuilder.create();
+    const sortQueryBuilder = SortQueryBuilder.create<CustomerEntity>() //
+      .add(x => x.prop('id'))
+      .add(x => x.prop('one').prop('customerId'));
 
-    // const queryBuilder = QueryBuilder.create<CustomerSearchConditions>() //
-    //   .add({ key: 'id', comparisons: [{ operator: 'Equals', value: 1 }, { operator: 'IsNull' }] })
-    //   .add({ key: 'text', comparisons: [{ operator: 'Equals', value: 'xs' }], operator: 'AndAlso' })
-    //   .build();
+    this.$axios.get<fieldResponseType[]>('', {
+      params: {
+        ...sortQueryBuilder.getQuery(),
+        ...pagingQueryBuilder.getQuery(),
+        ...fieldQueryBuilder.getQuery(),
+      },
+    });
+
+    this.$axios.get<(ReturnType<typeof groupQueryBuilder.getType> & ReturnType<typeof aggregateQueryBuilder.getType>)[]>('', {
+      params: {
+        ...groupQueryBuilder.getQuery(),
+        ...aggregateQueryBuilder.getQuery(),
+      },
+    });
+
+    const queryBuilder = QueryBuilder.create<ApiCustomerSearchConditions>() //
+      .add({
+        key: 'id',
+        operator: 'OrElse',
+        comparisons: [
+          { operator: 'Equals', value: 1 }, //
+          { operator: 'IsNull' },
+        ],
+      })
+      .add({
+        key: 'text',
+        operator: 'AndAlso',
+        comparisons: [
+          { operator: 'Equals', value: 'xs' }, //
+        ],
+      })
+      .build();
   },
 });
 </script>

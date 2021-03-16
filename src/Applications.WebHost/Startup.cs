@@ -164,6 +164,8 @@ namespace AspNetCoreNuxt.Applications.WebHost
 
                         }
 
+                        settings.DefaultPropertyNameHandling = NJsonSchema.Generation.PropertyNameHandling.CamelCase;
+
                         settings.DocumentName = typeof(Startup).Assembly.GetName().Version.ToString(3);
                         settings.DocumentProcessors.Add(new OpenApiSchemaProcessor<Startup>());
                         settings.Title = typeof(Startup).Namespace;

@@ -9,6 +9,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using NJsonSchema.Annotations;
+using NJsonSchema.Converters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

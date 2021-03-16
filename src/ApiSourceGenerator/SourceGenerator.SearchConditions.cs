@@ -50,6 +50,24 @@ namespace {buildSourceNamespace}
             }
             builder.Append($@"
     }}
+    public partial class Api{buildSourceClassName} : IOpenApiSchema
+    {{");
+            foreach (var property in entityType.GetMembers().OfType<IPropertySymbol>())
+            {
+                if (excludePropertyNames.Contains(property.Name))
+                {
+                    continue;
+                }
+                if (property.Type.IsValueType || property.Type.ToDisplayString() == "string")
+                {
+                    var propertyTypeName = property.Type.ToDisplayString().TrimEnd('?');
+                    builder.Append($@"
+        [NotNull]
+        public {propertyTypeName} {property.Name} {{ get; set; }}");
+                }
+            }
+            builder.Append($@"
+    }}
 }}");
 
             context.AddSource($"{Guid.NewGuid()}.g.cs", SourceText.From(builder.ToString(), Encoding.UTF8));

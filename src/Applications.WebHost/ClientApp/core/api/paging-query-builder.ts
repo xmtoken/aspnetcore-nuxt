@@ -1,4 +1,4 @@
-export class PagingQueryBuilder<T, TResult> {
+export class PagingQueryBuilder {
   private offset: number | undefined;
   private limit: number | undefined;
 
@@ -7,8 +7,8 @@ export class PagingQueryBuilder<T, TResult> {
     this.limit = undefined;
   }
 
-  public static create<T>(val: { offset?: number; limit?: number }) {
-    const builder = new PagingQueryBuilder<T, unknown>();
+  public static create(val: { offset?: number; limit?: number }) {
+    const builder = new PagingQueryBuilder();
     builder.offset = val.offset;
     builder.limit = val.limit;
     return builder;

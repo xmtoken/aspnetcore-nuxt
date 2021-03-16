@@ -1,4 +1,6 @@
-import { OmitFunction } from '~/core/types';
+import { PickPrimitive } from '~/core/types';
+
+const QUERY_KEY = '$group';
 
 export class GroupQueryBuilder<T, TResult> {
   private readonly fields: string[];
@@ -11,19 +13,19 @@ export class GroupQueryBuilder<T, TResult> {
     return new GroupQueryBuilder<T, unknown>();
   }
 
-  public add<TKey extends keyof OmitFunction<T>>(key: TKey) {
-    this.fields.push(`${key}`);
-    type ResultType = TResult & TKey;
+  public add<TKey extends keyof PickPrimitive<T>>(field: TKey) {
+    this.fields.push(`${field}`);
+    type ResultType = TResult & Pick<T, TKey>;
     return (this as any) as GroupQueryBuilder<T, { [P in keyof ResultType]: ResultType[P] }>;
   }
 
   public getQuery() {
     return {
-      $fields: this.fields.join(','),
-    };
+      [QUERY_KEY]: this.fields.join(','),
+    } as const;
   }
 
   public getType(): TResult {
-    return this as any;
+    return null as any;
   }
 }

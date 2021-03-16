@@ -30,6 +30,7 @@ namespace AspNetCoreNuxt.ApiSourceGenerator
             var namespaces = Enumerable
                 .Empty<string>()
                 .Append($"{entityType.ContainingNamespace.ToDisplayString()}")
+                .Append($"NJsonSchema.Annotations")
                 .Append($"{nameof(AspNetCoreNuxt)}.Applications.WebHost.Core.Models")
                 .Select(x => $"using {x};")
                 .OrderBy(x => x)
@@ -40,6 +41,7 @@ namespace AspNetCoreNuxt.ApiSourceGenerator
             builder.Append($@"
 namespace {buildSourceNamespace}
 {{
+    [JsonSchemaFlatten]
     public partial class {buildSourceClassName} : {entityType.Name}, IIdentification
     {{");
             foreach (var property in entityType.GetMembers().OfType<IPropertySymbol>())

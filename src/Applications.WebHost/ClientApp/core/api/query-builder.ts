@@ -1,4 +1,4 @@
-type ExpandSearchConditions<T> = T extends { val: infer TProp } ? TProp : never;
+import { OmitFunction } from '~/core/types';
 
 type ComparisonOperator =
   | 'Equals' //
@@ -22,7 +22,7 @@ type LogicalOperator =
 
 type Comparison<T> = {
   operator: ComparisonOperator;
-  value: ExpandSearchConditions<T> | null | undefined;
+  value: T | null | undefined;
 };
 
 type IsNullComparison = {
@@ -31,8 +31,8 @@ type IsNullComparison = {
 
 type QueryValue<T, TKey extends keyof T> = {
   key: TKey;
-  comparisons: (Comparison<T[TKey]> | IsNullComparison)[];
   operator?: LogicalOperator;
+  comparisons: (Comparison<T[TKey]> | IsNullComparison)[];
 };
 
 export class QueryBuilder<T extends Record<string, any>> {
@@ -46,7 +46,7 @@ export class QueryBuilder<T extends Record<string, any>> {
     return new QueryBuilder<T>();
   }
 
-  public add<TKey extends keyof T>(value: QueryValue<T, TKey>): QueryBuilder<Omit<T, TKey>> {
+  public add<TKey extends keyof OmitFunction<T>>(value: QueryValue<T, TKey>): QueryBuilder<Omit<T, TKey>> {
     this.values.push(value);
     return this;
   }

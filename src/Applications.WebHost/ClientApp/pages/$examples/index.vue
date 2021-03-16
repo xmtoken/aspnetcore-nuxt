@@ -112,7 +112,10 @@ export default Vue.extend({
           <app-select v-model="select" clearable dense-x hide-details="tooltip" :items="selections" vee-rules="required" @change="onChange" @input="onInput" />
         </v-col>
         <v-col>
-          <v-btn class="mt-3" @click="onClickButton">
+          <!-- <v-btn class="mt-3" @click="onClickButton">
+            Button
+          </v-btn> -->
+          <v-btn class="mt-3" nuxt replace to="/">
             Button
           </v-btn>
         </v-col>
