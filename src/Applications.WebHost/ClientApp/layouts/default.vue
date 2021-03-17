@@ -15,7 +15,9 @@ export default Vue.extend({});
     <app-navigation-drawer />
     <v-main style="max-height: 100vh;">
       <v-container id="container" class="align-start fill-height" fluid>
-        <nuxt />
+        <v-form autocomplete="off" @submit.prevent>
+          <nuxt />
+        </v-form>
       </v-container>
     </v-main>
     <app-notification :notifications="$store.state.notification.values" />

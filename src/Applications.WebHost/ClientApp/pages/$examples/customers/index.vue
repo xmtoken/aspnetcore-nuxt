@@ -1,17 +1,38 @@
 <script lang="ts">
 import Vue from 'vue';
+import { mapFields } from 'vuex-map-fields';
+import AppTextDateField from '~/components/AppTextField/AppTextDateField.vue';
 import { AggregateQueryBuilder, FieldQueryBuilder, GroupQueryBuilder, PagingQueryBuilder, QueryBuilder, SortQueryBuilder } from '~/core/api';
+import { mapComputed } from '~/core/vuex';
 import Store from '~/store/$examples/customers';
 import { ApiCustomerSearchConditions, CustomerEntity, OneEntity } from '~/types/api';
 
 export default Vue.extend({
+  components: { AppTextDateField },
+  async fetch() {
+    //
+    console.log('fetch');
+    await this.store.fetchCustomers({ conditions: {} });
+    this.customers = this.store.customers;
+    console.log(this.customers);
+  },
+  data() {
+    return {
+      customers: [] as CustomerEntity[],
+    };
+  },
   computed: {
     store() {
       return this.$accessor.$examples.customers;
     },
+    // xxxx: mapComputed('', null, ''),
   },
   created() {
-    console.log(this.store.customers);
+    console.log('created');
+    // console.log(this.store.customers);
+    // console.log(this.store.getcustomers);
+    // console.log(this.store.setCustomers);
+    // console.log(this.store.fetchCustomers);
     // const aggregateQueryBuilder0 = AggregateQueryBuilder.create<OneEntity>() //
     //   .add({ operator: 'Avg', field: 'id' })
     //   .add({ operator: 'Max', field: 'customerId' });
@@ -85,13 +106,11 @@ export default Vue.extend({
   <div>
     <v-row>
       <v-col>
-        <v-form autocomplete="off" @submit.prevent>
-          <v-row dense>
-            <v-col>
-              aa
-            </v-col>
-          </v-row>
-        </v-form>
+        <v-row dense>
+          <v-col>
+            <app-text-field v-model="customers[0].text" hide-details label="app-text-field" />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
